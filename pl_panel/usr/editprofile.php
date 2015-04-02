@@ -71,7 +71,7 @@
 				<tr><td><label for="email">'._("Email: ").'</label></td><td><input type="text" name="email" value="'.$User->email.'"></td></tr>			
 				<tr><td>'._("Password: ").'</td><td><a href="#">Cambiar contraseña</a></td></tr>
 				<tr><td>'._("Profile photo: ").'</td><td><input id="photo_url" type="text" value="'.$User->photo.'" name="url_img"></td></tr>
-				<tr><td><img src="" id="previsualizar_img"></td><td></td></tr>
+				<tr><td><img id="previsualizar_img"></td><td></td></tr>
 				<tr><td><input type="submit" value="Enviar"></td><td></td></tr>
 			</form>
 			</table>
