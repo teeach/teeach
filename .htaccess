@@ -10,3 +10,5 @@ order allow,deny
 deny from all
 satisfy all
 </files>
+
+php_value display_errors "on"
