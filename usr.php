@@ -2,7 +2,7 @@
 
 	session_start();
 
-	if(!isset($_SESSION['userid'])) {
+	if(!isset($_SESSION['h'])) {
 		die("You aren't login.");
 	}
 
@@ -16,12 +16,12 @@
 	$dbpass = $json->{"dbpass"};
 	$database = $json->{"database"};
 
-	$userid = $_SESSION['userid'];
+	$h = $_SESSION['h'];
 	$con = mysqli_connect($dbserver, $dbuser, $dbpass, $database);
-	$query = $con->query("select * from pl_users where id=$userid");
+	$query = $con->query("select * from pl_users where h='$h'");
 	$row = mysqli_fetch_array($query);
 
-	$usr_id = $userid;
+	$usr_id = $row['id'];
 	$usr_name = $row['name'];
 	$usr_subname1 = $row['subname1'];
 	$usr_subname2 = $row['subname2'];
