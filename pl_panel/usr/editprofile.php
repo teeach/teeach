@@ -82,9 +82,13 @@
 	<script>comprobarImagen();</script>
 -->
     <script>
-        $( "#photo_url" ).keyup(function() {
+        $("#photo_url" ).keyup(function() {
             var value = $( this ).val();
-            $( "#previsualizar_img" ).attr("src", value);
+            $("#previsualizar_img").show();
+            $("#previsualizar_img").attr("src", value);
+            $("#previsualizar_img").error(function(){
+                $(this).hide();
+            });
         })
         .keyup();
     </script>
