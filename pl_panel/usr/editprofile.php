@@ -2,28 +2,28 @@
 	include('../../core.php'); 
 	//~ include('../../usr.php');
 
-    if ($_GET['action']=="success") {
-
-		$name = $_POST['name'];
-		$subname1 = $_POST['subname1'];
-		$subname2 = $_POST['subname2'];
-		$email = $_POST['email'];
-		$url_img = $_POST['url_img'];
-
-		$query = $con->query("update pl_users set name='$name' where id=$User->id")or die("Error!");
-		$query = $con->query("update pl_users set subname1='$subname1' where id=$usr_id")or die("Error!");
-		$query = $con->query("update pl_users set subname2='$subname2' where id=$usr_id")or die("Error!");
-		$query = $con->query("update pl_users set email='$email' where id=$usr_id")or die("Error!");
-		$query = $con->query("update pl_users set photo='$url_img' where id=$usr_id")or die("Error!");
-		header("Location: profile.php?h=".$usr_h);
-	}
-
     session_start();
     $h = $_SESSION['h'];
 
     $System = new System();
     $connection = $System->conDB("../../config.json");
     $User = $System->get_user_by_id($h, $connection);
+
+    if ($_GET['action']=="success") {
+		$name = $_POST['name'];
+		$subname1 = $_POST['subname1'];
+		$subname2 = $_POST['subname2'];
+		$email = $_POST['email'];
+		$url_img = $_POST['url_img'];
+
+		$query = $connection->query("update pl_users set name='$name' where id=$User->id")or die("Error!");
+		$query = $connection->query("update pl_users set subname1='$subname1' where id=$User->id")or die("Error!");
+		$query = $connection->query("update pl_users set subname2='$subname2' where id=$User->id")or die("Error!");
+		$query = $connection->query("update pl_users set email='$email' where id=$User->id")or die("Error!");
+		$query = $connection->query("update pl_users set photo='$url_img' where id=$User->id")or die("Error!");
+		header("Location: profile.php?h=".$User->h);
+	}
+    
 ?>
 
 <!DOCTYPE html>
