@@ -1,0 +1,27 @@
+body {
+	overflow: hidden;
+	background: #ddd;
+	color: #320;
+}
+
+footer {
+	position: absolute;
+	bottom: 0%;
+	width: 100%;
+	border-top: 10px solid #bbb;
+}
+
+input {
+	background-color: #ddd;
+	color: #320;
+	border: 0;
+	border-bottom: 1px solid #320;
+	outline: 0;
+	margin: 10px;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+input:hover, input:focus {
+	box-shadow: 0 1px #320;
+}

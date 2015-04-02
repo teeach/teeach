@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Project Learn\n"
+"POT-Creation-Date: 2015-03-23 18:43+0100\n"
+"PO-Revision-Date: 2015-03-23 18:48+0100\n"
+"Last-Translator: \n"
+"Language-Team: Project Learn Dev\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.7.5\n"
+"X-Poedit-Basepath: C:/xampp/htdocs/\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-KeywordsList: _\n"
+"X-Poedit-SearchPath-0: Project_Learn\n"
+
+#: Project_Learn/install.php:31
+msgid "Hello"
+msgstr "Hola"
+
+#: Project_Learn/test.php:6
+msgid "Welcome to My PHP Application"
+msgstr "Bienvenido a mi Aplicación PHP"
