@@ -84,7 +84,7 @@
 <body>
 	<?php 
 		$System->set_header(); 
-		$System->set_usr_menu($usr_h,$usr_privilege);
+		$System->set_usr_menu($User->h,$User->privilege);
 	
 		echo '
 			<table>

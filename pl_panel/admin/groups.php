@@ -41,6 +41,48 @@
 			$System->conDB("../../config.json");
     		$query = $con->query("insert into pl_groups(name,h,level) values ('$name','$h','$level')")or die("Error");
     		echo "<p>¡Perfecto!</p>";
+    	} elseif($action == "edit") {
+
+    		$h = $_GET['h'];
+
+    		$System->conDB("../../config.json");
+    		$query = $con->query("select * from pl_groups where h='$h'");
+    		$row = mysqli_fetch_array($query);
+
+    		$groupname = $row['name'];
+    		$level = $row['level'];
+
+			echo '
+			<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="groups.php?action">Grupos</a> >> Editar</h2>
+			<form method="post" action="groups.php?action=update&h='.$h.'">
+				<label for="name">Nombre de grupo: </label><input type="text" name="name" value="'.$groupname.'"><br>
+				<label for="level">Curso: </label><input type="text" name="level" value="'.$level.'"><br>
+				<input type="submit" value="Enviar">
+			</form>
+			';
+		} elseif($action == "update") {
+
+			$groupname = $_POST['name'];
+			$level = $_POST['level'];
+
+			$h = $_GET['h'];
+
+			$con = $System->conDB("../../config.json");
+
+			$query = $con->query("update pl_groups set name='$groupname', level='$level' where h='$h'")or die("Query error!");
+
+			echo "<a href='groups.php?action'>Aceptar</a>";
+
+		} elseif($action == "delete") {
+
+			$h = $_GET['h'];
+
+			$con = $System->conDB("../../config.json");
+
+			$query = $con->query("delete from pl_groups where h='$h'")or die("Query error!");
+
+			echo "Eliminado! <a href='groups.php?action'>Aceptar</a>";
+			
 		} else {
 
 			echo '<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="groups.php?action">Grupos</a></h2>
@@ -55,23 +97,42 @@
 							<th>ID</th>
 							<th>Nombre</th>
 							<th>Curso</th>
+							<th>Usuarios</th>
+							<th>Acciones</th>
 						</thead>
 						<tbody>
 		';
 				$System->conDB("../../config.json");
 				$query = $con->query("select * from pl_groups");
 
-				while($row2 = mysqli_fetch_array($query)) {
+				while($row = mysqli_fetch_array($query)) {
 
-					$grupoid = $row2['id'];
-					
+					$grupoid = $row['id'];
+
+					$query2 = $con->query("select * from pl_groupuser where groupid=$grupoid");
 
 					echo "
 					<tr>
-						<td>".$row2['id']."</td>
-						<td>".$row2['name']."</td>
-						<td>".$row2['level']."</td>
-					</tr>";
+						<td>".$row['id']."</td>
+						<td>".$row['name']."</td>
+						<td>".$row['level']."</td>
+						<td>";
+
+					while ($row2 = mysqli_fetch_array($query2)) {
+						$userid = $row2['userid'];
+
+						$query3 = $con->query("select * from pl_users where id=$userid");
+						$row3 = mysqli_fetch_array($query3);
+
+						$username = $row3['username'];
+
+						echo $username.", ";
+					}
+
+					echo "
+					</td>
+					<td><a href='groups.php?action=edit&h=".$row['h']."'>Editar</a> <a href='groups.php?action=delete&h=".$row['h']."'>Eliminar</a></td>
+					";
 				}
 			echo "
 		</tbody>
