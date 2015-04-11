@@ -143,5 +143,6 @@
 	?>
 	
 	<?php $System->set_footer(); ?>
+	
 </body>
 </html>

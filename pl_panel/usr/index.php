@@ -32,7 +32,38 @@
 	$System->set_header();
 	$System->set_usr_menu($User->h,$User->privilege);
 
-		echo "<a href='profile.php?h=".$User->h."'>Hola $User->name $User->surname1</a>. Tienes 0 mensajes.";
+		echo "
+			<section id='posts'>
+				<h1>Posts</h1><br><br>
+				";
+
+		$query = $con->query("select * from pl_posts");
+		while($row = mysqli_fetch_array($query)) {
+
+			$title = $row['title'];
+			$body = $row['body'];
+			$h = $row['h'];
+			$author_h = $row['author'];
+
+			$query2 = $con->query("select * from pl_users where h='$author_h'")or die("Query error!");
+			$row2 = mysqli_fetch_array($query2);
+
+			$author = $row2['name']." ".$row2['subname1'];
+
+			echo "
+				<article>
+					<h2>".$title."</h2>
+					<h5>Writed by ".$author."</h5>
+					".$body."
+				</article>
+				<br><br>
+			";
+
+		}
+
+		echo "
+			</section>
+		";
 	?>
 </body>
 </html>

@@ -2,8 +2,9 @@
 	class System {
 
 		function set_head() {
-			putenv('LC_ALL=es_ES');
-			setlocale(LC_ALL, 'es_ES');
+			$lang = "es_ES";
+			putenv('LC_ALL='.$lang);
+			setlocale(LC_ALL, $lang);
 			bindtextdomain("app", "./locale");
 			textdomain("app");
 			echo "
@@ -14,7 +15,7 @@
 
 		function set_header() {
 			echo "
-				<header><h2>Project Learn</h2></header>
+				<header><h3>Project Learn</h3></header>
 			";
 		}
 
@@ -37,6 +38,17 @@
 					</ul>
 				</nav>
 			";
+		} elseif($p == 4) {
+			echo "
+					<nav>
+						<ul>
+							<a href='profile.php?h=$h'><li>Yo</li></a>
+							<a href='index.php'><li>Inicio</li></a>
+							<a href='../admin'><li>Admin</li></a>
+							<a href='../../logout.php'>Salir</a>
+						</ul>
+					</nav>
+				";
 		} else {
 			echo "
 					<nav>

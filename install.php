@@ -165,6 +165,9 @@
 			$centername = $_POST['centername'];
 			$logo = $_POST['logo'];
 
+			$query = $con->query("insert into pl_config(property,value) values('centername','$centername')")or die(mysql_error());
+			$query = $con->query("insert into pl_config(property,value) values('logo','$logo')")or die(mysql_error());
+
 			echo '
 				<h1>'._("The End").'</h1>
 				<p>'._("Thanks for choosing Project Learn.").'</p>

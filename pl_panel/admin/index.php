@@ -16,6 +16,7 @@
 	<div id="admin_menu">
 		<a href="users.php?action"><img class="icon" src="../../src/ico/users.png" alt="Users" style="border-radius: 100%"><?php echo _("Users & Groups"); ?></a>
 		<a href="organization.php?action"><img src="../../src/ico/university.png" alt="University" class="icon" style="border-radius: 100%"><?php echo _("Organization");?></a>
+		<a href="posts.php?action"><?php echo _("Posts");?></a>
 		<!--<a href="subjects.php?action"><?php echo _("Subjects"); ?></a>-->
 		<!--<a href="groups.php?action"><?php echo _("Groups"); ?></a>-->
 		<!--<a href="hours.php?action"><?php echo _("Timetables"); ?></a>-->

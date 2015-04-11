@@ -55,18 +55,53 @@
 
 				$con2 = mysqli_connect($dbserver, $dbuser, $dbpass, $database);
 				$query2 = $con2->query("select * from pl_config");
+
 				while($row2 = mysqli_fetch_array($query2)) {
+
 					$property = $row2['property'];
 					if ($property == "centername") {
 						$centername = $row2['value'];
-						break;
+						break;						
+					}					
+				}
+
+				while($row2 = mysqli_fetch_array($query2)) {
+					$property = $row2['property'];
+					if ($property == "accesspass") {
+							$accesspass = $row2['value'];
+							break;
 					}
 				}
+
+				while($row2 = mysqli_fetch_array($query2)) {
+					$property = $row2['property'];
+					if ($property == "logo") {
+							$logourl = $row2['value'];
+							break;
+					}
+				}
+					
 					echo "
-					<form action='settings.php?action=success' method='POST'>
-						<label for='centername'>"._('Centername: ')."</label><input type='text' name='centername' value='".$centername."'>
-						<input type='submit' value='"._('Send')."'>
-					</form>";
+					<table>
+						<form action='settings.php?action=success' method='POST'>
+							<tr>
+								<td><label for='centername'>"._('Centername: ')."</label></td><td><input type='text' name='centername' value='".$centername."'></td>
+							</tr>
+							<tr>
+								<label for='logo'>"._('Logo: ')."</label><input type='text' name='logo' value='".$logourl."'>
+							</tr>
+							<tr>
+								<td></td><td><img src='".$logourl."'></td>
+							</tr>
+							<tr>
+								<td><label for='accesspass'>"._('Access pass')."</label></td><td><input type='text' name='accesspass' value='".$accesspass."'></td>
+							</tr>
+							<tr>
+								<td></td><td><input type='submit' value='"._('Send')."'></td>
+							</tr>
+						</form>
+					</table>
+					";
 				}
 			echo "
 	</center>";
