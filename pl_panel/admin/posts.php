@@ -12,6 +12,7 @@
 	<title>Usuarios | Project Learn</title>
 	<link rel="stylesheet" href="../../src/css/main.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
+	<script type="text/javascript" src="../../ckeditor/ckeditor.js"></script>
 </head>
 <body>
 
@@ -27,6 +28,13 @@
 					<tr><td></td><td><input type="submit" value="Enviar"/></td></tr>
 				</form>
 				</table>
+				
+				<script type="text/javascript">
+                                        window.onload = function()
+                                        {
+                                                CKEDITOR.replace( "body" );
+                                        };
+                                </script>
 			';
 		} elseif ($action == "success") {
 			
@@ -59,6 +67,13 @@
 					<tr><td></td><td><input type="submit" value="Guardar"/></td></tr>
 				</form>
 				</table>
+				
+				 <script type="text/javascript">
+                                        window.onload = function()
+                                        {
+                                                CKEDITOR.replace( "body" );
+                                        };
+                                </script>
     		';
 
     	} elseif($action == "update") {
