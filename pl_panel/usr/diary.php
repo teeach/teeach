@@ -7,7 +7,7 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo "Hola, $usr_name | Project Learn"; ?></title>
+	<title><?php echo "Hola, $usr_name | Teeach"; ?></title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<?php
 		$System = new System();

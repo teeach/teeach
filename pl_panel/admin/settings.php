@@ -7,7 +7,7 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title>Settings | Project Learn</title>
+	<title><?php echo _("Settings"); ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
 </head>

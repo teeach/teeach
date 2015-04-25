@@ -15,12 +15,12 @@
 
 		function set_header() {
 			echo "
-				<header><h3>Project Learn</h3></header>
+				<header></header>
 			";
 		}
 
 		function set_footer() {
-			echo "<footer>(c)2015 Project Learn</footer>";
+			echo "<footer>©2015 Teeach</footer>";
 		}
 
 		function set_usr_menu($h,$p) {
@@ -31,19 +31,18 @@
 					<ul>
 						<a href='profile.php?h=$h'><li>Yo</li></a>
 						<a href='index.php'><li>Inicio</li></a>
-						<a href='#'><li>Exámenes</li></a>
-						<a href='#'>Agenda</a>
-						<a href='#'>Notificaciones</a>
+						<a href='diary.php'>Agenda</a>
 						<a href='../../logout.php'>Salir</a>
 					</ul>
 				</nav>
 			";
-		} elseif($p == 4) {
+		} elseif($p == 4 || $p == 3) {
 			echo "
 					<nav>
 						<ul>
 							<a href='profile.php?h=$h'><li>Yo</li></a>
 							<a href='index.php'><li>Inicio</li></a>
+							<a href='diary.php'>Agenda</a>
 							<a href='../admin'><li>Admin</li></a>
 							<a href='../../logout.php'>Salir</a>
 						</ul>
@@ -55,7 +54,7 @@
 						<ul>
 							<a href='profile.php?h=$h'><li>Yo</li></a>
 							<a href='index.php'><li>Inicio</li></a>
-							<a href='#'><li>Mis Grupos</li></a>
+							<a href='diary.php'>Agenda</a>
 							<a href='../../logout.php'>Salir</a>
 						</ul>
 					</nav>

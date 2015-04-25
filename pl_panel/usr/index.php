@@ -13,7 +13,7 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo "Hola, $User->name | Project Learn"; ?></title>
+	<title><?php echo "Hola, $User->name | Teeach"; ?></title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<?php
 		
@@ -37,7 +37,7 @@
 				<h1>Posts</h1><br><br>
 				";
 
-		$query = $con->query("select * from pl_posts");
+		$query = $con->query("select * from pl_posts ORDER BY id DESC");
 		while($row = mysqli_fetch_array($query)) {
 
 			$title = $row['title'];

@@ -69,7 +69,6 @@ thead {
 body {
 	margin: 0;
 	padding: 0;
-	overflow: hidden;
 	background: #ddd;
 }
 
@@ -120,6 +119,22 @@ nav ul{
 	padding: 2px;
 }
 
+aside {
+	background-color: #fff;
+	color: #320;
+	float: left;
+	width: 250px;
+	min-height: 500px;
+}
+
+aside h3 {
+	text-align: center;
+}
+
+aside ul {
+	list-style: none;
+}
+
 #posts article {
 	width: 580px;
 	display: inline-block;
@@ -140,7 +155,6 @@ nav ul{
 	background-color: #fff;
 	display: inline-block;
 	margin-top: 30px;
-	box-shadow: 1px 1px 5px #aaa;
 }
 
 #posts h2,h5 {

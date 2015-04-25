@@ -7,12 +7,12 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo _("Install");?> | Project Learn</title>
+	<title><?php echo _("Install");?> | Teeach</title>
 	<link rel="stylesheet" href="src/css/main.css">
 	<?php $System->set_head(); ?>
 	<script>
 		function advertenciaDev() {
-			alert("Project Learn is in a very early stage of development. Also, this software can produces damage irreparable. Project Learn doesn't accountable of any damage.");
+			//alert("Project Learn is in a very early stage of development. Also, this software can produces damage irreparable. Project Learn doesn't accountable of any damage.");
 			location.href = "install.php?step=2";
 		}
 		function getUrl() {
@@ -31,18 +31,18 @@
 		$step = $_GET['step'];
 		if ($step == "1") {
 			
-			echo '<center><h1>'._("Hello").'</h1><p>'._("Thanks for choosing Project Learn.").'</p><p>'._("Now, we're going to install.").'</p><br><button onclick="advertenciaDev()">'._("Next").'</button></center>';
+			echo '<center><h1>'._("Hello").'</h1><p>'._("Thanks for choosing Teeach.").'</p><p>'._("Now, we're going to install.").'</p><br><button onclick="advertenciaDev()">'._("Next").'</button></center>';
 		} elseif($step == "2") {
 			echo '
 				<center>
 				<h1>'._("Terms").'</h1>
 				
-					'._("Project Learn is the only smart software for administration of educational databases.").'<br>
+					'._("Teeach is the only smart software for administration of educational databases.").'<br>
 					'._("We still doesn't have the contract.").'<br>
 					'._("Even so, if you press Accept button, you will accept our future terms that we will tell through email.").'<br>
-					'._("To register this software we reserve the right to send promocional mails from Project Learn and our affiliates.").'<br>
-					'._("Project Learn is open source and you can obtain it code in GitHub clicking here.").'<br>
-					'._("Thanks by trust in Project Learn!").'<br>
+					'._("To register this software we reserve the right to send promocional mails from Teeach and our affiliates.").'<br>
+					'._("Teeach is open source and you can obtain it code in GitHub clicking here.").'<br>
+					'._("Thanks by trust in Teeach!").'<br>
 				
 				<button onclick="goStep3();">'._("Accept and next").'</button>
 				</center>
@@ -50,7 +50,7 @@
 		} elseif($step == "3") {
 			echo '
 				<h1>'._("Database").'</h1>				
-				<p>'._("Project Learn uses databases from save data. To connect, we need:").'</p>
+				<p>'._("Teeach uses databases from save data. To connect, we need:").'</p>
 				<form name="form_db" action="install.php?step=4" method="POST">
 					<label for="type_db">'._("Database type: ").'</label><select name="type_db"><option value="1">MySQL</option></select><br>
 					<label for="server_db">'._("Server DB: ").'</label><input type="text" name="server_db" required><br>
@@ -170,7 +170,7 @@
 
 			echo '
 				<h1>'._("The End").'</h1>
-				<p>'._("Thanks for choosing Project Learn.").'</p>
+				<p>'._("Thanks for choosing Teeach.").'</p>
 				<a href="login.php">'._("Finish").'</a>
 			';
 		}

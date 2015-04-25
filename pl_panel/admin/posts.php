@@ -9,7 +9,7 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title>Usuarios | Project Learn</title>
+	<title><?php echo _("Posts"); ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
 	<script type="text/javascript" src="../../ckeditor/ckeditor.js"></script>

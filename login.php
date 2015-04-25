@@ -10,7 +10,7 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo _("Log in"); ?> | Project Learn</title>
+	<title><?php echo _("Log in"); ?> | Teeach</title>
 	<link rel="stylesheet" href="src/css/login.css">
 	<link rel="stylesheet" href="src/css/main.css">
 	<?php

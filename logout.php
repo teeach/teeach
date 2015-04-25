@@ -12,7 +12,7 @@
 		$System->set_head(); 
 	?>
 	<meta charset="UTF-8">
-	<title><?php echo _("Logout"); ?> | Educa</title>
+	<title><?php echo _("Logout"); ?> | Teeach</title>
 	<link rel="stylesheet" href="src/css/main.css">
 	
 </head>
