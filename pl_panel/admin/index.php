@@ -25,5 +25,7 @@
 	</div>
 	<br>
 	<a href="../usr/index.php">Volver al panel de Usuario</a>
+	<br>
+	<p>Hora del servidor: <?php echo date("d-m-Y H:i:s")?></p>
 </body>
 </html>

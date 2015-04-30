@@ -263,6 +263,11 @@ aside ul {
 	height: 48px;
 }
 
+.actual_select {
+	background-color: #999;
+	padding: 10px;
+}
+
 footer {
 	display: block;
 	padding: 15px;

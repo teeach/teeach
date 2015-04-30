@@ -43,6 +43,7 @@
 							<a href='profile.php?h=$h'><li>Yo</li></a>
 							<a href='index.php'><li>Inicio</li></a>
 							<a href='diary.php'>Agenda</a>
+							<a href='messages.php'><li>Messages</li></a>
 							<a href='../admin'><li>Admin</li></a>
 							<a href='../../logout.php'>Salir</a>
 						</ul>
