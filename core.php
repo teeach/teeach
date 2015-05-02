@@ -1,18 +1,24 @@
 <?php
 	class System {
-
-		function set_head() {
-			$lang = "es_ES";
+        function __construct(){
+            $lang = "es_ES";
 			putenv('LC_ALL='.$lang);
 			setlocale(LC_ALL, $lang);
 			bindtextdomain("app", "./locale");
 			textdomain("app");
+			date_default_timezone_set("Europe/Madrid");
+        }
+		function set_head() {
 			echo "
 				<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
                 <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 			";
 		}
 
+                function get_date(){
+                    echo date("d-m-Y H:i:s");
+                }
+                
 		function set_header() {
 			echo "
 				<header></header>
