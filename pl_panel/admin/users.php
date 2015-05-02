@@ -164,28 +164,33 @@
 		} else {
 
 			echo '<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="users.php?action">Usuarios</a></h2>
+                        
+                        <ul class="submenu">
+                            <a href="groups.php?action"><li>Grupos</li></a>
+                            <a href="courses.php?action"><li>Courses</li></a>
+                        </ul>
+                        
 			<ul class="submenu">
-			<b>Acciones: </b>
-			<a href="users.php?action=new"><li>Nuevo</li></a>
-			<a href="groups.php?action"><li>Grupos</li></a>
-			</ul>
+                            <b>Acciones: </b>
+                            <a href="users.php?action=new"><li>Nuevo</li></a>
+                        </ul>
 			<center>
-				<table class="table">
-					<thead>
-						<th></th>
-						<th>ID</th>
-						<th>'._("Name").'</th>
-						<th>'._("Surnames").'</th>
-						<th>'._("Username").'</th>
-						<th>'._("Email").'</th>
-						<th>'._("Phone").'</th>
-						<th>'._("Birthdate").'</th>
-						<th>'._("Home").'</th>
-						<th>'._("Privilege").'</th>
-						<th>'._("Actions").'</th>
-					</thead>
-					<tbody>
-		';
+                            <table class="table">
+                                    <thead>
+                                        <th></th>
+                                        <th>ID</th>
+                                        <th>'._("Name").'</th>
+                                        <th>'._("Surnames").'</th>
+                                        <th>'._("Username").'</th>
+                                        <th>'._("Email").'</th>
+                                        <th>'._("Phone").'</th>
+                                        <th>'._("Birthdate").'</th>
+                                        <th>'._("Home").'</th>
+                                        <th>'._("Privilege").'</th>
+                                        <th>'._("Actions").'</th>
+                                    </thead>
+                                    <tbody>';
+                                    
 				$System->conDB("../../config.json");
 				$query = $con->query("select * from pl_users");
 				while($row = mysqli_fetch_array($query)) {

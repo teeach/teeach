@@ -86,6 +86,12 @@
 		} else {
 
 			echo '<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="groups.php?action">Grupos</a></h2>
+			
+			<ul class="submenu">
+                            <a href="users.php?action"><li>Users</li></a>
+                            <a href="courses.php?action"><li>Courses</li></a>
+                        </ul>
+			
 			<ul class="submenu">
 			<b>Acciones: </b>
 			<a href="groups.php?action=new"><li>Nuevo</li></a>
