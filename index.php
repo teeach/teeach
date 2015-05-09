@@ -4,7 +4,7 @@
 		header('Location: pl_panel/usr');
 	} else {
 		if(file_exists("config.json")) {
-			header('Location: login.php');
+			header('Location: pl_panel/usr/login.php');
 		} else {
 			header('Location: install.php?step=1');
 		}		

@@ -11,6 +11,7 @@
 		function set_head() {
 			echo "
 				<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
+				<link rel='stylesheet' href='../../src/css/main.css'>
                 <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 			";
 		}
@@ -38,7 +39,8 @@
 						<a href='profile.php?h=$h'><li>Yo</li></a>
 						<a href='index.php'><li>Inicio</li></a>
 						<a href='diary.php'>Agenda</a>
-						<a href='../../logout.php'>Salir</a>
+						<a href='messages.php'><li>Messages</li></a>
+						<a href='logout.php'>Salir</a>
 					</ul>
 				</nav>
 			";
@@ -51,7 +53,7 @@
 							<a href='diary.php'>Agenda</a>
 							<a href='messages.php'><li>Messages</li></a>
 							<a href='../admin'><li>Admin</li></a>
-							<a href='../../logout.php'>Salir</a>
+							<a href='logout.php'>Salir</a>
 						</ul>
 					</nav>
 				";
@@ -62,7 +64,7 @@
 							<a href='profile.php?h=$h'><li>Yo</li></a>
 							<a href='index.php'><li>Inicio</li></a>
 							<a href='diary.php'>Agenda</a>
-							<a href='../../logout.php'>Salir</a>
+							<a href='logout.php'>Salir</a>
 						</ul>
 					</nav>
 				";

@@ -41,7 +41,7 @@
 					'._("We still doesn't have the contract.").'<br>
 					'._("Even so, if you press Accept button, you will accept our future terms that we will tell through email.").'<br>
 					'._("To register this software we reserve the right to send promocional mails from Teeach and our affiliates.").'<br>
-					'._("Teeach is open source and you can obtain it code in GitHub clicking here.").'<br>
+					'._("Teeach is open source and you can obtain it code in GitHub clicking").'<a href="http://github.com/sergio98/Teeach-dev" target="_blank"> '._("here.").'</a><br>
 					'._("Thanks by trust in Teeach!").'<br>
 				
 				<button onclick="goStep3();">'._("Accept and next").'</button>
@@ -130,6 +130,7 @@
 					<table>
 						<tr><td><label for="centername">'._("Centername: ").'</label></td><td><input type="text" name="centername"></td></tr>
 						<tr><td><label for="logo">'._("Logo: ").'</label></td><td><input type="text" name="logo"></td></tr>
+						<tr><td><label for="logo">'._("Accesspass: ").'</label></td><td><input type="text" name="accesspass"></td></tr>
 					</table>
 					<h3>'._("Your account").'</h3>
 					<table>
@@ -164,9 +165,11 @@
 			//Datos del centro
 			$centername = $_POST['centername'];
 			$logo = $_POST['logo'];
+			$accesspass = $_POST['accesspass'];
 
-			$query = $con->query("insert into pl_config(property,value) values('centername','$centername')")or die(mysql_error());
-			$query = $con->query("insert into pl_config(property,value) values('logo','$logo')")or die(mysql_error());
+			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('centername','$centername')")or die("Query error!");
+			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('logo','$logo')")or die("Query error!");
+			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('accesspass','$accesspass')")or die("Query error!");
 
 			echo '
 				<h1>'._("The End").'</h1>
