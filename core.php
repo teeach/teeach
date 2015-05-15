@@ -7,6 +7,14 @@
 			bindtextdomain("app", "./locale");
 			textdomain("app");
 			date_default_timezone_set("Europe/Madrid");
+            //~ $fp = fopen("config.json", "r");
+            //~ $file = fread($fp, filesize("config.json"));
+            //~ $json = json_decode($file);
+            //~ $dbserver = $json->{'dbserver'};
+            //~ $dbuser = $json->{'dbuser'};
+            //~ $dbpass = $json->{'dbpass'};
+            //~ $database = $json->{'database'};
+            //~ $con = mysqli_connect($dbserver, $dbuser, $dbpass, $database);
         }
 		function set_head() {
 			echo "
