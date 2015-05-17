@@ -65,5 +65,26 @@
 			</section>
 		";
 	?>
+	<section id="groups">
+		<div class="sectiontitle">
+			<?php echo _("Groups"); ?>
+		</div>
+		<ul>
+			<?php
+				$userid = $User->id;
+				$query = $con->query("SELECT * FROM pl_groupuser WHERE userid=$userid")or die("Query Error!");
+				while ($row = mysqli_fetch_array($query)) {
+					$groupid = $row['groupid'];
+					$query2 = $con->query("SELECT * FROM pl_groups WHERE id=$groupid")or die("Query Error!");
+					$row2 = mysqli_fetch_array($query2);
+					$groupname = $row2['name'];
+					$grouph = $row2['h'];
+
+					echo '<li><a href="group.php?h='.$grouph.'">'.$groupname.'</a></li>';
+				}
+			?>
+		</ul>
+		<a href="group.php?action=join">Join</a>
+	</section>
 </body>
 </html>

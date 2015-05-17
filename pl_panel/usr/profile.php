@@ -56,13 +56,21 @@
 
 	</table>
 
-	<table>
-		<thead>
-			<th>Mis grupos</th>
-		</thead>
-		<tbody>
-			<?php
-				$userid = $User->id;
+
+	<?php
+		$query = $con->query("SELECT * FROM pl_settings WHERE property='showgroups'")or die("Query error!");
+		$row = mysqli_fetch_array($query);
+		$showgroups = $row['value'];
+		if ($showgroups == "true") {
+			echo '
+				<table>
+					<thead>
+						<th>Mis grupos</th>
+					</thead>
+					<tbody>
+			';
+
+			$userid = $User->id;
 				$query = $con->query("SELECT * FROM pl_groupuser WHERE userid=$userid")or die("Query Error!");
 				while ($row = mysqli_fetch_array($query)) {
 					$groupid = $row['groupid'];
@@ -73,10 +81,9 @@
 
 					echo '<td><a href="group.php?h='.$grouph.'">'.$groupname.'</a></td>';
 				}
-			?>
-		</tbody>
-	</table>
 
-	<!--<?php $System->set_footer(); ?>-->
+				echo '</tbody></table>';
+		}
+	?>
 </body>
 </html>

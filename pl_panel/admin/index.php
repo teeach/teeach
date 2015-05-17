@@ -15,13 +15,10 @@
 <body>
 	<h2><?php echo _("Administration"); ?></h2>
 	<div id="admin_menu">
-		<a href="users.php?action"><img class="icon" src="../../src/ico/users.png" alt="Users" style="border-radius: 100%"><?php echo _("Users & Groups"); ?></a>
-		<a href="organization.php?action"><img src="../../src/ico/university.png" alt="University" class="icon" style="border-radius: 100%"><?php echo _("Organization");?></a>
-		<a href="posts.php?action"><img src="../../src/ico/pencil.png" alt="Posts" class="icon" style="border-radius: 100%"><?php echo _("Posts");?></a>
-		<!--<a href="subjects.php?action"><?php echo _("Subjects"); ?></a>-->
-		<!--<a href="groups.php?action"><?php echo _("Groups"); ?></a>-->
-		<!--<a href="hours.php?action"><?php echo _("Timetables"); ?></a>-->
-		<!--<a href="exams.php?action"><?php echo _("Exams"); ?></a>-->
+		<a href="users.php?action"><img class="icon" src="../../src/ico/users.png" alt="Users" style="border-radius: 100%"><?php echo _("Users"); ?></a>
+		<a href="groups.php?action"><?php echo _("Groups"); ?></a>
+		<!--<a href="organization.php?action"><img src="../../src/ico/university.png" alt="University" class="icon" style="border-radius: 100%"></a>-->
+		<a href="posts.php?action"><img src="../../src/ico/pencil.png" alt="Posts" class="icon" style="border-radius: 100%"><?php echo _("Posts");?></a>		
 		<a href="settings.php?action"><img class="icon" src="../../src/ico/settings.png" alt="Settings"><?php echo _("Settings"); ?></a>
 	</div>
 	<br>

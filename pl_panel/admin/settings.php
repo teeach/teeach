@@ -59,29 +59,40 @@
 			$centername = $_POST['centername'];
 			$logo = $_POST['logo'];
 			$accesspass = $_POST['accesspass'];
+			@$showgroups = $_POST['showgroups'];
 
-			$query = $con->query("update pl_settings set value='$centername' where property='centername'")or die("Query error!");
-			$query = $con->query("update pl_settings set value='$logo' where property='logo'")or die("Query error!");
-			$query = $con->query("update pl_settings set value='$accesspass' where property='accesspass'")or die("Query error!");
+			if(isset($showgroups)) {
+				$showgroups = "true";
+			} else {
+				$showgroups = "false";
+			}
+
+			$query = $con->query("UPDATE pl_settings SET value='$centername' WHERE property='centername'")or die("Query error!");
+			$query = $con->query("UPDATE pl_settings SET value='$logo' WHERE property='logo'")or die("Query error!");
+			$query = $con->query("UPDATE pl_settings SET value='$accesspass' WHERE property='accesspass'")or die("Query error!");
+			$query = $con->query("UPDATE pl_settings SET value='$showgroups' WHERE property='showgroups'")or die("Query error!");
 
 			echo '<a href="settings.php?action">Accept</a>';
 
 		} else {
 			
 			//Queries
-			$query_centername = $con->query("select * from pl_settings where property='centername'");
-			$query_logo = $con->query("select * from pl_settings where property='logo'");
-			$query_accesspass = $con->query("select * from pl_settings where property='accesspass'");
+			$query_centername = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
+			$query_logo = $con->query("SELECT * FROM pl_settings WHERE property='logo'");
+			$query_accesspass = $con->query("SELECT * FROM pl_settings WHERE property='accesspass'");
+			$query_sg = $con->query("SELECT * FROM pl_settings WHERE property='showgroups'");
 
 			//Arrays
 			$row_centername = mysqli_fetch_array($query_centername);
 			$row_logo = mysqli_fetch_array($query_logo);
 			$row_accesspass = mysqli_fetch_array($query_accesspass);
+			$row_sg = mysqli_fetch_array($query_sg);
 
 			//Values
 			$centername = $row_centername['value'];
 			$logo = $row_logo['value'];
 			$accesspass = $row_accesspass['value'];
+			$sg = $row_sg['value'];
 
 
 			echo '<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="settings.php?action">'._("Settings").'</a></h2>
@@ -91,6 +102,8 @@
 						<div id="pestanas">
             				<ul id=lista>
                 				<li id="pestana1"><a href="javascript:cambiarPestanna(pestanas,pestana1);">'._("Basic").'</a></li>
+                				<li id="pestana4"><a href="javascript:cambiarPestanna(pestanas,pestana4);">'._("Privacy").'</a></li>
+                				<li id="pestana3"><a href="javascript:cambiarPestanna(pestanas,pestana3);">'._("Advanced").'</a></li>
                 				<li id="pestana2"><a href="javascript:cambiarPestanna(pestanas,pestana2);">'._("About").'</a></li>
             				</ul>
         				</div> 
@@ -105,6 +118,26 @@
             					<b>Teeach</b><br>
             					<p>In Dev</p><br>
                 				'._("Server time: ").': '.date("d-m-Y H:i:s").'
+            				</div>
+            				<div id="cpestana3">
+            					<!--<label for="JP">Join a group: </label>
+            					<select name="JP">
+									<option value="1">'._("Direct").'</option>
+									<option value="2">'._("Request").'</option>
+									<option value="3">'._("None").'</option>
+            					</select>-->
+            					<p>Coming soon...</p>
+            				</div>
+            				<div id="cpestana4">
+            				';
+
+            				if ($sg == "true") {
+            					echo '<input type="checkbox" name="showgroups" checked>';
+            				} else {
+            					echo '<input type="checkbox" name="showgroups">';
+            				}
+            echo '            				
+            					<label for="showgroups">Show groups in user profile</label>
             				</div>
    						</div>
 

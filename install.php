@@ -170,11 +170,13 @@
 			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('centername','$centername')")or die("Query error!");
 			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('logo','$logo')")or die("Query error!");
 			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('accesspass','$accesspass')")or die("Query error!");
+			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('JP','2')")or die("Query error!");
+			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('showgroups','true')")or die("Query error!");
 
 			echo '
 				<h1>'._("The End").'</h1>
 				<p>'._("Thanks for choosing Teeach.").'</p>
-				<a href="login.php">'._("Finish").'</a>
+				<a href="pl_panel/usr/login.php">'._("Finish").'</a>
 			';
 		}
 	?>

@@ -143,16 +143,19 @@
 
 				while ($row = mysqli_fetch_array($query)) {
 					$from_id = $row['from_id'];
+					$query_from_h = $con->query("SELECT * FROM pl_users WHERE id=$from_id")or die("Query error!");
+					$row_from_h = mysqli_fetch_array($query_from_h);
+					$from_h = $row_from_h['h'];
 					$subject = $row['subject'];
 					$date = $row['date'];
 
-					$from = $System->get_user_by_id2($from_id, $con);
+					$from = $System->get_user_by_id($from_h, $con);
 
 					$h = $row['h'];
                     
 					echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname1.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 				}
-            echo'
+            echo '
                 </div>
             ';
 

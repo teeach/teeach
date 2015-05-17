@@ -7,21 +7,13 @@
 			bindtextdomain("app", "./locale");
 			textdomain("app");
 			date_default_timezone_set("Europe/Madrid");
-            //~ $fp = fopen("config.json", "r");
-            //~ $file = fread($fp, filesize("config.json"));
-            //~ $json = json_decode($file);
-            //~ $dbserver = $json->{'dbserver'};
-            //~ $dbuser = $json->{'dbuser'};
-            //~ $dbpass = $json->{'dbpass'};
-            //~ $database = $json->{'database'};
-            //~ $con = mysqli_connect($dbserver, $dbuser, $dbpass, $database);
         }
 		function set_head() {
 			echo "
 				<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
 				<link rel='stylesheet' href='../../src/css/main.css'>
+				<link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
                 <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-                <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
 			";
 		}
 
@@ -103,14 +95,7 @@
             $user = new User($result['id'],$result['username'],$result['name'],$result['subname1'],$result['subname2'],$result['email'],$result['phone'],$result['level'],$result['h'],$result['photo'],$result['birthday'],$result['home'],$result['pass'],$result['privilege'],$result['group']);
             return $user;
         }
-        
-        function get_user_by_id2($id, $connection){
-            $query = $connection->query("select * from pl_users where id='$id'");
-            $result = mysqli_fetch_array($query);
-            $user = new User($result['id'],$result['username'],$result['name'],$result['subname1'],$result['subname2'],$result['email'],$result['phone'],$result['level'],$result['h'],$result['photo'],$result['birthday'],$result['home'],$result['pass'],$result['privilege'],$result['group']);
-            return $user;
-        }
-        
+
         function rand_string( $length ) {
             $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 

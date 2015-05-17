@@ -165,14 +165,9 @@
 
 			echo '<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="users.php?action">Usuarios</a></h2>
                         
-                        <ul class="submenu">
-                            <a href="groups.php?action"><li>Grupos</li></a>
-                            <a href="courses.php?action"><li>Courses</li></a>
-                        </ul>
-                        
 			<ul class="submenu">
                             <b>Acciones: </b>
-                            <a href="users.php?action=new"><li>Nuevo</li></a>
+                            <a href="users.php?action=new"><li>'._("New").'</li></a>
                         </ul>
 			<center>
                             <table class="table">

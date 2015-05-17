@@ -135,6 +135,13 @@ aside ul {
 	list-style: none;
 }
 
+#posts {
+	display: inline-block;
+	float: left;
+	padding: 10px;
+	margin-right: 30px;
+}
+
 #posts article {
 	width: 580px;
 	display: inline-block;
@@ -164,6 +171,30 @@ aside ul {
 
 #posts h2 {
 	font-size: 3rem;
+}
+
+#groups {
+	margin-top: 10px;
+	float: left;
+	display: inline-block;
+	padding: 10px;
+	border: 1px solid #000;
+}
+
+#groups div {
+	background-color: #320;
+	color: #fff;
+}
+
+.grouplist li {
+	list-style: none;
+	padding: 20px 150px;
+	display: inline-block;
+	background-color: #fff;
+}
+
+.grouplist li:hover {
+	background-color: #bbb;
 }
 
 .btn_back {
