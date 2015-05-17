@@ -86,7 +86,7 @@
         <p></p>
         <textarea cols="80" id="editor1" name="editor1" rows="10"></textarea>
         <p></p>
-        <input type="submit" value="Envíar">
+        <input type="submit" value="Enviar">
     </form>
         <script type="text/javascript">  
                 CKEDITOR.replace( "editor1", { 
@@ -137,11 +137,11 @@
           // Send the data using post
           var posting = $.post( url, { users: term, subject: $form.find( "input[name='subject']" ).val(), content: CKEDITOR.instances['editor1'].getData(), sender: sender});
           // Put the results in a div
-          posting.done(function( data ) {
-              alert(data);
+          //~ posting.done(function( data ) {
+              //~ alert(data);
             //~ var content = $( data ).find( "#content" );
             //~ $( "#result" ).empty().append( content );
-          });
+          //~ });
         });
     </script>
     </body>

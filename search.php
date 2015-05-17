@@ -1,10 +1,6 @@
 <?php
  
     //connection information
-    $host = "localhost";
-    $user = "sysadmin";
-    $password = "S1y2s31d4m53n6";
-    $database = "plearn";
     $param = $_GET["term"];
      
     $fp = fopen("config.json", "r");
