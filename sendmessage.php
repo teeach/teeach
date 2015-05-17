@@ -20,6 +20,6 @@
 	$con = mysqli_connect($dbserver, $dbuser, $dbpass, $database);
     $sender = $System->get_user_by_id($sender, $con);
     foreach ($users as $user) {
-        $query = $con->query("INSERT INTO `plearn`.`pl_messages` (`id`, `from_id`, `to_id`, `subject`, `body`, `h`, `date`) VALUES (NULL, '".$sender->id."', '".$user."', '".$subject."', '".$content."', '', '')");
+        $query = $con->query("INSERT INTO `plearn`.`pl_messages` (`id`, `from_id`, `to_id`, `subject`, `body`, `h`, `date`) VALUES (NULL, '".$sender->id."', '".$user."', '".$subject."', '".$content."', '".$System->rand_string(20)."', '".date("Y-m-d H:i:s")."')");
     }
 ?>
