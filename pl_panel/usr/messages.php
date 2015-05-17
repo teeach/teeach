@@ -7,6 +7,10 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
+    <?
+    $System = new System();
+    $System->set_header();
+    ?>
 	<title><?php echo _("Messages");?> | Teeach </title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<?php
@@ -15,11 +19,25 @@
 		$User = $System->get_user_by_id($_SESSION['h'], $con);
 		$System->set_head();
 	?>
+
+<style>
+    .message{
+        float:left;
+        width:600px;
+        border-radius:5px;
+        margin:10px;
+        background:#242424;
+        color: white;
+        padding: 10px;
+    }
+    .fa{
+        cursor:pointer;
+    }
+</style>
+
 </head>
 <body>
 	<?php
-		$System = new System();
-		$System->set_header();
 		$System->set_usr_menu($usr_h,$usr_privilege);
 
 		if (@$_GET['action'] == "new") {
@@ -67,14 +85,7 @@
 						<li><div class="actual_select"><a href="#">'._("Sent").'</a></div></li>
 					</ul>
 				</aside>
-				<table class="table">
-					<thead>
-						<th></th>
-						<th>'._("To").'</th>
-						<th>'._("Subject").'</th>
-						<th>'._("Date").'</th>
-					</thead>
-					<tbody>
+                <div style = "width:500px; margin-left:270px;">
 			';
 
 				$query = $con->query("SELECT * FROM pl_messages WHERE from_id=$User->id ORDER BY id DESC")or die("Query error!");
@@ -85,30 +96,17 @@
 					$subject = $row['subject'];
 					$date = $row['date'];
 
-					$query2 = $con->query("SELECT * FROM pl_users WHERE id=$to_id")or die("Query error!");
-					$row2 = mysqli_fetch_array($query2);
-					$name = $row2['name'];
-					$surname1 = $row2['subname1'];
-
-					$to = $name." ".$surname1;
+					$to = $System->get_user_by_id2($to_id, $con);
 
 					$h = $row['h'];
 
 
-					echo '
-					<tr>
-						<td><input type="checkbox"></td>
-						<td>'.$to.'</td>
-						<td><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></td>
-						<td>'.$date.'</td>
-					</tr>
-					';
+					echo'<div id="'.$h.'" class="'.$h.' message">'.$to->name.' '.$to->surname1.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 				}
-
-			echo '
-					</tbody>
-				</table>
-			';
+                
+                echo'
+                    </div>
+                ';
 
 		} elseif(@$_GET['action'] == "view") {
 
@@ -137,49 +135,43 @@
 						<li><a href="messages.php?action=sent">'._("Sent").'</a></li>
 					</ul>
 				</aside>
-				<table class="table">
-					<thead>
-						<th></th>
-						<th>'._("From").'</th>
-						<th>'._("Subject").'</th>
-						<th>'._("Date").'</th>
-					</thead>
-					<tbody>
+                
+                <div style = "width:500px; margin-left:270px;">
 			';
 
 				$query = $con->query("SELECT * FROM pl_messages WHERE to_id=$User->id ORDER BY id DESC")or die("Query error!");
 
 				while ($row = mysqli_fetch_array($query)) {
-
 					$from_id = $row['from_id'];
 					$subject = $row['subject'];
 					$date = $row['date'];
 
-					$query2 = $con->query("SELECT * FROM pl_users WHERE id=$from_id")or die("Query error!");
-					$row2 = mysqli_fetch_array($query2);
-					$name = $row2['name'];
-					$surname1 = $row2['subname1'];
-
-					$from = $name." ".$surname1;
+					$from = $System->get_user_by_id2($from_id, $con);
 
 					$h = $row['h'];
-
-
-					echo '					
-						<tr>
-							<td><input type="checkbox"></td>
-							<td>'.$from.'</td>
-							<td><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></td>
-							<td>'.$date.'</td>
-						</tr>					
-					';
+                    
+					echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname1.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 				}
+            echo'
+                </div>
+            ';
 
-			echo '
-					</tbody>
-				</table>
-			';
+
 		}
 	?>
+<script>
+    $(".delete").click(function() {
+        var $msg = $(this);
+        var posting = $.post( "delmsg.php", {h:$(this).attr("id")});
+          // Put the results in a div
+          posting.done(function( data ) {
+            //~ alert($("."+$(this).attr("id")).text());
+            $("div."+$msg.attr("id")).toggle("slide");
+            //~ var content = $( data ).find( "#content" );
+            //~ $( "#result" ).empty().append( content );
+          });
+    });
+
+</script>
 </body>
 </html>
