@@ -79,7 +79,7 @@
 					$groupname = $row2['name'];
 					$grouph = $row2['h'];
 
-					echo '<td><a href="group.php?h='.$grouph.'">'.$groupname.'</a></td>';
+					echo '<tr><td><a href="group.php?h='.$grouph.'">'.$groupname.'</a></td></tr>';
 				}
 
 				echo '</tbody></table>';

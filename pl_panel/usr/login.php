@@ -26,8 +26,8 @@
 
 		if ($check) {
 			session_start();
-			$_SESSION['h'] = $row['h'];
-			header('Location: index.php');
+			$_SESSION['h'] = $row['h'];			
+			//header('Location: index.php');
 		} else {
 			header('Location: login.php?err=autf');
 		}
@@ -39,6 +39,9 @@
 	session_start();
 	include('../../core.php');
 	if (isset($_SESSION['h'])) {
+		$user_h = $row['h'];
+		$time = date("Y-m-d H:i:s");
+		$query_last_time = $con->query("UPDATE pl_users SET last_time='$time' WHERE h='$user_h'")or die("Query error!");
 		header('Location: index.php');
 	}
 ?>

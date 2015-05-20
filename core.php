@@ -1,20 +1,19 @@
 <?php
 	class System {
-        function __construct(){
-            $lang = "es_ES";
-			putenv('LC_ALL='.$lang);
-			setlocale(LC_ALL, $lang);
-			bindtextdomain("app", "./locale");
-			textdomain("app");
-			date_default_timezone_set("Europe/Madrid");
-        }
-		function set_head() {
+       
+       	function set_head() {
 			echo "
 				<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
 				<link rel='stylesheet' href='../../src/css/main.css'>
 				<link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
                 <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 			";
+			$lang = "es_ES";
+			putenv('LC_ALL='.$lang);
+			setlocale(LC_ALL, $lang);
+			bindtextdomain("app", "./locale");
+			textdomain("app");
+			date_default_timezone_set("Europe/Madrid");
 		}
 
                 function get_date(){

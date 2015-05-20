@@ -80,7 +80,7 @@
 					$groupname = $row2['name'];
 					$grouph = $row2['h'];
 
-					echo '<li><a href="group.php?h='.$grouph.'">'.$groupname.'</a></li>';
+					echo '<li><a href="group.php?action=view&h='.$grouph.'&page=index">'.$groupname.'</a></li>';
 				}
 			?>
 		</ul>

@@ -39,8 +39,9 @@
 		$h = substr( md5(microtime()), 1, 18);
     	$t_hasher = new PasswordHash(8, FALSE);
         $pass = $t_hasher->HashPassword($password);
+        $date = date("Y-m-d H:i:s");
 
-		$query = $con->query("INSERT INTO pl_users(username,email,pass,h,privilege) VALUES('$username','$email','$pass','$h',1)")or die("Query error!");
+		$query = $con->query("INSERT INTO pl_users(username,email,pass,h,privilege,creation_date) VALUES('$username','$email','$pass','$h',1,'$date')")or die("Query error!");
 
 		$query2 = $con->query("SELECT * FROM pl_settings WHERE property='centername'")or die("Query error!");
 		$row2 = mysqli_fetch_array($query2);

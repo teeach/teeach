@@ -101,15 +101,32 @@
 
 			echo '<a href="group.php?h='.$group_h.'">Accept</a>';
 
-		} else {
+		} elseif(@$_GET['page'] == "index") {
+
+			$gh = $_GET['h'];
+
 			echo '
 				<aside>
 					<h3>'.$group_name.'</h3>
 					<ul>
-						<li><a href="#">'._("Users").'</a></li>
+						<li><div class="actual_select"><a href="group.php?action=view&h='.$gh.'&page=index">'._("Works").'</a></div></li>
+						<li><a href="group.php?action=view&h='.$gh.'&page=users">'._("Users").'</a></li>
 					</ul>
 				</aside>
+				';
 
+		} elseif(@$_GET['page'] == "users") {
+
+			$gh = $_GET['h'];
+
+			echo '
+				<aside>
+					<h3>'.$group_name.'</h3>
+					<ul>
+						<li><a href="group.php?action=view&h='.$gh.'&page=index">'._("Works").'</a></li>
+						<li><div class="actual_select"><a href="group.php?action=view&h='.$gh.'&page=users">'._("Users").'</a></div></li>
+					</ul>
+				</aside>
 				<h1>'._("Users").'</h1>
 				<table>
 					<thead>
@@ -127,15 +144,18 @@
 						$surname1 = $row2['subname1'];
 						$surname2 = $row2['subname2'];
 						$user_h = $row2['h'];
+
+						echo '<tr><td><a href="profile.php?h='.$user_h.'">'.$name." ".$surname1." ".$surname2.'</a></td></tr>';
 					}
 
-			echo '<tr><td><a href="profile.php?h='.$user_h.'">'.$name." ".$surname1." ".$surname2.'</a></td></tr>
-			</tbody>
-			</table>';
+			echo '
+				</tbody>
+				</table>
+			';
 		}
 		
 	?>		
 
-	<?php $System->set_footer(); ?>
+	<?php //$System->set_footer(); ?>
 </body>
 </html>
