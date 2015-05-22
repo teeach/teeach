@@ -54,7 +54,6 @@
 <head>
 	<meta charset="UTF-8">
 	<title><?php echo _("Log in"); ?> | Teeach</title>
-	<link rel="stylesheet" href="../../src/css/login.css">
 	<?php
 		$System = new System();
 		$System->set_head();
@@ -62,36 +61,26 @@
 </head>
 
 <body>	
-	
-	<center>
-		<h1><?php echo _("Log in"); ?></h1>
-	<section id="box">
-
-		<?php
-			if(isset($_GET['err'])) {
-				$err = $_GET['err'];
-				if($err == "autf") {
-					echo '<div class="msg_error"><img src="../../src/ico/error.png"/>'._("Username or password are incorrect.").'</div>';
-				}
-			}
-		?>		
-	<form method="POST" action="login.php?action=check" autocomplete="off">
-		<table>
-			<tr>
-				<td><label for="usuario"><?php echo _("Username: ");?></label></td>
-				<td><input type="text" id="usuario" name="usuario" required></td>
-			</tr>
-			<tr>
-				<td><label for="pass"><?php echo _("Password: ");?></label></td>
-				<td><input type="password" id="pass" name="pass"></td>
-			</tr>
-		</table>
-		<input type="submit" value="Login">
-	</form>
-	<br>
-	<a href="register.php"><?php echo _("New account"); ?></a>
-</section>
-</center>
+	<div class="main">
+        <?php
+            if(isset($_GET['err'])) {
+                $err = $_GET['err'];
+                if($err == "autf") {
+                    echo '<div class="message"><p>'._("Username or password are incorrect.").'</p></div>';
+                }
+            }
+        ?>	
+        <div class="container">
+            <h1><?php echo _("Log in"); ?></h1>
+            
+            <form class="login" method="POST" action="login.php?action=check" autocomplete="off">
+                <label class="username"><input type="text" id="usuario" name="usuario" placeholder="<?php echo _("Username");?>" required></label>
+                <label class="password"><input type="password" id="pass" name="pass" placeholder="<?php echo _("Password");?>"  /></label> 
+                <input type="submit" value="<?php echo _("Log in");?>" />
+            </form>
+            <a class="extra_link" href="register.php"><?php echo _("Create acount &raquo;"); ?></a>
+        </div>  
+    </div>
 
 	<?php $System->set_footer(); ?>
 

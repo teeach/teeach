@@ -109,10 +109,10 @@
         				</div> 
         				<div id="contenidopestanas">
            					<div id="cpestana1">
-                				<label for="centername">Centername: </label><input type="text" name="centername" value="'.$centername.'"><br>
-                				<label for="logo">Logo: </label><input type="text" name="logo" value="'.$logo.'"><br>
+                				<label for="centername">'._("Centername").': </label><input type="text" name="centername" value="'.$centername.'"><br>
+                				<label for="logo">'._("Logo").': </label><input type="text" name="logo" value="'.$logo.'"><br>
                 				<img src="'.$logo.'" alt="logo"><br>
-                				<label for="accesspass">Accesspass: </label><input type="text" name="accesspass" value="'.$accesspass.'">
+                				<label for="accesspass">'._("Accesspass").': </label><input type="text" name="accesspass" value="'.$accesspass.'">
             				</div>
             				<div id="cpestana2">
             					<b>Teeach</b><br>
@@ -137,7 +137,7 @@
             					echo '<input type="checkbox" name="showgroups">';
             				}
             echo '            				
-            					<label for="showgroups">Show groups in user profile</label>
+            					<label for="showgroups">'._("Show groups in user profile").'</label>
             				</div>
    						</div>
 

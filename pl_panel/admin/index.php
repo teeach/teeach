@@ -13,7 +13,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
 </head>
 <body>
-	<h2><?php echo _("Administration"); ?></h2>
+	<h1><?php echo _("Administration"); ?></h1>
 	<div id="admin_menu">
 		<a href="users.php?action"><img class="icon" src="../../src/ico/users.png" alt="Users" style="border-radius: 100%"><?php echo _("Users"); ?></a>
 		<a href="groups.php?action"><?php echo _("Groups"); ?></a>

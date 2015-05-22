@@ -3,7 +3,7 @@
        
        	function set_head() {
 			echo "
-				<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
+				<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
 				<link rel='stylesheet' href='../../src/css/main.css'>
 				<link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
                 <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
@@ -16,60 +16,147 @@
 			date_default_timezone_set("Europe/Madrid");
 		}
 
-                function get_date(){
-                    echo date("d-m-Y H:i:s");
-                }
+        function get_date() {
+            echo date("d-m-Y H:i:s");
+        }
                 
-		function set_header() {
-			echo "
-				<header></header>
-			";
+		function set_header($centername) {
+			echo '
+				<header id="header">
+    				<div class="main_title">
+        				<h1>'.$centername.'</h1>
+    				</div>
+    				
+			
+			';
 		}
 
 		function set_footer() {
-			echo "<footer>©2015 Teeach</footer>";
+			echo "
+                <footer>
+                    ©2015 Teeach<br>
+                    Early development version
+                </footer>";
 		}
 
 		function set_usr_menu($h,$p) {
-			
+            $fp = fopen("../../config.json", "r");
+            $rfile = fread($fp, filesize("../../config.json"));
+
+            $json = json_decode($rfile);
+
+            $dbserver = $json->{"dbserver"};
+            $dbuser = $json->{"dbuser"};
+            $dbpass = $json->{"dbpass"};
+            $database = $json->{"database"};
+
+            $con = mysqli_connect($dbserver, $dbuser, $dbpass, $database)or die("Error al conectar BD!");
+            $query = $con->query("SELECT * FROM pl_users WHERE h='$h'")or die("Query error!");
+            $row = mysqli_fetch_array($query);
+
+            //Current User data
+            $name = $row['name'];
+            $surname1 = $row['subname1'];
+            $surname2 = $row['subname2'];
+            $username = $row['username'];
+            $profile_photo = $row['photo'];
+
+		//Student Menu
 		if ($p == 1) {
-			echo "
-				<nav>
-					<ul>
-						<a href='profile.php?h=$h'><li>Yo</li></a>
-						<a href='index.php'><li>Inicio</li></a>
-						<a href='diary.php'>Agenda</a>
-						<a href='messages.php'><li>Messages</li></a>
-						<a href='logout.php'>Salir</a>
-					</ul>
-				</nav>
-			";
-		} elseif($p == 4 || $p == 3) {
-			echo "
-					<nav>
-						<ul>
-							<a href='profile.php?h=$h'><li>Yo</li></a>
-							<a href='index.php'><li>Inicio</li></a>
-							<a href='diary.php'>Agenda</a>
-							<a href='messages.php'><li>Messages</li></a>
-							<a href='../admin'><li>Admin</li></a>
-							<a href='logout.php'>Salir</a>
-						</ul>
-					</nav>
-				";
+			echo '
+				<nav class="main_menu">
+        			<ul>
+            			<li><a href="index.php">'._("Index").'</a></li>
+            			<li><a href="diary.php">'._("Diary").'</a></li>
+            			<li><a href="messages.php">'._("Messages").'</a></li>
+        			</ul>
+    			</nav>
+    			<nav class="user_menu">
+        			<ul>
+            			<li><a class="user_image" href="#"><img src="'.$profile_photo.'" /></a>
+                		<ul>
+                    		<li class="view_profile">
+                    		<a href="profile.php?h='.$h.'">
+                        		'.$name." ".$surname1." ".$surname2.'
+                        		<span>'._("View profile").'</span>
+                        	</a>
+                    		</li>
+                    		<li class="edit_profile"><a href="editprofile.php"><i class="fa fa-pencil"></i> '._("Edit profile").'</a></li>
+                    		<li class="logout_user"><a href="logout.php"><i class="fa fa-sign-out"></i> '._("Log out").'</a></li>
+                		</ul>
+            		</li>
+        		</ul>
+    			</nav>
+    			</header>
+			';
+
+		//Teacher Menu
+		} elseif ($p == 2) {
+			echo '
+				<nav class="main_menu">
+        			<ul>
+            			<li><a href="index.php">'._("Index").'</a></li>
+            			<li><a href="diary.php">'._("Diary").'</a></li>
+            			<li><a href="messages.php">'._("Messages").'</a></li> 
+        			</ul>
+    			</nav>
+    			<nav class="user_menu">
+        			<ul>
+            			<li><a class="user_image" href="#"><img src="'.$profile_photo.'" /></a>
+                		<ul>
+                    		<li class="view_profile">
+                    		<a href="profile.php?h='.$h.'">
+                                '.$name." ".$surname1." ".$surname2.'
+                                <span>'._("View profile").'</span>
+                            </a>
+                    		</li>
+                    		<li class="edit_profile"><a href="editprofile.php"><i class="fa fa-pencil"></i> '._("Edit profile").'</a></li>
+                    		<li class="logout_user"><a href="logout.php"><i class="fa fa-sign-out"></i> '._("Log out").'</a></li>
+                		</ul>
+            		</li>
+        		</ul>
+    			</nav>
+    			</header>
+				';
+
+		//Admin Menu
 		} else {
-			echo "
-					<nav>
-						<ul>
-							<a href='profile.php?h=$h'><li>Yo</li></a>
-							<a href='index.php'><li>Inicio</li></a>
-							<a href='diary.php'>Agenda</a>
-							<a href='logout.php'>Salir</a>
-						</ul>
-					</nav>
-				";
-			}			
+			echo '
+				<nav class="main_menu">
+        			<ul>
+            			<li><a href="index.php">'._("Index").'</a></li>
+            			<li><a href="diary.php">'._("Diary").'</a></li>
+            			<li><a href="messages.php">'._("Messages").'</a></li>
+           				<li><a href="../admin">'._("Admin").'</a>
+                	<ul>
+                    	<li><a class="icon_users" href="../admin/users.php?action"><i class="fa fa-users"></i> '._("Users").'</a></li>
+                    	<li><a class="icon_org" href="../admin/groups.php?action"><i class="fa fa-graduation-cap"></i> '._("Groups").'</a></li>
+                    	<li><a class="icon_post" href="../admin/posts.php?action"><i class="fa fa-pencil"></i> '._("Posts").'</a></li>
+                    	<li><a class="icon_config" href="../admin/settings.php?action"><i class="fa fa-cog"></i> '._("Settings").'</a></li>
+                	</ul>
+            		</li>  
+        			</ul>
+    			</nav>
+    			<nav class="user_menu">
+        			<ul>
+            			<li><a class="user_image" href="#"><img src="'.$profile_photo.'" /></a>
+                		<ul>
+                    		<li class="view_profile">
+                    		<a href="profile.php?h='.$h.'">
+                                '.$name." ".$surname1." ".$surname2.'
+                                <span>'._("View profile").'</span>
+                            </a>
+                    		</li>
+                    		<li class="edit_profile"><a href="editprofile.php"><i class="fa fa-pencil"></i> '._("Edit profile").'</a></li>
+                    		<li class="logout_user"><a href="logout.php"><i class="fa fa-sign-out"></i> '._("Log out").'</a></li>
+                		</ul>
+            		</li>
+        		</ul>
+    			</nav>
+    			</header>
+				';		
 		}
+	}
 
 		function conDB($filejson) {
 			$fp = fopen($filejson, "r");
@@ -105,10 +192,10 @@
 
             return $str;
         }
-        
-	}
+
+    }
     
-    class User{
+    class User {
         
         function __construct($id, $username, $name, $subname1, $subname2, $email, $phone, $level, $h, $photo, $birthday, $home, $pass, $privilege, $group){
             $this->id = $id;

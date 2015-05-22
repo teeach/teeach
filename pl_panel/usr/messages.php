@@ -1,16 +1,14 @@
 <?php
 	include("../../core.php");
 	include("../../usr.php");
+
+	$System = new System();
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-    <?
-    $System = new System();
-    $System->set_header();
-    ?>
 	<title><?php echo _("Messages");?> | Teeach </title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<?php
@@ -38,7 +36,11 @@
 </head>
 <body>
 	<?php
-		$System->set_usr_menu($usr_h,$usr_privilege);
+		$query = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
+		$row = mysqli_fetch_array($query);
+		$centername = $row['value'];
+		$System->set_header($centername);
+		$System->set_usr_menu($User->h,$User->privilege);
 
 		if (@$_GET['action'] == "new") {
 			echo '

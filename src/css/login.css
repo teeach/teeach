@@ -1,27 +1,189 @@
 body {
-	overflow: hidden;
-	background: #ddd;
-	color: #320;
+    background: #EEE;
+    font-family: 'RobotoRegular', sans-serif;    
 }
 
-footer {
-	position: absolute;
-	bottom: 0%;
-	width: 100%;
-	border-top: 10px solid #bbb;
+.main {
+    margin: 50px auto;
+    width: 392px;   
 }
 
-input {
-	background-color: #ddd;
-	color: #320;
-	border: 0;
-	border-bottom: 1px solid #320;
-	outline: 0;
-	margin: 10px;
-	cursor: pointer;
-	border-radius: 5px;
+/* Container
+   =========================================================== */
+
+.container {
+    background: #d1d1d1;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.30);
+    padding: 50px;
+    width: 292px;
 }
 
-input:hover, input:focus {
-	box-shadow: 0 1px #320;
+.container h1, .container h2 {
+    color: #320;       
+    margin-bottom: 20px;    
+}
+
+.container h1 {
+    font-size: 32px; 
+    text-align: center;
+}
+
+.container h2 {
+    font-size: 24px;    
+    text-align: left;
+}
+
+.container .form  label {
+    color: #320;
+    width: 100%x;
+}
+
+.container .form input, .container .form select {
+    border: 0;
+    box-sizing: border-box;
+    font-family: 'RobotoLight', sans-serif;
+    font-size: 15px;
+    padding: 12px 12px;
+    margin: 5px 0px 20px 0px;
+    width: 100%;
+}
+
+.container .form input:focus, .container .form select:focus {
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.30);
+}
+
+.container .form input[type="submit"] {
+    background: #320;
+    color: #FFF;
+    cursor: pointer;
+    font-family: 'RobotoBold', sans-serif;
+    margin-bottom: 0px;
+    width: 100%;
+}
+
+.container button, .container a.button {
+    background: #320;
+    border: 0px;
+    color: #FFF;
+    cursor: pointer;
+    font-family: 'RobotoBold', sans-serif;
+    font-size: 15px;
+    padding: 12px 12px;    
+    margin-bottom: 0px;
+    width: 100%;
+}
+
+.container a.button {
+    box-sizing: border-box;
+    color: #FFF;
+    display: inline-block;
+}
+
+/* Login */
+.container .login input {
+    border: 0;
+    box-sizing: border-box;
+    font-family: 'RobotoLight', sans-serif;
+    font-size: 15px;
+    padding: 12px 12px;
+    margin-bottom: 20px;
+    width: 250px;
+}
+.container .login input[type="submit"] {
+    background: #320;
+    color: #FFF;
+    cursor: pointer;
+    font-family: 'RobotoBold', sans-serif;
+    margin-bottom: 0px;
+    width: 292px;
+}
+
+.container .login  label {    
+    width: 292px;
+}
+
+.container .login label:before {
+    background: #320;
+    color: #FFF;
+    display: inline-block;
+    float: left;
+    font-family: FontAwesome;
+    font-size: 24px;
+    height: 34px;
+    padding-top: 8px;
+    text-align: center;    
+    width: 42px;
+}
+.container .login label.username:before {
+    content: "\f007";
+}
+.container .login  label.password:before {
+    content: "\f084";
+}
+
+.container .extra_link {
+    color: #320;
+    display: inline-block;    
+    margin-top: 20px;
+    text-align: right;
+    width: 100%;
+}
+
+.extra_link:hover {
+    text-decoration: underline;
+}
+
+/* Text */
+
+.container .text {
+    display: inline-block;
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.container  .text p {
+    margin-bottom: 10px;
+}
+
+.container  .text a.link {
+    color: #000;
+    font-family: 'RobotoBold', sans-serif;
+}
+
+/* Mesasges
+   =========================================================== */
+
+.message {
+    background: #d1d1d1;
+    border-left: 4px solid #320;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.30);
+    color: #320;
+    font-weight: 300;
+    margin-bottom: 20px;
+    padding: 15px;
+    width: 358px;
+}
+
+
+/* Footer
+   =========================================================== */
+
+#footer {
+    bottom: 0px;
+    box-sizing: border-box;
+    color: #666;
+    left: 0px;
+    padding: 10px 20px;
+    position: fixed;
+    width: 100%;
+}
+
+#footer .copyright {
+    float: left;
+}
+
+#footer .version {
+    float: right;
 }

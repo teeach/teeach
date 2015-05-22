@@ -32,8 +32,13 @@
 	?>
 </head>
 <body>
-	<?php $System->set_header(); ?>
-	<?php $System->set_usr_menu($User->h, $User->privilege); ?>
+	<?php
+		$query = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
+		$row = mysqli_fetch_array($query);
+		$centername = $row['value'];
+		$System->set_header($centername);
+		$System->set_usr_menu($User->h,$User->privilege);
+	?>
 
 	<table class="profile_table">
 		<tr>

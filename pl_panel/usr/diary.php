@@ -18,8 +18,11 @@
 	<?php
 
 	$System = new System();
-	$System->set_header();
-	$System->set_usr_menu($usr_h,$usr_privilege);
+	$query = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
+	$row = mysqli_fetch_array($query);
+	$centername = $row['value'];
+	$System->set_header($centername);
+	$System->set_usr_menu($User->h,$User->privilege);
 
 	echo "<h1>Coming soon</h1>";
 

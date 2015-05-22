@@ -9,7 +9,7 @@
     $connection = $System->conDB("../../config.json");
     $User = $System->get_user_by_id($h, $connection);
 
-    if ($_GET['action']=="success") {
+    if (@$_GET['action']=="success") {
         $error = 0;
 		$name = $_POST['name'];
 		$subname1 = $_POST['subname1'];
@@ -83,7 +83,10 @@
 </head>
 <body>
 	<?php 
-		$System->set_header(); 
+		$query = $connection->query("SELECT * FROM pl_settings WHERE property='centername'");
+		$row = mysqli_fetch_array($query);
+		$centername = $row['value'];
+		$System->set_header($centername);
 		$System->set_usr_menu($User->h,$User->privilege);
 	
 		echo '

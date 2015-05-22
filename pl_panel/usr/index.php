@@ -29,7 +29,10 @@
 		die("You aren't logged in.");
 	}
 
-	$System->set_header();
+	$query = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
+	$row = mysqli_fetch_array($query);
+	$centername = $row['value'];
+	$System->set_header($centername);
 	$System->set_usr_menu($User->h,$User->privilege);
 
 		echo "

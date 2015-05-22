@@ -1,392 +1,578 @@
-* {
-	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+/*===============================================================
+1.0 RESET
+===============================================================*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+    outline: 0;
 }
 
 a {
-	font-weight: bold;
-	color: #249;
-	text-decoration: none;
+    text-decoration: none;
+}
+
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/*===============================================================
+2.0 FONTS
+===============================================================*/
+
+/* RobotoBold */
+@font-face {
+    font-family: 'RobotoBold';
+    src: url('../fonts/roboto-bold/roboto-bold-webfont.eot');
+    src: url('../fonts/roboto-bold/roboto-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/roboto-bold/roboto-bold-webfont.woff') format('woff'),
+         url('../fonts/roboto-bold/roboto-bold-webfont.ttf') format('truetype'),
+         url('../fonts/roboto-bold/roboto-bold-webfont.svg#robotobold') format('svg');
+	font-weight: normal;
+    font-style: normal;
+}
+
+/* RobotoMedium */
+@font-face {
+    font-family: 'RobotoMedium';
+    src: url('../fonts/roboto-medium/roboto-medium-webfont.eot');
+    src: url('../fonts/roboto-medium/roboto-medium-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/roboto-medium/roboto-medium-webfont.woff') format('woff'),
+         url('../fonts/roboto-medium/roboto-medium-webfont.ttf') format('truetype'),
+         url('../fonts/roboto-medium/roboto-medium-webfont.svg#robotomedium') format('svg');
+	font-weight: normal;
+    font-style: normal;
+}
+
+/* RobotoRegular */
+@font-face {
+    font-family: 'RobotoRegular';
+    src: url('../fonts/roboto-regular/roboto-regular-webfont.eot');
+    src: url('../fonts/roboto-regular/roboto-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/roboto-regular/roboto-regular-webfont.woff') format('woff'),
+         url('../fonts/roboto-regular/roboto-regular-webfont.ttf') format('truetype'),
+         url('../fonts/roboto-regular/roboto-regular-webfont.svg#robotoregular') format('svg');
+	font-weight: normal;
+    font-style: normal;
+}
+
+/* RobotoLight */
+@font-face {
+    font-family: 'RobotoLight';
+    src: url('../fonts/roboto-light/roboto-light-webfont.eot');
+    src: url('../fonts/roboto-light/roboto-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/roboto-light/roboto-light-webfont.woff') format('woff'),
+         url('../fonts/roboto-light/roboto-light-webfont.ttf') format('truetype'),
+         url('../fonts/roboto-light/roboto-light-webfont.svg#robotolight') format('svg');
+	font-weight: normal;
+    font-style: normal;
+}
+
+/* RobotoThin */
+@font-face {
+    font-family: 'RobotoThin';
+    src: url('../fonts/roboto-thin/roboto-thin-webfont.eot');
+    src: url('../fonts/roboto-thin/roboto-thin-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/roboto-thin/roboto-thin-webfont.woff') format('woff'),
+         url('../fonts/roboto-thin/roboto-thin-webfont.ttf') format('truetype'),
+         url('../fonts/roboto-thin/roboto-thin-webfont.svg#robotothin') format('svg');
+	font-weight: normal;
+    font-style: normal;
+}
+
+/*===============================================================
+3.0 BASIC STYLES
+===============================================================*/
+
+body {
+    background: #EEE;    
+    font-family: 'Open Sans', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a {
+    color: #C96;
+    transition: all 0.3s ease;
 }
 
 a:hover {
-	color: #016;
+    color: #320;
+    text-decoration: underline;
 }
 
 h1 {
-	font-weight: 100;
-	font-size: 4rem;
-	margin: 0;
-	padding: 10px;
-	color: #320;
+    font-size: 4rem;
+    font-weight: 100;
+    font-family: 'Open Sans', sans-serif;
+    color: #320;
 }
 
-h2 {
-	display: inline-block;
-	font-weight: 100;
-	/*font-size: 3rem;*/
-	padding: 10px;
+.fa {
+    padding-right: 2px;
 }
 
-h2 a {
-	color: #000;
-	font-weight: 100;
+.main {
+    margin: 50px auto;
+    width: 392px;
 }
 
-h2 a:hover {
-	text-decoration: underline;
+/*===============================================================
+4.0 HEADER
+===============================================================*/
+
+#header {
+    background: #FFF;  
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.30);
+    display: inline-block;
+    height: 60px;
+    padding: 0px 80px;
+    width: 100%;
 }
 
-h3 {
-	padding: 10px;
+header a:hover {
+    text-decoration: none;
 }
 
-h6 {
-	color: #320;
+/* Main Title
+   =========================================================== */
+
+.main_title {    
+    padding-right: 20px;
+    margin-right: 10px;
+    float: left;
+    margin-top: 15px;
+}
+.main_title h1 {
+    color: #332200;
+    font-size: 24px;    
 }
 
-.table {
-	border-collapse: collapse;
-	margin: 10px;
+/* Main Menu
+   =========================================================== */
+
+.main_menu {    
+    float: left;
 }
 
-.table td, .table th {
-	border: 1px solid #999;
-	padding: 2px;
-	margin: 0;
+.main_menu li {
+    float: left;
+    position: relative;
 }
 
-thead {
-	background-color: #320;
-	color: #fff;
+.main_menu li a {
+    color: #332200;
+    display: inline-block;
+    font-size: 16px;
+    padding: 22px 15px;
 }
 
-.table tr:hover {
-	background-color: #99f;
-	color: #33f;
-	cursor: default;
+
+.main_menu li:hover a {
+    background: #f5f5f5;       
 }
 
-body {
-	margin: 0;
-	padding: 0;
-	background: #ddd;
+.main_menu li:hover > ul {
+    display: block;
 }
 
-header {
-	position: relative;
-	display: inline-block;
-	width: 100%;
-	color: #fff;
-	background-color: #000;
+.main_menu li ul {
+    background: #320;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.30);
+    display: none;    
+    padding: 10px 0px;
+    position: absolute;
+    min-width: 180px;    
 }
 
-nav {
-	margin-top: -30px;
-	position: relative;
-	width: 100%;
-	display: inline-block;
-	color: #fff;
-	background-color: #000;
+.main_menu li ul li {
+    display: block;
+    float: none;
 }
 
-nav a {
-	font-size: 0.9rem;
-	text-transform: uppercase;
-	display: inline-block;
-	color: #bbb;
-	padding: 7px;
+.main_menu li ul li a {    
+    color: #FFF;
+    padding: 5px 10px;
+    width: 100%;
 }
 
-nav a:hover {
-	color: #fff;
+.main_menu li ul li a:hover {
+    color: #C96;
 }
 
-nav ul{
-	list-style: none;
-	padding: 0;
+.main_menu li:hover > ul li a {
+    background: none;
 }
 
-.submenu {
-	list-style: none;
-	padding: 10px 30px;
-	background-color: #eef;
+
+/* User Menu
+   =========================================================== */
+
+.user_menu {
+    float: right;
 }
 
-.submenu a {
-	display: inline-block;
-	border: 1px solid #33f;
-	margin-left: 7px;
-	padding: 2px;
+.user_menu li {
+    position: relative;
 }
 
-aside {
-	background-color: #fff;
-	color: #320;
-	float: left;
-	width: 250px;
-	min-height: 500px;
+.user_menu li a {
+    color: #FFF;
+    display: inline-block;
+    height: 60px;
+    padding: 6px 15px;
 }
 
-aside h3 {
-	text-align: center;
+.user_menu li:hover > ul {
+    display: block;
 }
 
-aside ul {
-	list-style: none;
+.user_menu li ul {
+    background: #320;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.30);
+    display: none;    
+    padding: 10px 0px;
+    position: absolute;
+    width: 220px;
+    right: 0px;
 }
 
-#posts {
-	display: inline-block;
-	float: left;
-	padding: 10px;
-	margin-right: 30px;
+.user_menu li ul li a {
+    height: auto;
 }
 
-#posts article {
-	width: 580px;
-	display: inline-block;
-	padding: 30px;
-	margin-left: 20px;
-	background-color: #fff;
-	box-shadow: 1px 1px 5px #aaa;
-	transition: all 0.1s ease;	
+.user_menu .user_image img {
+    background: #FFF;
+    border-radius: 100%;
+    height: 48px;
+    width: 48px;    
 }
 
-#posts article:hover {
-	border-left: 5px solid #320;
+.user_menu ul li a {
+    font-size: 13px;
 }
 
-#posts h1 {
-	color: #320;
-	padding: 10px 50px 10px 25px;
-	background-color: #fff;
-	display: inline-block;
-	margin-top: 30px;
+.user_menu:hover > ul li a {
+    background: none;
 }
 
-#posts h2,h5 {
-	padding: 0;
-	margin: 0;
+.user_menu ul li:hover {
+    background: none;
 }
 
-#posts h2 {
-	font-size: 3rem;
+.user_menu ul li a:before {
+    color: #FFF;
+    padding-right: 5px;
+    font-size: 13px;
 }
 
-#groups {
-	margin-top: 10px;
-	float: left;
-	display: inline-block;
-	padding: 10px;
-	border: 1px solid #000;
+.user_menu ul li a:hover, .user_menu ul li a:hover:before {
+    color: #C96;    
 }
 
-#groups div {
-	background-color: #320;
-	color: #fff;
+.user_menu .view_profile a  {
+    font-size: 20px !important;
+    margin-bottom: 10px;
 }
 
-.grouplist li {
-	list-style: none;
-	padding: 20px 150px;
-	display: inline-block;
-	background-color: #fff;
+.user_menu .view_profile span {
+    display: inline-block;
+    font-size: 13px;
 }
 
-.grouplist li:hover {
-	background-color: #bbb;
+/*Admin panel*/
+#admin_menu {
+    padding: 10px;
+}
+
+#admin_menu a {
+    border: 1px solid #aaa;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+#admin_menu a:hover {
+    background-color: #fff;
+}
+
+#admin_menu img {
+    width: 60px;
+    height: 52px;
+}
+
+#admin_menu a img {
+    vertical-align: middle;
+    padding-right: 10px;
 }
 
 .btn_back {
-	width: 48px;
-	height: 48px;
-	opacity: 0.7;
-	cursor: pointer;
-	vertical-align: middle;
+    width: 48px;
+    height: 48px;
+    opacity: 0.7;
+    cursor: pointer;
+    vertical-align: middle;
 }
 
 .btn_back:hover {
-	opacity: 1;
-}
-
-
-
-.msg_error {
-	padding: 10px;
-	border: 2px solid #C0392B;
-	background-color: #FF8484;
-	color: #C0392B;
-	display: inline-block;
-	font-weight: bold;
-}
-
-.msg_error img {
-	width: 48px;
-	height: 48px;
-	vertical-align: middle;
-	padding: 3px;
-}
-
-.msg_ok {
-	padding: 10px;
-	border: 2px solid #349F41;
-	background-color: #65AF6D;
-	color: #349F41;
-	display: inline-block;
-	font-weight: bold;
-}
-
-.msg_ok img {
-	width: 48px;
-	height: 48px;
-	vertical-align: middle;
-	padding: 3px;
-}
-
-/*
------------
-------PRUEBAS
-------Pestañas
------------
-*/
-
-.contenedor {
-    width: 1080px;
-    margin: auto;    
-    padding: 20px 15px 50px 50px;
-    border-radius: 5px;
-}
- 
-#pestanas {
-    float: top;
-    font-size: 1.5rem;
-    margin-left: 13px;
-}
- 
-#pestanas ul {
-    margin-left: -40px;    
-}
- 
-#pestanas li {
-    list-style-type: none;
-    float: left;
-    text-align: center;
-    margin: 0px 2px -2px -0px;
-    background: #ccc;
-    border: 4px solid #bbb;
-    border-bottom: dimgray;
-    padding: 0px 20px 0px 20px;
-}
- 
-#pestanas a:link {
-    text-decoration: none;
-    color: #222;
-}
- 
-#contenidopestanas {
-    clear: both;  
-    background: #fff;
-    padding: 20px 0px 20px 20px;
-    border-top-left-radius: 0px;
-    border: 4px solid #bbb;
-    width: 1025px;
+    opacity: 1;
 }
 
 /* Ventanta Profile */
 
 .profile_table {
-	padding: 10px;
-	margin: 10px;
-	border: 1px solid #aaa;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #aaa;
 }
 
 .profile_table td {
-	padding: 10px;	
+    padding: 10px;  
 }
 
 .main_profile_photo {
-	width: 100px;
-	height: 100px;
-	background-color: #fff;
-	border: 1px solid #aaa;
-	box-shadow: 1px 1px 5px #aaa;
-	border-radius: 100%;
+    width: 100px;
+    height: 100px;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    box-shadow: 1px 1px 5px #aaa;
+    border-radius: 100%;
 }
 
 #previsualizar_img {
-	width: 64px;
-	height: 64px;
+    width: 64px;
+    height: 64px;
 }
 
-/*Admin panel*/
-#admin_menu {
-	padding: 10px;
+/* Container
+=========================================================== */
+.container {
+    background: #d1d1d1;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.30);
+    padding: 50px;
+    /*width: 392px;*/
 }
 
-#admin_menu a {
-	border: 1px solid #aaa;
-	padding: 20px;
-	transition: all 0.3s ease;
+.container h1, .container h2 {
+    color: #320;       
+    margin-bottom: 20px;    
 }
 
-#admin_menu a:hover {
-	background-color: #fff;
+.container h1 {
+    font-size: 32px; 
+    text-align: center;
 }
 
-#admin_menu a img {
-	vertical-align: middle;
-	padding-right: 10px;
+.container h2 {
+    font-size: 24px;    
+    text-align: left;
 }
 
-.icon {
-	width: 48px;
-	height: 48px;
+.container .form  label {
+    color: #320;
+    width: 100%x;
 }
 
-.actual_select {
-	background-color: #999;
-	padding: 10px;
+.container .form input, .container .form select {
+    border: 0;
+    box-sizing: border-box;
+    font-family: 'RobotoLight', sans-serif;
+    font-size: 15px;
+    padding: 12px 12px;
+    margin: 5px 0px 20px 0px;
+    width: 100%;
 }
+
+.container .form input:focus, .container .form select:focus {
+    box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.30);
+}
+
+.container .form input[type="submit"] {
+    background: #320;
+    color: #FFF;
+    cursor: pointer;
+    font-family: 'RobotoBold', sans-serif;
+    margin-bottom: 0px;
+    width: 100%;
+}
+
+.container button, .container a.button {
+    background: #320;
+    border: 0px;
+    color: #FFF;
+    cursor: pointer;
+    font-family: 'RobotoBold', sans-serif;
+    font-size: 15px;
+    padding: 12px 12px;    
+    margin-bottom: 0px;
+    width: 100%;
+}
+
+.container a.button {
+    box-sizing: border-box;
+    color: #FFF;
+    display: inline-block;
+}
+
+/* Login */
+.container .login input {
+    border: 0;
+    box-sizing: border-box;
+    font-family: 'RobotoLight', sans-serif;
+    font-size: 15px;
+    padding: 12px 12px;
+    margin-bottom: 20px;
+    width: 250px;
+}
+.container .login input[type="submit"] {
+    background: #320;
+    color: #FFF;
+    cursor: pointer;
+    font-family: 'RobotoBold', sans-serif;
+    margin-bottom: 0px;
+    width: 292px;
+}
+
+.container .login  label {    
+    width: 292px;
+}
+
+.container .login label:before {
+    background: #320;
+    color: #FFF;
+    display: inline-block;
+    float: left;
+    font-family: FontAwesome;
+    font-size: 24px;
+    height: 34px;
+    padding-top: 8px;
+    text-align: center;    
+    width: 42px;
+}
+.container .login label.username:before {
+    content: "\f007";
+}
+.container .login  label.password:before {
+    content: "\f084";
+}
+
+.container .extra_link {
+    color: #320;
+    display: inline-block;    
+    margin-top: 20px;
+    text-align: right;
+    width: 100%;
+}
+
+.extra_link:hover {
+    text-decoration: underline;
+}
+
+/* Text */
+
+.container .text {
+    display: inline-block;
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.container  .text p {
+    margin-bottom: 10px;
+}
+
+.container  .text a.link {
+    color: #000;
+    font-family: 'RobotoBold', sans-serif;
+}
+
+/* Mesasges
+   =========================================================== */
+
+.message {
+    background: #d1d1d1;
+    border-left: 4px solid #320;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.30);
+    color: #320;
+    font-weight: 300;
+    margin-bottom: 20px;
+    padding: 15px;
+    width: 358px;
+}
+
+
+/* Footer
+   =========================================================== */
 
 footer {
-	display: block;
-	padding: 15px;
-	background-color: #320;
-	color: #fff;
-	text-align: center;
-	font-size: 0.7rem;
-	width: 100%;
-	border-top: 10px solid #bbb;
+    bottom: 0px;
+    box-sizing: border-box;
+    color: #666;
+    left: 0px;
+    padding: 10px 20px;
+    position: fixed;
+    width: 100%;
 }
 
-/*Test*/
+footer .copyright {
+    float: left;
+}
 
+footer .version {
+    float: right;
+}
+
+/* INPUT */
 input,button {
-	background-color: #ddd;
-	color: #320;
-	border: 0;
-	border-bottom: 1px solid #320;
-	outline: 0;
-	margin: 10px;
-	border-radius: 5px;
+    background-color: #eee;
+    color: #320;
+    border: 0;
+    border-bottom: 1px solid #320;
+    outline: 0;
+    border-radius: 5px;
 }
 
 input:hover, input:focus {
-	box-shadow: 0 1px #320;
+    box-shadow: 0 1px #320;
 }
-
-input[type="submit"],button {
-	padding: 3px 40px;
-	border: 1px solid #320;
-	box-shadow: 0 1px #320;
-	cursor: pointer;
-	transition: all 0.3s ease;
-}
-
-input[type="submit"]:hover,button:hover {
-	background-color: #fff;
-	box-shadow: none;
-	border-bottom: 1px solid #320;
-}
-
-/*(c)2015 Project Learn*/
+/*
+==================
+(c)2015 Teeach
+==================
+*/
