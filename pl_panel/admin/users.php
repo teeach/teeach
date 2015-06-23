@@ -154,7 +154,7 @@
     		$privilege = $row['privilege'];
 
     		if ($privilege == 4) {
-    			die("<h1>¿¡Qué haces alma cándida!?</h1><p>¡No se puede borrar el administrador general porque sino la base de datos se destruiría!</p><a href='users.php?action'>Aceptar</a>");
+    			die("<h1>"._('What are you doing!?')."</h1><p>"._('You cannot delete the general admin because the database will be destroyed!')."</p><a href='users.php?action'>"._('Accept')."</a>");
     		}
 
     		$query = $con->query("delete from pl_users where h='$h'")or die("Query error!");

@@ -11,7 +11,7 @@
 			$lang = "es_ES";
 			putenv('LC_ALL='.$lang);
 			setlocale(LC_ALL, $lang);
-			bindtextdomain("app", "./locale");
+			bindtextdomain("app", "../../locale");
 			textdomain("app");
 			date_default_timezone_set("Europe/Madrid");
 		}
@@ -55,11 +55,13 @@
             $row = mysqli_fetch_array($query);
 
             //Current User data
+            $id = $row['id'];
             $name = $row['name'];
             $surname1 = $row['subname1'];
             $surname2 = $row['subname2'];
             $username = $row['username'];
             $profile_photo = $row['photo'];
+
 
 		//Student Menu
 		if ($p == 1) {
@@ -67,6 +69,21 @@
 				<nav class="main_menu">
         			<ul>
             			<li><a href="index.php">'._("Index").'</a></li>
+                        <li>
+                            <a href="../admin">'._("Groups").'</a>
+                            <ul>';
+                                $query = $con->query("SELECT * FROM pl_groupuser WHERE userid=$id")or die("Query error!");
+                                while($row1 = mysqli_fetch_array($query)) {
+                                    $groupid = $row1['groupid'];
+                                    $query2 = $con->query("SELECT * FROM pl_groups WHERE id=$groupid")or die("Query error!");
+                                    $row2 = mysqli_fetch_array($query2);
+                                    $name = $row2['name'];
+                                    $h = $row2['h'];
+                                    echo '<li><a class="icon_users" href="group.php?action=view&h='.$h.'&page=index"><i class="fa fa-users"></i> '.$name.'</a></li>';
+                                }
+                            echo '                                
+                            </ul>
+                         </li>
             			<li><a href="diary.php">'._("Diary").'</a></li>
             			<li><a href="messages.php">'._("Messages").'</a></li>
         			</ul>
@@ -127,14 +144,15 @@
             			<li><a href="index.php">'._("Index").'</a></li>
             			<li><a href="diary.php">'._("Diary").'</a></li>
             			<li><a href="messages.php">'._("Messages").'</a></li>
-           				<li><a href="../admin">'._("Admin").'</a>
-                	<ul>
-                    	<li><a class="icon_users" href="../admin/users.php?action"><i class="fa fa-users"></i> '._("Users").'</a></li>
-                    	<li><a class="icon_org" href="../admin/groups.php?action"><i class="fa fa-graduation-cap"></i> '._("Groups").'</a></li>
-                    	<li><a class="icon_post" href="../admin/posts.php?action"><i class="fa fa-pencil"></i> '._("Posts").'</a></li>
-                    	<li><a class="icon_config" href="../admin/settings.php?action"><i class="fa fa-cog"></i> '._("Settings").'</a></li>
-                	</ul>
-            		</li>  
+           				<li>
+                            <a href="../admin">'._("Admin").'</a>
+                	        <ul>
+                    	        <li><a class="icon_users" href="../admin/users.php?action"><i class="fa fa-users"></i> '._("Users").'</a></li>
+                    	        <li><a class="icon_org" href="../admin/groups.php?action"><i class="fa fa-graduation-cap"></i> '._("Groups").'</a></li>
+                    	        <li><a class="icon_post" href="../admin/posts.php?action"><i class="fa fa-pencil"></i> '._("Posts").'</a></li>
+                    	        <li><a class="icon_config" href="../admin/settings.php?action"><i class="fa fa-cog"></i> '._("Settings").'</a></li>
+                	        </ul>
+            		     </li>
         			</ul>
     			</nav>
     			<nav class="user_menu">

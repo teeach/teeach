@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Teeach\n"
-"POT-Creation-Date: 2015-05-22 20:02+0100\n"
-"PO-Revision-Date: 2015-05-22 20:02+0100\n"
+"POT-Creation-Date: 2015-05-23 11:51+0100\n"
+"PO-Revision-Date: 2015-05-23 11:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_ES\n"
@@ -15,55 +15,55 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: Teeach-Dev\n"
 
-#: Teeach-Dev/core.php:65 Teeach-Dev/core.php:94 Teeach-Dev/core.php:123
+#: Teeach-Dev/core.php:69 Teeach-Dev/core.php:98 Teeach-Dev/core.php:127
 msgid "Index"
 msgstr "Inicio"
 
-#: Teeach-Dev/core.php:66 Teeach-Dev/core.php:95 Teeach-Dev/core.php:124
+#: Teeach-Dev/core.php:70 Teeach-Dev/core.php:99 Teeach-Dev/core.php:128
 msgid "Diary"
 msgstr "Agenda"
 
-#: Teeach-Dev/core.php:67 Teeach-Dev/core.php:96 Teeach-Dev/core.php:125
+#: Teeach-Dev/core.php:71 Teeach-Dev/core.php:100 Teeach-Dev/core.php:129
 #: Teeach-Dev/pl_panel/usr/messages.php:12
 msgid "Messages"
 msgstr "Mensajes"
 
-#: Teeach-Dev/core.php:77 Teeach-Dev/core.php:106 Teeach-Dev/core.php:143
+#: Teeach-Dev/core.php:81 Teeach-Dev/core.php:110 Teeach-Dev/core.php:147
 msgid "View profile"
 msgstr "Ver perfil"
 
-#: Teeach-Dev/core.php:80 Teeach-Dev/core.php:109 Teeach-Dev/core.php:146
+#: Teeach-Dev/core.php:84 Teeach-Dev/core.php:113 Teeach-Dev/core.php:150
 msgid "Edit profile"
 msgstr "Editar perfil"
 
-#: Teeach-Dev/core.php:81 Teeach-Dev/core.php:110 Teeach-Dev/core.php:147
+#: Teeach-Dev/core.php:85 Teeach-Dev/core.php:114 Teeach-Dev/core.php:151
 msgid "Log out"
 msgstr "Cerrar sesión"
 
-#: Teeach-Dev/core.php:126 Teeach-Dev/pl_panel/admin/users.php:211
+#: Teeach-Dev/core.php:130 Teeach-Dev/pl_panel/admin/users.php:211
 #: Teeach-Dev/pl_panel/admin/users.php:214
 msgid "Admin"
 msgstr "Administrador"
 
-#: Teeach-Dev/core.php:128 Teeach-Dev/pl_panel/admin/index.php:18
+#: Teeach-Dev/core.php:132 Teeach-Dev/pl_panel/admin/index.php:18
 #: Teeach-Dev/pl_panel/admin/users.php:12
 #: Teeach-Dev/pl_panel/usr/group.php:116 Teeach-Dev/pl_panel/usr/group.php:130
 #: Teeach-Dev/pl_panel/usr/group.php:133
 msgid "Users"
 msgstr "Usuarios"
 
-#: Teeach-Dev/core.php:129 Teeach-Dev/pl_panel/admin/groups.php:12
+#: Teeach-Dev/core.php:133 Teeach-Dev/pl_panel/admin/groups.php:12
 #: Teeach-Dev/pl_panel/admin/index.php:19 Teeach-Dev/pl_panel/usr/group.php:21
 #: Teeach-Dev/pl_panel/usr/index.php:73
 msgid "Groups"
 msgstr "Grupos"
 
-#: Teeach-Dev/core.php:130 Teeach-Dev/pl_panel/admin/index.php:21
+#: Teeach-Dev/core.php:134 Teeach-Dev/pl_panel/admin/index.php:21
 #: Teeach-Dev/pl_panel/admin/posts.php:12
 msgid "Posts"
 msgstr "Entradas"
 
-#: Teeach-Dev/core.php:131 Teeach-Dev/pl_panel/admin/index.php:22
+#: Teeach-Dev/core.php:135 Teeach-Dev/pl_panel/admin/index.php:22
 #: Teeach-Dev/pl_panel/admin/settings.php:12
 #: Teeach-Dev/pl_panel/admin/settings.php:98
 msgid "Settings"
@@ -73,27 +73,27 @@ msgstr "Ajustes"
 msgid "Install"
 msgstr "Instalar"
 
-#: Teeach-Dev/install.php:34
+#: Teeach-Dev/install.php:42
 msgid "Hello"
 msgstr "Hola"
 
-#: Teeach-Dev/install.php:34 Teeach-Dev/install.php:178
+#: Teeach-Dev/install.php:42 Teeach-Dev/install.php:186
 msgid "Thanks for choosing Teeach."
 msgstr "Gracias por elegir Teeach."
 
-#: Teeach-Dev/install.php:34
+#: Teeach-Dev/install.php:42
 msgid "Now, we're going to install."
 msgstr "Ahora, vamos a ayudate a instalar tu nuevo software."
 
-#: Teeach-Dev/install.php:34
+#: Teeach-Dev/install.php:42
 msgid "Next"
 msgstr "Siguiente"
 
-#: Teeach-Dev/install.php:38
+#: Teeach-Dev/install.php:46
 msgid "Terms"
 msgstr "Términos"
 
-#: Teeach-Dev/install.php:40
+#: Teeach-Dev/install.php:48
 msgid ""
 "Teeach is the only smart software for administration of educational "
 "databases."
@@ -101,18 +101,18 @@ msgstr ""
 "Teeach es el único software inteligente para la adminstración de bases de "
 "datos educativas."
 
-#: Teeach-Dev/install.php:41
+#: Teeach-Dev/install.php:49
 msgid "We still doesn't have the contract."
 msgstr "Todavía no tenemos disponible el contrato."
 
-#: Teeach-Dev/install.php:42
+#: Teeach-Dev/install.php:50
 msgid ""
 "Even so, if you press Accept button, you will accept our future terms that "
 "we will tell through email."
 msgstr ""
 "Aún así, al presionar Aceptar, estarás aceptando nuestros futuros términos."
 
-#: Teeach-Dev/install.php:43
+#: Teeach-Dev/install.php:51
 msgid ""
 "To register this software we reserve the right to send promocional mails "
 "from Teeach and our affiliates."
@@ -120,104 +120,104 @@ msgstr ""
 "Al registrar el software, nos reservamos el derecho a enviarte correos "
 "promocionales de Teeach y nuestros afiliados."
 
-#: Teeach-Dev/install.php:44
+#: Teeach-Dev/install.php:52
 msgid "Teeach is open source and you can obtain it code in GitHub clicking"
 msgstr "Teeach es de código abierto y puedes obtenerlo en GitHub haciendo clic"
 
-#: Teeach-Dev/install.php:44
+#: Teeach-Dev/install.php:52
 msgid "here."
 msgstr "aquí."
 
-#: Teeach-Dev/install.php:45
+#: Teeach-Dev/install.php:53
 msgid "Thanks by trust in Teeach!"
 msgstr "¡Gracias por confiar en Teeach!"
 
-#: Teeach-Dev/install.php:47
+#: Teeach-Dev/install.php:55
 msgid "Accept and next"
 msgstr "Aceptar y siguiente"
 
-#: Teeach-Dev/install.php:52
+#: Teeach-Dev/install.php:60
 msgid "Database"
 msgstr "Base de Datos"
 
-#: Teeach-Dev/install.php:53
+#: Teeach-Dev/install.php:61
 msgid "Teeach uses databases from save data. To connect, we need:"
 msgstr ""
 "Teeach utiliza bases de datos para guardar la información. Necesitamos:"
 
-#: Teeach-Dev/install.php:55
+#: Teeach-Dev/install.php:63
 msgid "Database type: "
 msgstr "Tipo de base de datos:"
 
-#: Teeach-Dev/install.php:56
+#: Teeach-Dev/install.php:64
 msgid "Server DB: "
 msgstr "Servidor BD:"
 
-#: Teeach-Dev/install.php:57
+#: Teeach-Dev/install.php:65
 msgid "Name DB: "
 msgstr "Nombre de la BD:"
 
-#: Teeach-Dev/install.php:58
+#: Teeach-Dev/install.php:66
 msgid "User DB: "
 msgstr "Usuario de la BD:"
 
-#: Teeach-Dev/install.php:59 Teeach-Dev/install.php:139
+#: Teeach-Dev/install.php:67 Teeach-Dev/install.php:147
 #: Teeach-Dev/pl_panel/usr/register.php:67
 msgid "Password: "
 msgstr "Contraseña:"
 
-#: Teeach-Dev/install.php:61
+#: Teeach-Dev/install.php:69
 msgid "Send"
 msgstr "Enviar"
 
-#: Teeach-Dev/install.php:127
+#: Teeach-Dev/install.php:135
 msgid "Initial settings"
 msgstr "Configuración inicial"
 
-#: Teeach-Dev/install.php:129
+#: Teeach-Dev/install.php:137
 msgid "Your center"
 msgstr "Tu centro"
 
-#: Teeach-Dev/install.php:131
+#: Teeach-Dev/install.php:139
 msgid "Centername: "
 msgstr "Nombre del centro:"
 
-#: Teeach-Dev/install.php:132
+#: Teeach-Dev/install.php:140
 msgid "Logo: "
 msgstr "Logo:"
 
-#: Teeach-Dev/install.php:133
+#: Teeach-Dev/install.php:141
 msgid "Accesspass: "
 msgstr "Contraseña de acceso:"
 
-#: Teeach-Dev/install.php:135
+#: Teeach-Dev/install.php:143
 msgid "Your account"
 msgstr "Tu cuenta:"
 
-#: Teeach-Dev/install.php:137 Teeach-Dev/pl_panel/admin/users.php:106
+#: Teeach-Dev/install.php:145 Teeach-Dev/pl_panel/admin/users.php:106
 #: Teeach-Dev/pl_panel/usr/register.php:65
 msgid "Username: "
 msgstr "Usuario:"
 
-#: Teeach-Dev/install.php:138 Teeach-Dev/pl_panel/admin/users.php:111
+#: Teeach-Dev/install.php:146 Teeach-Dev/pl_panel/admin/users.php:111
 #: Teeach-Dev/pl_panel/usr/editprofile.php:97
 #: Teeach-Dev/pl_panel/usr/register.php:66
 msgid "Email: "
 msgstr "Correo:"
 
-#: Teeach-Dev/install.php:140 Teeach-Dev/pl_panel/usr/register.php:68
+#: Teeach-Dev/install.php:148 Teeach-Dev/pl_panel/usr/register.php:68
 msgid "Repeat password: "
 msgstr "Repetir contraseña:"
 
-#: Teeach-Dev/install.php:142
+#: Teeach-Dev/install.php:150
 msgid "Create"
 msgstr "Crear"
 
-#: Teeach-Dev/install.php:177
+#: Teeach-Dev/install.php:185
 msgid "The End"
 msgstr "Hemos terminado"
 
-#: Teeach-Dev/install.php:179
+#: Teeach-Dev/install.php:187
 msgid "Finish"
 msgstr "Finalizar"
 
@@ -323,6 +323,22 @@ msgstr "Localidad:"
 msgid "Birthdate: "
 msgstr "Fecha de nacimiento:"
 
+#: Teeach-Dev/pl_panel/admin/users.php:157
+msgid "What are you doing!?"
+msgstr "¿¡Qué estás haciendo alma cándida!?"
+
+#: Teeach-Dev/pl_panel/admin/users.php:157
+msgid ""
+"You cannot delete the general admin because the database will be destroyed!"
+msgstr ""
+"¡No puedes eliminar el administrador general porque sino la base de datos se "
+"destruiría!"
+
+#: Teeach-Dev/pl_panel/admin/users.php:157
+#: Teeach-Dev/pl_panel/usr/logout.php:22
+msgid "Accept"
+msgstr "Aceptar"
+
 #: Teeach-Dev/pl_panel/admin/users.php:177
 msgid "Name"
 msgstr "Nombre"
@@ -401,6 +417,7 @@ msgid "Works"
 msgstr "Tareas"
 
 #: Teeach-Dev/pl_panel/usr/login.php:56 Teeach-Dev/pl_panel/usr/login.php:74
+#: Teeach-Dev/pl_panel/usr/login.php:79
 #: Teeach-Dev/pl_panel/usr/register.php:53
 msgid "Log in"
 msgstr "Iniciar sesión"
@@ -428,10 +445,6 @@ msgstr "¡Hasta pronto!"
 #: Teeach-Dev/pl_panel/usr/logout.php:21
 msgid "You're logout"
 msgstr "Has salido con éxito."
-
-#: Teeach-Dev/pl_panel/usr/logout.php:22
-msgid "Accept"
-msgstr "Aceptar"
 
 #: Teeach-Dev/pl_panel/usr/messages.php:50
 msgid "To: (username)"
@@ -472,3 +485,6 @@ msgstr "Bienvenido al Teeach de"
 #: Teeach-Dev/pl_panel/usr/register.php:62
 msgid "New account"
 msgstr "Nueva cuenta"
+
+#~ msgid "Aceptar"
+#~ msgstr "Aceptar"

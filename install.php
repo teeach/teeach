@@ -28,6 +28,14 @@
 </head>
 <body>
 	<?php
+
+		$lang = "es_ES";
+		putenv('LC_ALL='.$lang);
+		setlocale(LC_ALL, $lang);
+		bindtextdomain("app", "./locale");
+		textdomain("app");
+		date_default_timezone_set("Europe/Madrid");
+
 		$step = $_GET['step'];
 		if ($step == "1") {
 			

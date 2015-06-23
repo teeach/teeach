@@ -33,7 +33,7 @@
 		if (@$_GET['action'] == "join") {
 			echo '
 				<h1>'._("Join a group").'</h1>
-				<p>Select a group: </p>
+				<p>'._("Select a group:").' </p>
 				<ul class="grouplist">
 					';
 
@@ -104,18 +104,87 @@
 
 			echo '<a href="group.php?h='.$group_h.'">Accept</a>';
 
-		} elseif(@$_GET['page'] == "index") {
+		} elseif(@$_GET['action'] == "new_work") {
 
+			//Group Hash
 			$gh = $_GET['h'];
 
 			echo '
-				<aside>
-					<h3>'.$group_name.'</h3>
-					<ul>
-						<li><div class="actual_select"><a href="group.php?action=view&h='.$gh.'&page=index">'._("Works").'</a></div></li>
-						<li><a href="group.php?action=view&h='.$gh.'&page=users">'._("Users").'</a></li>
+			<form action="group.php?action=save_work&h='.$gh.'" method="POST">
+				<table>
+					<tr><td><label for="workname">'._("Workname").'</label></td><td><input type="text" name="workname"></td></tr>
+					<tr><td><label for="type">'._("Type").'</label></td><td>
+						<select name="type">
+							<option value="1">'._("Homework").'</option>
+							<option value="2">'._("Exam").'</option>
+						</select>
+					</td></tr>
+					<tr><td><label for="desc">'._("Description:").' </label></td><td><textarea name="desc"></textarea></td></tr>
+					<tr><td></td><td><input type="submit" value='._("Accept").'></td></tr>
+				</table>
+			</form>
+			';
+
+		} elseif(@$_GET['action'] == "save_work") {
+
+			//Group Hash
+			$gh = $_GET['h'];
+
+			$workname = $_POST['workname'];
+			$type = $_POST['type'];
+			$desc = $_POST['desc'];
+			$h = substr( md5(microtime()), 1, 18);
+			$date = date("Y-m-d H:i:s");
+
+			$query = $con->query("INSERT INTO pl_works(name,type,description,group_h,creation_date,h) VALUES('$workname',$type,'$desc','$gh','$date','$h')")or die("Query error!");
+
+			echo '<a href="group.php?h='.$gh.'&page=index">'._("Accept").'</a>';
+
+		} elseif(@$_GET['page'] == "index") {
+
+			$gh = $_GET['h'];
+			$query = $con->query("SELECT * FROM pl_groups WHERE h='$gh'")or die("Query error!");
+			$row = mysqli_fetch_array($query);
+			$groupid = $row['id'];
+
+			$privilege = $User->privilege;
+
+			if ($privilege >= 2) {
+				echo '
+					<ul class="submenu">
+						<a href="group.php?action=new_work&h='.$gh.'"><li>'._("New").'</li></a>
 					</ul>
-				</aside>
+				';
+			}
+
+				echo '				
+					<aside>
+						<h3>'.$group_name.'</h3>
+						<ul>
+							<li><div class="actual_select"><a href="group.php?action=view&h='.$gh.'&page=index">'._("Works").'</a></div></li>
+							<li><a href="group.php?action=view&h='.$gh.'&page=users">'._("Users").'</a></li>
+						</ul>
+					</aside>
+
+					<ul class="unit">
+					';
+
+					$query = $con->query("SELECT * FROM pl_units WHERE group=$groupid");
+					while($row = mysqli_fetch_array($query)) {
+						$unitid = $row['id'];
+						$unitname = $row['name'];
+						echo '<li>'.$unitname.'</li>';
+						echo '<ul class="work">';
+						$query2 = $con->query("SELECT * FROM pl_works WHERE unit=$unitid")or die("Query error 2!");
+						while($row2 = mysqli_fetch_array($query2)) {
+							$workname = $row2['name'];
+							$workdesc = $row2['description'];
+							echo '<li>'.$workname.' » '.$workdesc.'</li>';
+						}
+						echo '</ul>';
+					}
+				echo '
+				</ul>
 				';
 
 		} elseif(@$_GET['page'] == "users") {
