@@ -1,6 +1,6 @@
 <?php
+
 	include("../../core.php");
-	include("../../usr.php");
 
 	$System = new System();
 ?>
@@ -95,15 +95,14 @@
 				<div class="table">
 					<table>
 						<thead>
-							<th>ID</th>
-							<th>Nombre</th>
-							<th>Curso</th>
-							<th>Usuarios</th>
-							<th>Acciones</th>
+							<th>#</th>
+							<th>'._("Nombre").'</th>
+							<th>'._("Usuarios").'</th>
+							<th>'._("Acciones").'</th>
 						</thead>
 						<tbody>
 		';
-				$System->conDB("../../config.json");
+				$con = $System->conDB("../../config.json");
 				$query = $con->query("select * from pl_groups");
 
 				while($row = mysqli_fetch_array($query)) {
@@ -116,7 +115,6 @@
 					<tr>
 						<td>".$row['id']."</td>
 						<td>".$row['name']."</td>
-						<td>".$row['level']."</td>
 						<td>";
 
 					while ($row2 = mysqli_fetch_array($query2)) {

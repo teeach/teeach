@@ -51,7 +51,7 @@
 			$query2 = $con->query("select * from pl_users where h='$author_h'")or die("Query error!");
 			$row2 = mysqli_fetch_array($query2);
 
-			$author = $row2['name']." ".$row2['subname1'];
+			$author = $row2['name']." ".$row2['surname1'];
 
 			echo "
 				<article>

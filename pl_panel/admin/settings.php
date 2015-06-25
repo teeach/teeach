@@ -1,8 +1,9 @@
 <?php
+
 	include("../../core.php");
-	include("../../usr.php");
 
 	$System = new System;
+    $con = $System->conDB("../../config.json");
 ?>
 
 <!DOCTYPE html>
@@ -14,6 +15,7 @@
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
 	<?php $System->set_head(); ?>
 	<script>
+    // CÓDIGO EN PRUEBAS!!! [TEST]
 		// Dadas la division que contiene todas las pestañas y la de la pestaña que se 
 		// quiere mostrar, la funcion oculta todas las pestañas a excepcion de esa.
 		function cambiarPestanna(pestannas,pestanna) {

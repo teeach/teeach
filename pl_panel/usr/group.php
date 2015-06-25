@@ -169,10 +169,10 @@
 					<ul class="unit">
 					';
 
-					$query = $con->query("SELECT * FROM pl_units WHERE group=$groupid");
-					while($row = mysqli_fetch_array($query)) {
-						$unitid = $row['id'];
-						$unitname = $row['name'];
+					$query1 = $con->query("SELECT * FROM pl_units WHERE group=$groupid")or die("Query error!");
+					while($row1 = mysqli_fetch_array($query1)) {
+						$unitid = $row1['id'];
+						$unitname = $row1['name'];
 						echo '<li>'.$unitname.'</li>';
 						echo '<ul class="work">';
 						$query2 = $con->query("SELECT * FROM pl_works WHERE unit=$unitid")or die("Query error 2!");

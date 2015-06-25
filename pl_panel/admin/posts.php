@@ -1,6 +1,6 @@
 <?php
+
 	include("../../core.php");
-	include("../../usr.php");
 
 	$System = new System();
 ?>
@@ -106,14 +106,14 @@
 			<center>
 				<table class="table">
 					<thead>
-						<th>ID</th>
-						<th>Title</th>
-						<th>Body</th>
-						<th>Actions</th>
+						<th>#</th>
+						<th>'._("Title").'</th>
+						<th>'._("Body").'</th>
+						<th>'._("Actions").'</th>
 					</thead>
 					<tbody>
 		';
-				$System->conDB("../../config.json");
+				$con = $System->conDB("../../config.json");
 				$query = $con->query("select * from pl_posts");
 				while($row = mysqli_fetch_array($query)) {
 					echo "

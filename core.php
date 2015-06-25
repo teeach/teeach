@@ -57,8 +57,8 @@
             //Current User data
             $id = $row['id'];
             $name = $row['name'];
-            $surname1 = $row['subname1'];
-            $surname2 = $row['subname2'];
+            $surname1 = $row['surname1'];
+            $surname2 = $row['surname2'];
             $username = $row['username'];
             $profile_photo = $row['photo'];
 
@@ -77,9 +77,9 @@
                                     $groupid = $row1['groupid'];
                                     $query2 = $con->query("SELECT * FROM pl_groups WHERE id=$groupid")or die("Query error!");
                                     $row2 = mysqli_fetch_array($query2);
-                                    $name = $row2['name'];
+                                    $groupname = $row2['name'];
                                     $h = $row2['h'];
-                                    echo '<li><a class="icon_users" href="group.php?action=view&h='.$h.'&page=index"><i class="fa fa-users"></i> '.$name.'</a></li>';
+                                    echo '<li><a class="icon_users" href="group.php?action=view&h='.$h.'&page=index"><i class="fa fa-users"></i> '.$groupname.'</a></li>';
                                 }
                             echo '                                
                             </ul>
@@ -113,6 +113,21 @@
 				<nav class="main_menu">
         			<ul>
             			<li><a href="index.php">'._("Index").'</a></li>
+                        <li>
+                            <a href="../admin">'._("Groups").'</a>
+                            <ul>';
+                                $query = $con->query("SELECT * FROM pl_groupuser WHERE userid=$id")or die("Query error!");
+                                while($row1 = mysqli_fetch_array($query)) {
+                                    $groupid = $row1['groupid'];
+                                    $query2 = $con->query("SELECT * FROM pl_groups WHERE id=$groupid")or die("Query error!");
+                                    $row2 = mysqli_fetch_array($query2);
+                                    $groupname = $row2['name'];
+                                    $h = $row2['h'];
+                                    echo '<li><a class="icon_users" href="group.php?action=view&h='.$h.'&page=index"><i class="fa fa-users"></i> '.$groupname.'</a></li>';
+                                }
+                            echo '
+                            </ul>
+                         </li>
             			<li><a href="diary.php">'._("Diary").'</a></li>
             			<li><a href="messages.php">'._("Messages").'</a></li> 
         			</ul>
@@ -142,6 +157,21 @@
 				<nav class="main_menu">
         			<ul>
             			<li><a href="index.php">'._("Index").'</a></li>
+                        <li>
+                            <a href="../admin">'._("Groups").'</a>
+                            <ul>';
+                                $query = $con->query("SELECT * FROM pl_groupuser WHERE userid=$id")or die("Query error!");
+                                while($row1 = mysqli_fetch_array($query)) {
+                                    $groupid = $row1['groupid'];
+                                    $query2 = $con->query("SELECT * FROM pl_groups WHERE id=$groupid")or die("Query error!");
+                                    $row2 = mysqli_fetch_array($query2);
+                                    $groupname = $row2['name'];
+                                    $h = $row2['h'];
+                                    echo '<li><a class="icon_users" href="group.php?action=view&h='.$h.'&page=index"><i class="fa fa-users"></i> '.$groupname.'</a></li>';
+                                }
+                            echo '                                
+                            </ul>
+                         </li>
             			<li><a href="diary.php">'._("Diary").'</a></li>
             			<li><a href="messages.php">'._("Messages").'</a></li>
            				<li>
@@ -196,7 +226,7 @@
         function get_user_by_id($h, $connection){
             $query = $connection->query("select * from pl_users where h='$h'");
             $result = mysqli_fetch_array($query);
-            $user = new User($result['id'],$result['username'],$result['name'],$result['subname1'],$result['subname2'],$result['email'],$result['phone'],$result['level'],$result['h'],$result['photo'],$result['birthday'],$result['home'],$result['pass'],$result['privilege'],$result['group']);
+            $user = new User($result['id'],$result['username'],$result['name'],$result['surname1'],$result['surname2'],$result['email'],$result['phone'],$result['level'],$result['h'],$result['photo'],$result['birthday'],$result['home'],$result['pass'],$result['privilege']);
             return $user;
         }
 
@@ -215,12 +245,12 @@
     
     class User {
         
-        function __construct($id, $username, $name, $subname1, $subname2, $email, $phone, $level, $h, $photo, $birthday, $home, $pass, $privilege, $group){
+        function __construct($id, $username, $name, $surname1, $surname2, $email, $phone, $level, $h, $photo, $birthday, $home, $pass, $privilege){
             $this->id = $id;
             $this->username = $username;
             $this->name = $name;
-            $this->surname1 = $subname1;
-            $this->surname2 = $subname2;
+            $this->surname1 = $surname1;
+            $this->surname2 = $surname2;
             $this->email = $email;
             $this->phone = $phone;
             $this->level = $level;
@@ -230,7 +260,6 @@
             $this->home = $home;
             $this->pass = $pass;
             $this->privilege = $privilege;
-            $this->group = $group;
         }
     }
 ?>

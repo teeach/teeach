@@ -4,19 +4,17 @@
 
 	$get_usr = $_GET['h'];
 
-	$filejson = "../../config.json";
-
 	$System = new System();
 	session_start();
-	$con = $System->conDB($filejson);
 
+	$con = $System->conDB("../../config.json");
 	$User = $System->get_user_by_id($_SESSION['h'], $con);
 
-	$query = $con->query("select * from pl_users where h='$get_usr'");
+	$query = $con->query("SELECT * FROM pl_users WHERE h='$get_usr'")or die("Query error!");
 	$row = mysqli_fetch_array($query);
 	$profile_name = $row['name'];
-	$profile_subname1 = $row['subname1'];
-	$profile_subname2 = $row['subname2'];
+	$profile_subname1 = $row['surname1'];
+	$profile_subname2 = $row['surname2'];
 	$profile_email = $row['email'];
 	$profile_photo = $row['photo'];
 ?>
@@ -51,8 +49,8 @@
 					}
 				?>
 			</td>
-			<td><?php echo "<h1>$profile_name</h1>";
-			echo "$profile_subname1, $profile_subname2"; 
+			<td><?php echo "<h1>".$profile_name."</h1>";
+			echo $profile_subname1.", ".$profile_subname2; 
 			if ($User->h==$get_usr) {
 				echo "<br><a href='editprofile.php?action'>Editar mi información</a>";
 			}?></td>

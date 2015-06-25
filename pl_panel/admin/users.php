@@ -1,6 +1,6 @@
 <?php
+
 	include("../../core.php");
-	include("../../usr.php");
 
 	$System = new System();
 ?>
@@ -173,7 +173,7 @@
                             <table class="table">
                                     <thead>
                                         <th></th>
-                                        <th>ID</th>
+                                        <th>#</th>
                                         <th>'._("Name").'</th>
                                         <th>'._("Surnames").'</th>
                                         <th>'._("Username").'</th>
@@ -186,13 +186,9 @@
                                     </thead>
                                     <tbody>';
                                     
-				$System->conDB("../../config.json");
-				$query = $con->query("select * from pl_users");
+				$con = $System->conDB("../../config.json");
+				$query = $con->query("SELECT * FROM pl_users");
 				while($row = mysqli_fetch_array($query)) {
-					$grupoid = $row['group'];
-					$query2 = $con->query("select * from pl_groups where id=$grupoid");
-					$row2 = mysqli_fetch_array($query2);
-					$grupo = $row['name'];
 					//Comprobar si es administrador
 					if ($row['privilege'] >= 3) {
 						$nombre = "<b><span style='color:#a00'>".$row['name']."</span></b>";
@@ -218,7 +214,7 @@
 						<td><input type='checkbox'></td>
 						<td>".$row['id']."</td>
 						<td>".$nombre."</td>
-						<td>".$row['subname1'].", ".$row['subname2']."</td>
+						<td>".$row['surname1'].", ".$row['surname2']."</td>
 						<td>".$row['username']."</td>
 						<td>".$row['email']."</td>
 						<td>".$row['phone']."</td>
