@@ -16,7 +16,7 @@
 	<title><?php echo "Hola, $User->name | Teeach"; ?></title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<?php
-		$System->set_head();		
+		$System->set_head();
 	?>
 </head>
 <body>
@@ -72,15 +72,15 @@
 		<ul>
 			<?php
 				$userid = $User->id;
-				$query = $con->query("SELECT * FROM pl_groupuser WHERE userid=$userid")or die("Query Error!");
+				$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query 1 Error!");
 				while ($row = mysqli_fetch_array($query)) {
-					$groupid = $row['groupid'];
-					$query2 = $con->query("SELECT * FROM pl_groups WHERE id=$groupid")or die("Query Error!");
+					$group_h = $row['group_h'];
+					$query2 = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query 2 Error!");
 					$row2 = mysqli_fetch_array($query2);
 					$groupname = $row2['name'];
-					$grouph = $row2['h'];
+					//~ $grouph = $row2['h'];
 
-					echo '<li><a href="group.php?action=view&h='.$grouph.'&page=index">'.$groupname.'</a></li>';
+					echo '<li><a href="group.php?action=view&h='.$group_h.'&page=index">'.$groupname.'</a></li>';
 				}
 			?>
 		</ul>

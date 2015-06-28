@@ -98,6 +98,7 @@
                     </ul>
                 </li>
 			';
+        }
 
 		echo '
             </ul>
@@ -119,8 +120,8 @@
             </ul>
         </nav>
         </header>
+        </header>
         ';
-		}
 	}
 
 		function conDB($filejson) {

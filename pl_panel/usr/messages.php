@@ -61,19 +61,19 @@
 
 			$to_username = $_POST['to'];
 
-			$query = $con->query("select * from pl_users where username='$to_username'");
+			$query = $con->query("SELECT * FROM pl_users WHERE username='$to_username'");
 			$row = mysqli_fetch_array($query);
 
-			$to = $row['id'];
+			$to = $row['h'];
 
 			$subject = $_POST['subject'];
 			$body = $_POST['body'];
-			$from = $User->id;
+			$from = $User->h;
 			$h = substr( md5(microtime()), 1, 18);
 
 			$date = date("Y-m-d H:i:s");
 
-			$query2 = $con->query("INSERT INTO pl_messages(from_id,to_id,subject,body,h,date) VALUES($from,$to,'$subject','$body','$h','$date')")or die("Query error!");
+			$query2 = $con->query("INSERT INTO pl_messages(from_h,to_h,subject,body,h,date) VALUES('$from','$to','$subject','$body','$h','$date')")or die("Query error!");
 
 			echo '<a href="messages.php">Aceptar</a>';
 
@@ -92,15 +92,15 @@
                 <div style = "width:500px; margin-left:270px;">
 			';
 
-				$query = $con->query("SELECT * FROM pl_messages WHERE from_id=$User->id ORDER BY id DESC")or die("Query error!");
+				$query = $con->query("SELECT * FROM pl_messages WHERE from_h='$User->h' ORDER BY id DESC")or die("Query error!");
 
 				while ($row = mysqli_fetch_array($query)) {
 
-					$to_id = $row['to_id'];
+					$to_h = $row['to_h'];
 					$subject = $row['subject'];
 					$date = $row['date'];
 
-					$to = $System->get_user_by_id2($to_id, $con);
+					$to = $System->get_user_by_id2($to_h, $con);
 
 					$h = $row['h'];
 
@@ -143,11 +143,11 @@
                 <div style = "width:500px; margin-left:270px;">
 			';
 
-				$query = $con->query("SELECT * FROM pl_messages WHERE to_id=$User->id ORDER BY id DESC")or die("Query error!");
+				$query = $con->query("SELECT * FROM pl_messages WHERE to_h='$User->h' ORDER BY id DESC")or die("Query error!");
 
 				while ($row = mysqli_fetch_array($query)) {
-					$from_id = $row['from_id'];
-					$query_from_h = $con->query("SELECT * FROM pl_users WHERE id=$from_id")or die("Query error!");
+					$from_h = $row['from_h'];
+					$query_from_h = $con->query("SELECT * FROM pl_users WHERE id='$from_h'")or die("Query error!");
 					$row_from_h = mysqli_fetch_array($query_from_h);
 					$from_h = $row_from_h['h'];
 					$subject = $row['subject'];
@@ -157,7 +157,7 @@
 
 					$h = $row['h'];
                     
-					echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname1.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+					echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 				}
             echo '
                 </div>
