@@ -41,9 +41,10 @@
 			$title = $_POST['title'];
 			$body = $_POST['body'];
     		$h = substr( md5(microtime()), 1, 18);
+    		session_start();
     		$author = $_SESSION['h'];
 
-    		$System->conDB("../../config.json");
+    		$con = $System->conDB("../../config.json");
     		$query = $con->query("insert into pl_posts(title,body,h,author) values('$title','$body','$h','$author')")or die("Query Error!");
     		echo "<p>¡Perfecto!</p><a href='posts.php?action'>Aceptar</a>";
 
@@ -51,7 +52,7 @@
 
     		$h = $_GET['h'];
 
-    		$System->conDB("../../config.json");
+    		$con = $System->conDB("../../config.json");
     		$query = $con->query("select * from pl_posts where h='$h'")or die("Query error!");
     		$row = mysqli_fetch_array($query);
 

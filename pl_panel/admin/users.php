@@ -51,20 +51,19 @@
 				<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="users.php?action">Usuarios</a></h2>
 				<table style="padding: 20px;">
 				<form name="cu" method="post" action="users.php?action=success" autocomplete="off">
-					<tr><td><label for="usr">Usuario: </label></td><td><input type="text" name="user" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
+					<tr><td><label for="usr">'._("Usuario: ").'</label></td><td><input type="text" name="user" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
 					<tr><td/><td><h6 style="display:none" id="txt_user">El nombre de usuario de 6 a 29 carácteres</h6></td></tr>
-					<tr><td><label for="name">Nombre: </label></td><td><input type="text" name="name" required/></td></tr>
-					<tr><td><label for="subname1">Apellido 1: </label></td><td><input type="text" name="subname1" required/></td></tr>
-					<tr><td><label for="subname2">Apellido 2: </label></td><td><input type="text" name="subname2" required/></td></tr>
-					<tr><td><label for="email">Correo: </label></td><td><input type="email" name="email" required/></td></tr>
-					<tr><td><label for="phone">Teléfono: </label></td><td><input type="tel" name="phone" required onblur="checkPhone()"/></td></tr>
-					<tr><td><label for="home">Localidad: </label></td><td><input type="text" name="home" required/></td></tr>
-					<tr><td><label for="birth">Nacimiento: </label></td><td><input type="date" name="birth" required/></td></tr>
-					<tr><td><label for="privilege">Privilegios: </label></td><td>
+					<tr><td><label for="name">'._("Nombre: ").'</label></td><td><input type="text" name="name" required/></td></tr>
+					<tr><td><label for="surname">'._("Apellido: ").'</label></td><td><input type="text" name="surname" required/></td></tr>
+					<tr><td><label for="email">'._("Correo: ").'</label></td><td><input type="email" name="email" required/></td></tr>
+					<tr><td><label for="phone">'._("Teléfono: ").'</label></td><td><input type="tel" name="phone" required onblur="checkPhone()"/></td></tr>
+					<tr><td><label for="home">'._("Localidad: ").'</label></td><td><input type="text" name="home" required/></td></tr>
+					<tr><td><label for="birth">'._("Nacimiento: ").'</label></td><td><input type="date" name="birth" required/></td></tr>
+					<tr><td><label for="privilege">'._("Privilegios: ").'</label></td><td>
 						<select name="privilege">
-							<option value="1">Estudiante</option>
-							<option value="2">Profesor</option>
-							<option value="3">Administrador</option>
+							<option value="1">'._("Student").'</option>
+							<option value="2">'._("Teacher").'</option>
+							<option value="3">'._("Administrator").'</option>
 						</select>
 					</td></tr>
 					<tr><td><input type="submit" value="Enviar" onclick="comprobarformulario()"/></td></tr>
@@ -75,8 +74,7 @@
 			require '../../PasswordHash.php';
 			$user = $_POST['user'];
 			$name = $_POST['name'];
-			$subname1 = $_POST['subname1'];
-			$subname2 = $_POST['subname2'];
+			$surname = $_POST['surname'];
 			$email = $_POST['email'];
 			$phone = $_POST['phone'];
 			$home = $_POST['home'];
@@ -87,8 +85,8 @@
     		$t_hasher = new PasswordHash(8, FALSE);
             $pass = $t_hasher->HashPassword($password);
 
-    		$System->conDB("../../config.json");
-    		$query = $con->query("insert into pl_users(username,name,subname1,subname2,email,phone,home,birthday,h,pass,privilege) values ('$user','$name','$subname1','$subname2','$email',$phone,'$home','$birth','$h','$pass',$privilege)")or die("Error");
+    		$con = $System->conDB("../../config.json");
+    		$query = $con->query("INSERT INTO pl_users(username,name,surname,email,phone,home,birthday,h,pass,privilege) VALUES ('$user','$name','$surname','$email',$phone,'$home','$birth','$h','$pass',$privilege)")or die("Error");
     		echo "<p>¡Perfecto la contraseña es: ".$password."</p><a href='users.php?action'>Aceptar</a>";
 
     	} elseif($action == "edit") {
@@ -96,7 +94,7 @@
     		$h = $_GET['h'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("select * from pl_users where h='$h'")or die("Query error!");
+    		$query = $con->query("SELECT * FROM pl_users WHERE h='$h'")or die("Query error!");
     		$row = mysqli_fetch_array($query);
 
     		echo '
@@ -106,17 +104,16 @@
 					<tr><td><label for="usr">'._("Username: ").'</label></td><td><input type="text" name="user" value="'.$row["username"].'" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
 					<tr><td/><td><h6 style="display:none" id="txt_user">El nombre de usuario de 6 a 29 carácteres</h6></td></tr>
 					<tr><td><label for="name">'._("Name: ").'</label></td><td><input type="text" name="name" value="'.$row['name'].'" required/></td></tr>
-					<tr><td><label for="subname1">'._("Surname 1: ").'</label></td><td><input type="text" name="subname1" value="'.$row['subname1'].'" required/></td></tr>
-					<tr><td><label for="subname2">'._("Surname 2: ").'</label></td><td><input type="text" name="subname2" value="'.$row['subname2'].'" required/></td></tr>
+					<tr><td><label for="surname">'._("Surname: ").'</label></td><td><input type="text" name="surname" value="'.$row['surname'].'" required/></td></tr>
 					<tr><td><label for="email">'._("Email: ").'</label></td><td><input type="email" name="email" value="'.$row['email'].'" required/></td></tr>
 					<tr><td><label for="phone">'._("Phone: ").'</label></td><td><input type="tel" name="phone" value="'.$row['phone'].'" required onblur="checkPhone()"/></td></tr>
 					<tr><td><label for="home">'._("Home: ").'</label></td><td><input type="text" name="home" value="'.$row['home'].'" required/></td></tr>
 					<tr><td><label for="birth">'._("Birthdate: ").'</label></td><td><input type="date" name="birth" value="'.$row['birthday'].'" required/></td></tr>
 					<tr><td><label for="privilege">Privilegios: </label></td><td>
 						<select name="privilege">
-							<option value="1">Estudiante</option>
-							<option value="2">Profesor</option>
-							<option value="3">Administrador</option>
+							<option value="1">'._("Student").'</option>
+							<option value="2">'._("Teacher").'</option>
+							<option value="3">'._("Administrator").'</option>
 						</select>
 					</td></tr>
 					<tr><td><input type="submit" value="Enviar" onclick="comprobarformulario()"/></td></tr>
@@ -130,8 +127,7 @@
 
     		$username = $_POST['user'];
     		$name = $_POST['name'];
-    		$subname1 = $_POST['subname1'];
-    		$subname2 = $_POST['subname2'];
+    		$surname = $_POST['surname'];
     		$email = $_POST['email'];
     		$phone = $_POST['phone'];
     		$home = $_POST['home'];
@@ -139,7 +135,7 @@
     		$privilege = $_POST['privilege'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("update pl_users set username='$username',name='$name',subname1='$subname1',subname2='$subname2',email='$email',phone='$phone',home='$home',birthday='$birth',privilege=$privilege where h='$h'")or die("Query error!");
+    		$query = $con->query("UPDATE pl_users SET username='$username',name='$name',surname='$surname',email='$email',phone='$phone',home='$home',birthday='$birth',privilege=$privilege WHERE h='$h'")or die("Query error!");
 
     		echo "<a href='users.php?action'>Aceptar</a>";
 
@@ -148,7 +144,7 @@
     		$h = $_GET['h'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("select * from pl_users where h='$h'")or die("Query error!");
+    		$query = $con->query("SELECT * FROM pl_users WHERE h='$h'")or die("Query error!");
     		$row = mysqli_fetch_array($query);
 
     		$privilege = $row['privilege'];
@@ -157,7 +153,7 @@
     			die("<h1>"._('What are you doing!?')."</h1><p>"._('You cannot delete the general admin because the database will be destroyed!')."</p><a href='users.php?action'>"._('Accept')."</a>");
     		}
 
-    		$query = $con->query("delete from pl_users where h='$h'")or die("Query error!");
+    		$query = $con->query("DELETE FROM pl_users WHERE h='$h'")or die("Query error!");
 
     		echo "<a href='users.php?action'>Aceptar</a>";
 
@@ -175,7 +171,7 @@
                                         <th></th>
                                         <th>#</th>
                                         <th>'._("Name").'</th>
-                                        <th>'._("Surnames").'</th>
+                                        <th>'._("Surname").'</th>
                                         <th>'._("Username").'</th>
                                         <th>'._("Email").'</th>
                                         <th>'._("Phone").'</th>
@@ -214,7 +210,7 @@
 						<td><input type='checkbox'></td>
 						<td>".$row['id']."</td>
 						<td>".$nombre."</td>
-						<td>".$row['surname1'].", ".$row['surname2']."</td>
+						<td>".$row['surname']."</td>
 						<td>".$row['username']."</td>
 						<td>".$row['email']."</td>
 						<td>".$row['phone']."</td>

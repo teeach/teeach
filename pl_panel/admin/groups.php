@@ -22,25 +22,21 @@
 				<a href="groups.php?action"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="groups.php?action">Grupos</a> >> <a href="groups.php?action=new">Nuevo</a></h2>
 				<table style="padding: 20px;">
 				<form name="cg" method="post" action="groups.php?action=success" autocomplete="off">
-					<tr><td><label for="name">Nombre del grupo: </label></td><td><input type="text" name="name" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
-					<tr><td/><td><h6 style="display:none" id="txt_user">El nombre de grupo de 6 a 29 carácteres</h6></td></tr>
-					<tr><td><label for="level">Curso: </label></td><td>
-						<input type="text" name="level">
-					</td></tr>
+					<tr><td><label for="name">'._("Nombre del grupo: ").'</label></td><td><input type="text" name="name" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
+					<tr><td/><td><h6 style="display:none" id="txt_user">'._("El nombre de grupo de 6 a 29 carácteres").'</h6></td></tr>
 					<tr><td><input type="submit" value="Enviar"/></td></tr>
 				</form>
 				</table>
 			';
 		} elseif ($action == "success") {
 			$name = $_POST['name'];
-			$level = $_POST['level'];
 			$h = substr( md5(microtime()), 1, 18);
 
 			$System = new System();
 
-			$System->conDB("../../config.json");
-    		$query = $con->query("insert into pl_groups(name,h,level) values ('$name','$h','$level')")or die("Error");
-    		echo "<p>¡Perfecto!</p>";
+			$con = $System->conDB("../../config.json");
+    		$query = $con->query("INSERT INTO pl_groups(name,h) VALUES ('$name','$h')")or die("Error");
+    		echo "<p>¡Perfecto!</p><a href='groups.php?action'>Accept</a>";
     	} elseif($action == "edit") {
 
     		$h = $_GET['h'];

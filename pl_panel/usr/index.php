@@ -16,10 +16,7 @@
 	<title><?php echo "Hola, $User->name | Teeach"; ?></title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<?php
-		
-		$System->set_head();
-
-		
+		$System->set_head();		
 	?>
 </head>
 <body>
@@ -40,7 +37,7 @@
 				<h1>Posts</h1><br><br>
 				";
 
-		$query = $con->query("select * from pl_posts ORDER BY id DESC");
+		$query = $con->query("SELECT * FROM pl_posts ORDER BY id DESC");
 		while($row = mysqli_fetch_array($query)) {
 
 			$title = $row['title'];
@@ -48,10 +45,10 @@
 			$h = $row['h'];
 			$author_h = $row['author'];
 
-			$query2 = $con->query("select * from pl_users where h='$author_h'")or die("Query error!");
+			$query2 = $con->query("SELECT * FROM pl_users WHERE h='$author_h'")or die("Query error!");
 			$row2 = mysqli_fetch_array($query2);
 
-			$author = $row2['name']." ".$row2['surname1'];
+			$author = $row2['name']." ".$row2['surname'];
 
 			echo "
 				<article>

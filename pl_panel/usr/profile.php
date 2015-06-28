@@ -13,8 +13,7 @@
 	$query = $con->query("SELECT * FROM pl_users WHERE h='$get_usr'")or die("Query error!");
 	$row = mysqli_fetch_array($query);
 	$profile_name = $row['name'];
-	$profile_subname1 = $row['surname1'];
-	$profile_subname2 = $row['surname2'];
+	$profile_surname = $row['surname'];
 	$profile_email = $row['email'];
 	$profile_photo = $row['photo'];
 ?>
@@ -50,7 +49,7 @@
 				?>
 			</td>
 			<td><?php echo "<h1>".$profile_name."</h1>";
-			echo $profile_subname1.", ".$profile_subname2; 
+			echo $profile_surname; 
 			if ($User->h==$get_usr) {
 				echo "<br><a href='editprofile.php?action'>Editar mi información</a>";
 			}?></td>

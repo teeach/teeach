@@ -12,8 +12,7 @@
     if (@$_GET['action']=="success") {
         $error = 0;
 		$name = $_POST['name'];
-		$subname1 = $_POST['subname1'];
-		$subname2 = $_POST['subname2'];
+		$surname = $_POST['surname'];
 		$email = $_POST['email'];
 		$url_img = $_POST['url_img'];
         if($_POST['act_password'] != $_POST['new_password']){
@@ -39,8 +38,7 @@
         }
         if($error == 0){
             $query = $connection->query("update pl_users set name='$name' where id=$User->id")or die("Error!");
-            $query = $connection->query("update pl_users set subname1='$subname1' where id=$User->id")or die("Error!");
-            $query = $connection->query("update pl_users set subname2='$subname2' where id=$User->id")or die("Error!");
+            $query = $connection->query("update pl_users set surname='$surname' where id=$User->id")or die("Error!");
             $query = $connection->query("update pl_users set email='$email' where id=$User->id")or die("Error!");
             $query = $connection->query("update pl_users set photo='$url_img' where id=$User->id")or die("Error!");
             //~ header("Location: profile.php?h=".$User->h);
@@ -59,27 +57,6 @@
 		$System = new System();
 		$System->set_head(); 
 	?>
-<!--
-	<script>
-		function comprobarImagen() {
-			var url_img = document.perfil.url_img.value;
-			var ext_permitidas = new Array(".gif", ".jpg",".jpeg",".png",".swg");
-			var ext = (url_img.substring(url_img.lastIndexOf("."))).toLowerCase();
-			var permitida = false;
-			for (var i=0; i < ext_permitidas.length; i++) {
-				if(ext_permitidas[i]==ext) {
-					permitida = true;
-					break;
-				}
-			}
-			if(!permitida) {
-				alert("Project Learn sólo admite las extensiones gif, jpg, png y swg.");
-			} else {
-				document.getElementById("previsualizar_img").src = url_img;
-			}
-		}
-	</script>
--->
 </head>
 <body>
 	<?php 
@@ -93,7 +70,7 @@
 			<table>
 			<form method="post" action="editprofile.php?action=success" name="perfil" style="padding: 10px">
 				<tr><td><label for="name">'._("Name: ").'</label></td><td><input type="text" name="name" value="'.$User->name.'"></td></tr>
-				<tr><td>'._("Surnames: ").'</td><td><input type="text" name="subname1" value="'.$User->surname1.'">, <input type="text" name="subname2" value="'.$User->surname2.'"></td></tr>
+				<tr><td>'._("Surname: ").'</td><td><input type="text" name="surname" value="'.$User->surname.'"></td></tr>
 				<tr><td><label for="email">'._("Email: ").'</label></td><td><input type="text" name="email" value="'.$User->email.'"></td></tr>			
 				<tr><td>'._("Change password <br>(Not changed if left blank): ").'</td><td>Actual password: <input type="password" name="act_password"></td><td>New password: <input type="password" name="new_password"></td></tr>
 				<tr><td>'._("Profile photo: ").'</td><td><input id="photo_url" type="text" value="'.$User->photo.'" name="url_img"></td></tr>

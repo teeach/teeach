@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-06-2015 a las 16:05:33
+-- Tiempo de generación: 26-06-2015 a las 13:01:18
 -- Versión del servidor: 5.6.21
 -- Versión de PHP: 5.6.3
 
@@ -53,8 +53,8 @@ CREATE TABLE IF NOT EXISTS `pl_groups` (
 
 CREATE TABLE IF NOT EXISTS `pl_groupuser` (
 `id` int(11) NOT NULL,
-  `groupid` int(11) NOT NULL,
-  `userid` int(11) NOT NULL
+  `group_h` text NOT NULL,
+  `user_h` text NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -65,8 +65,8 @@ CREATE TABLE IF NOT EXISTS `pl_groupuser` (
 
 CREATE TABLE IF NOT EXISTS `pl_messages` (
 `id` int(11) NOT NULL,
-  `from_id` int(11) NOT NULL,
-  `to_id` int(11) NOT NULL,
+  `from_h` int(11) NOT NULL,
+  `to_h` int(11) NOT NULL,
   `subject` varchar(99) CHARACTER SET utf8 NOT NULL,
   `body` longtext CHARACTER SET utf8 NOT NULL,
   `h` varchar(99) CHARACTER SET utf8 NOT NULL,
@@ -122,8 +122,7 @@ CREATE TABLE IF NOT EXISTS `pl_users` (
 `id` int(11) NOT NULL,
   `username` char(29) CHARACTER SET utf8 NOT NULL,
   `name` char(29) CHARACTER SET utf8 NOT NULL,
-  `surname1` char(29) CHARACTER SET utf8 NOT NULL,
-  `surname2` char(29) CHARACTER SET utf8 NOT NULL,
+  `surname` char(29) CHARACTER SET utf8 NOT NULL,
   `email` char(40) CHARACTER SET utf8 NOT NULL,
   `phone` int(9) NOT NULL,
   `level` int(3) NOT NULL,
@@ -135,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `pl_users` (
   `privilege` int(2) NOT NULL,
   `creation_date` datetime NOT NULL,
   `last_time` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -255,7 +254,7 @@ MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 -- AUTO_INCREMENT de la tabla `pl_users`
 --
 ALTER TABLE `pl_users`
-MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT de la tabla `pl_works`
 --

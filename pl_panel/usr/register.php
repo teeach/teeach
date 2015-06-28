@@ -48,8 +48,8 @@
 		$centername = $row2['value'];
 
 		echo '
-			<h1>'._("Hi ").$username.'</h1>
-			<p>'._("Welcome to Teeach from ").$centername.'</p>
+			<h1>'._("Hi")." ".$username.'</h1>
+			<p>'._("Welcome to Teeach from")." ".$centername.'</p>
 			<a href="login.php">'._("Log in").'</a>
 		';
 
