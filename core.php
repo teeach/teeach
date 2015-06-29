@@ -162,7 +162,6 @@
     }
     
     class User {
-        
         function __construct($id, $username, $name, $surname, $email, $phone, $level, $h, $photo, $birthday, $home, $pass, $privilege){
             $this->id = $id;
             $this->username = $username;
@@ -177,6 +176,27 @@
             $this->home = $home;
             $this->pass = $pass;
             $this->privilege = $privilege;
+        }
+    }
+    
+    class Group {
+        function __construct($id,$name,$h,$category_h){
+            $this->id = $id;
+            $this->name = $name;
+            $this->h = $h;
+            $this->category_h = $category_h
+        }
+    }
+    
+    class Message {
+        function __construct($id,$from_h,$to_h,$subject,$body,$h,$date){
+            $this->id = $id;
+            $this->from_h = $from_H;
+            $this->to_h = $to_h;
+            $this->subject = $subject;
+            $this->body = $body;
+            $this->h = $h;
+            $this->date = $date;
         }
     }
 ?>
