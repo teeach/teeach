@@ -3,6 +3,7 @@
 	include("../../core.php");
 
 	$System = new System();
+	$con = $System->conDB("../../config.json");
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +43,7 @@
     		$h = $_GET['h'];
 
     		$System->conDB("../../config.json");
-    		$query = $con->query("select * from pl_groups where h='$h'");
+    		$query = $con->query("SELECT * FROM pl_groups WHERE h='$h'");
     		$row = mysqli_fetch_array($query);
 
     		$groupname = $row['name'];
@@ -65,7 +66,7 @@
 
 			$con = $System->conDB("../../config.json");
 
-			$query = $con->query("update pl_groups set name='$groupname', level='$level' where h='$h'")or die("Query error!");
+			$query = $con->query("UPDATE pl_groups SET name='$groupname', level='$level' WHERE h='$h'")or die("Query error!");
 
 			echo "<a href='groups.php?action'>Aceptar</a>";
 
@@ -75,10 +76,45 @@
 
 			$con = $System->conDB("../../config.json");
 
-			$query = $con->query("delete from pl_groups where h='$h'")or die("Query error!");
+			$query = $con->query("DELETE FROM pl_groups WHERE h='$h'")or die("Query error!");
 
 			echo "Eliminado! <a href='groups.php?action'>Aceptar</a>";
+
+		} elseif($action == "requests") {
 			
+			$query = $con->query("SELECT * FROM pl_groupuser WHERE status='waiting'")or die("Query error!");
+			while ($row = mysqli_fetch_array($query)) {
+
+				$group_h = $row['group_h'];
+				$user_h = $row['user_h'];
+				$request_id = $row['id'];
+
+				$query_group = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query error!");
+				$query_user = $con->query("SELECT * FROM pl_users WHERE h='$user_h'")or die("Query error!");
+
+				$row_group = mysqli_fetch_array($query_group);
+				$row_user = mysqli_fetch_array($query_user);
+
+				//~User Data
+				$name = $row_user['name'];
+				$surname = $row_user['surname'];
+
+				//~Group Data
+				$groupname = $row_group['name'];
+
+				echo "<a href='groups.php?action=accept_request&request_id=".$request_id."'><li>".$name." ".$surname." wants join to ".$groupname.". Click here to accept this request.</li></a>";
+			}
+
+			echo "<br><a href='groups.php?action'>Back</a>";
+
+		} elseif($action == "accept_request") {
+
+			$request_id = $_GET['request_id'];
+
+			$query = $con->query("UPDATE pl_groupuser SET status='active' WHERE id=$request_id")or die("Query error!");
+
+			echo "<a href='groups.php?action=requests'>Accept</a>";
+
 		} else {
 
 			echo '<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="groups.php?action">Grupos</a></h2>
@@ -86,6 +122,17 @@
 			<ul class="submenu">
 				<b>Acciones: </b>
 				<a href="groups.php?action=new"><li>'._("New").'</li></a>
+				';
+
+			$query_setting = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
+			$row_setting = mysqli_fetch_array($query_setting);
+			$JP = $row_setting['value'];
+
+			if($JP == 2) {
+				echo '<a href="groups.php?action=requests"><li>'._("Requests").'</li></a>';
+			}
+
+			echo '
 			</ul>
 			<center>
 				<div class="table">
@@ -99,13 +146,13 @@
 						<tbody>
 		';
 				$con = $System->conDB("../../config.json");
-				$query = $con->query("select * from pl_groups");
+				$query = $con->query("SELECT * FROM pl_groups");
 
 				while($row = mysqli_fetch_array($query)) {
 
 					$grupoid = $row['id'];
 
-					$query2 = $con->query("select * from pl_groupuser where groupid=$grupoid");
+					$query2 = $con->query("SELECT * FROM pl_groupuser WHERE groupid=$grupoid");
 
 					echo "
 					<tr>
@@ -116,7 +163,7 @@
 					while ($row2 = mysqli_fetch_array($query2)) {
 						$userid = $row2['userid'];
 
-						$query3 = $con->query("select * from pl_users where id=$userid");
+						$query3 = $con->query("SELECT * FROM pl_users WHERE id=$userid");
 						$row3 = mysqli_fetch_array($query3);
 
 						$username = $row3['username'];

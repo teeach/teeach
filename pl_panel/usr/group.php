@@ -51,38 +51,34 @@
 		} elseif (@$_GET['action'] == "send_request") {
 
 			$gh = $_GET['group'];
+			$user_h = $User->h;
 
-			$query = $con->query("SELECT * FROM pl_groups WHERE h='$gh'")or die("Query error!");
-			$row = mysqli_fetch_array($query);
-			$groupname = $row['name'];
-			$gid = $row['id'];
-
-			$query2 = $con->query("SELECT * FROM pl_groupuser WHERE groupid=$gid");
-			while ($row2 = mysqli_fetch_array($query2)) {
-				$uid = $row2['userid'];
-				$query3 = $con->query("SELECT * FROM pl_users WHERE id=$uid");
-				$row3 = mysqli_fetch_array($query3);
-				$privilege = $row3['privilege'];
-				if ($privilege >= 2) {
-
-					//User info.
-					$name = $User->name;
-					$surname = $User->surname1;
-
-					//Receiver.
-					$to_id = $uid;					
-					$subject = $name." ".$surname." wants to join ".$groupname;
-					$body = "group.php?action=add&group=".$gh."&user=".$User->h." ";
-					$h = substr( md5(microtime()), 1, 18);
-					$date = date("Y-m-d H:i:s");
-
-					$query4 = $con->query("INSERT INTO pl_messages(to_id,subject,body,h,date) VALUES($to_id,'$subject','$body','$h','$date')")or die("Query 4 error!");
-				}
-
-				
+			//Check Settings
+			$query_settings = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
+			$row_settings = mysqli_fetch_array($query_settings);
+			$JP = $row_settings['value'];
+			
+			switch($JP) {
+				case 1:
+					//Direct ~ No need permission
+					$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','active')")or die("Query error!");
+					echo _("Great! You've joined to group. <a href='group.php?group=".$gh."&page=index'>Enter</a>");
+				case 2:
+					//Request ~ Need permission
+					$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','waiting')")or die("Query error!");
+					echo _("You've sent a request successfully! <a href='index.php'>Return to Index Page</a>");
+					break;
+				case 3:
+					//Diabled ~ Lock requests
+					echo _("The administrator has disabled the activation to groups. Try again later. <a href='index.php'>Accept</a>");
+				default:
+					//Error ~ Invalid setting
+					echo _("Error in table pl_settings The value of JP is invalid!");
 			}
 
-			echo '<a href="index.php">Great! Return to Index Page</a>';
+			
+
+			
 
 		} elseif(@$_GET['action'] == "add") {
 

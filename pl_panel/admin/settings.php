@@ -62,6 +62,7 @@
 			$logo = $_POST['logo'];
 			$accesspass = $_POST['accesspass'];
 			@$showgroups = $_POST['showgroups'];
+            $JP = $_POST['JP'];
 
 			if(isset($showgroups)) {
 				$showgroups = "true";
@@ -73,6 +74,7 @@
 			$query = $con->query("UPDATE pl_settings SET value='$logo' WHERE property='logo'")or die("Query error!");
 			$query = $con->query("UPDATE pl_settings SET value='$accesspass' WHERE property='accesspass'")or die("Query error!");
 			$query = $con->query("UPDATE pl_settings SET value='$showgroups' WHERE property='showgroups'")or die("Query error!");
+            $query = $con->query("UPDATE pl_settings SET value=$JP WHERE property='JP'")or die("Query error!");
 
 			echo '<a href="settings.php?action">Accept</a>';
 
@@ -83,18 +85,21 @@
 			$query_logo = $con->query("SELECT * FROM pl_settings WHERE property='logo'");
 			$query_accesspass = $con->query("SELECT * FROM pl_settings WHERE property='accesspass'");
 			$query_sg = $con->query("SELECT * FROM pl_settings WHERE property='showgroups'");
+            $query_JP = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
 
 			//Arrays
 			$row_centername = mysqli_fetch_array($query_centername);
 			$row_logo = mysqli_fetch_array($query_logo);
 			$row_accesspass = mysqli_fetch_array($query_accesspass);
 			$row_sg = mysqli_fetch_array($query_sg);
+            $row_JP = mysqli_fetch_array($query_JP);
 
 			//Values
 			$centername = $row_centername['value'];
 			$logo = $row_logo['value'];
 			$accesspass = $row_accesspass['value'];
 			$sg = $row_sg['value'];
+            $JP = $row_JP['value'];
 
 
 			echo '<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="settings.php?action">'._("Settings").'</a></h2>
@@ -122,13 +127,39 @@
                 				'._("Server time: ").': '.date("d-m-Y H:i:s").'
             				</div>
             				<div id="cpestana3">
-            					<!--<label for="JP">Join a group: </label>
-            					<select name="JP">
-									<option value="1">'._("Direct").'</option>
-									<option value="2">'._("Request").'</option>
-									<option value="3">'._("None").'</option>
-            					</select>-->
-            					<p>Coming soon...</p>
+            					<label for="JP">Join a group: </label>
+            					<select name="JP">';
+                                    switch($JP) {
+                                        case 1:
+                                            echo '
+                                                <option value="1" selected>'._("Direct").'</option>
+                                                <option value="2">'._("Request").'</option>
+                                                <option value="3">'._("Disabled").'</option>
+                                            ';
+                                            break;
+                                        case 2:
+                                            echo '
+                                                <option value="1">'._("Direct").'</option>
+                                                <option value="2" selected>'._("Request").'</option>
+                                                <option value="3">'._("Disabled").'</option>
+                                            ';
+                                            break;
+                                        case 3:
+                                            echo '
+                                                <option value="1">'._("Direct").'</option>
+                                                <option value="2">'._("Request").'</option>
+                                                <option value="3" selected>'._("Disabled").'</option>
+                                            ';
+                                            break;
+                                        default:
+                                            echo '
+                                                <option value="1" selected>'._("Direct").'</option>
+                                                <option value="2">'._("Request").'</option>
+                                                <option value="3">'._("Disabled").'</option>
+                                            ';
+                                    }
+                                echo '									
+            					</select>
             				</div>
             				<div id="cpestana4">
             				';

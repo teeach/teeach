@@ -162,6 +162,7 @@
     }
     
     class User {
+        
         function __construct($id, $username, $name, $surname, $email, $phone, $level, $h, $photo, $birthday, $home, $pass, $privilege){
             $this->id = $id;
             $this->username = $username;
@@ -178,13 +179,13 @@
             $this->privilege = $privilege;
         }
     }
-    
+
     class Group {
-        function __construct($id,$name,$h,$category_h){
+        function __construct($id,$name,$h,$category_h) {
             $this->id = $id;
             $this->name = $name;
             $this->h = $h;
-            $this->category_h = $category_h
+            $this->category_h = $category_h;
         }
     }
     
