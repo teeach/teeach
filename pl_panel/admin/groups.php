@@ -47,26 +47,23 @@
     		$row = mysqli_fetch_array($query);
 
     		$groupname = $row['name'];
-    		$level = $row['level'];
 
 			echo '
 			<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="groups.php?action">Grupos</a> >> Editar</h2>
 			<form method="post" action="groups.php?action=update&h='.$h.'">
 				<label for="name">Nombre de grupo: </label><input type="text" name="name" value="'.$groupname.'"><br>
-				<label for="level">Curso: </label><input type="text" name="level" value="'.$level.'"><br>
 				<input type="submit" value="Enviar">
 			</form>
 			';
 		} elseif($action == "update") {
 
 			$groupname = $_POST['name'];
-			$level = $_POST['level'];
 
 			$h = $_GET['h'];
 
 			$con = $System->conDB("../../config.json");
 
-			$query = $con->query("UPDATE pl_groups SET name='$groupname', level='$level' WHERE h='$h'")or die("Query error!");
+			$query = $con->query("UPDATE pl_groups SET name='$groupname' WHERE h='$h'")or die("Query error!");
 
 			echo "<a href='groups.php?action'>Aceptar</a>";
 
@@ -78,7 +75,7 @@
 
 			$query = $con->query("DELETE FROM pl_groups WHERE h='$h'")or die("Query error!");
 
-			echo "Eliminado! <a href='groups.php?action'>Aceptar</a>";
+			echo "¡Eliminado! <a href='groups.php?action'>Aceptar</a>";
 
 		} elseif($action == "requests") {
 			
@@ -117,11 +114,18 @@
 
 		} else {
 
-			echo '<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="groups.php?action">Grupos</a></h2>
+			echo '
+				<div class="admin_header">
 
-			<ul class="submenu">
-				<b>Acciones: </b>
-				<a href="groups.php?action=new"><li>'._("New").'</li></a>
+				<div class="admin_hmenu">
+					<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>				
+					<h2><a href="index.php">Admin</a> >> <a href="users.php?action">'._("Groups").'</a></h2>
+                </div>
+
+			<div class="submenu">
+				<ul>
+					<a href="groups.php?action=new"><li>'._("New").'</li></a>
+					<a href="categories.php?action"><li>'._("Categories").'</li></a>
 				';
 
 			$query_setting = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
@@ -134,6 +138,8 @@
 
 			echo '
 			</ul>
+			</div>
+			</div>
 			<center>
 				<div class="table">
 					<table>
@@ -145,14 +151,14 @@
 						</thead>
 						<tbody>
 		';
-				$con = $System->conDB("../../config.json");
+				
 				$query = $con->query("SELECT * FROM pl_groups");
 
 				while($row = mysqli_fetch_array($query)) {
 
-					$grupoid = $row['id'];
+					$group_h = $row['h'];
 
-					$query2 = $con->query("SELECT * FROM pl_groupuser WHERE groupid=$grupoid");
+					$query2 = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$group_h'");
 
 					echo "
 					<tr>
@@ -161,9 +167,9 @@
 						<td>";
 
 					while ($row2 = mysqli_fetch_array($query2)) {
-						$userid = $row2['userid'];
+						$user_h = $row2['user_h'];
 
-						$query3 = $con->query("SELECT * FROM pl_users WHERE id=$userid");
+						$query3 = $con->query("SELECT * FROM pl_users WHERE h='$user_h'");
 						$row3 = mysqli_fetch_array($query3);
 
 						$username = $row3['username'];

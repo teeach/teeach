@@ -48,7 +48,7 @@
 		$action = $_GET['action'];
 		if ($action == "new") {
 			echo '
-				<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="users.php?action">Usuarios</a></h2>
+				<a href="users.php?action"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>
 				<table style="padding: 20px;">
 				<form name="cu" method="post" action="users.php?action=success" autocomplete="off">
 					<tr><td><label for="usr">'._("Usuario: ").'</label></td><td><input type="text" name="user" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
@@ -159,12 +159,20 @@
 
 		} else {
 
-			echo '<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="users.php?action">Usuarios</a></h2>
-                        
-			<ul class="submenu">
-                            <b>Acciones: </b>
-                            <a href="users.php?action=new"><li>'._("New").'</li></a>
-                        </ul>
+			echo '
+			<div class="admin_header">
+
+				<div class="admin_hmenu">
+					<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>				
+					<h2><a href="index.php">Admin</a> >> <a href="users.php?action">'._("Users").'</a></h2>
+                </div>
+
+				<div class="submenu">
+					<ul>
+                    	<a href="users.php?action=new"><li><img src="../../src/ico/add.png">'._("New").'</li></a>
+                	</ul>
+                </div>
+            </div>
 			<center>
                             <table class="table">
                                     <thead>

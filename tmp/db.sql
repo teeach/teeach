@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `pl_works` (
   `type` int(1) NOT NULL,
   `creation_date` datetime NOT NULL,
   `group_h` varchar(99) CHARACTER SET utf8 NOT NULL,
-  `unit` int(11) NOT NULL
+  `unit_h` varchar(99) CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `pl_categories`

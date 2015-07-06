@@ -61,6 +61,10 @@
             $username = $row['username'];
             $profile_photo = $row['photo'];
 
+            if ($profile_photo = " ") {
+                $profile_photo = "../../src/ico/user.png";
+            }
+
             //Main Menu
             echo '
             <header>
@@ -68,7 +72,7 @@
                     <ul>
                         <li><a href="index.php">'._("Index").'</a></li>
                         <li>
-                            <a href="../admin">'._("Groups").'</a>
+                            <a href="#">'._("Groups").'</a>
                             <ul>';
                                 $query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$h'")or die("Query error!");
                                 while($row1 = mysqli_fetch_array($query)) {

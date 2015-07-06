@@ -102,8 +102,13 @@
             $JP = $row_JP['value'];
 
 
-			echo '<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="settings.php?action">'._("Settings").'</a></h2>
-				<center>
+			echo '
+            <div class="admin_header">
+                <div class="admin_hmenu">
+                    <a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="settings.php?action">'._("Settings").'</a></h2>
+			    </div>
+            </div>
+            	<center>
 					<form action="settings.php?action=save" method="post">			
 						<div class="contenedor">
 						<div id="pestanas">

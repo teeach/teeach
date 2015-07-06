@@ -1,14 +1,15 @@
 <?php
 	include("../../core.php");
-	include("../../usr.php");
+	$System = new System("../../config.json");
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo "Hola, $usr_name | Teeach"; ?></title>
+	<title>Coming soon</title>
 	<link rel="stylesheet" href="../../src/css/main.css">
+	<?php $System->set_head(); ?>
 </head>
 <body>
 	<?php
