@@ -20,10 +20,22 @@
 		$action = $_GET['action'];
 		if ($action == "new") {
 			echo '
-				<a href="groups.php?action"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="groups.php?action">Grupos</a> >> <a href="groups.php?action=new">Nuevo</a></h2>
+				<a href="groups.php?action"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>
 				<table style="padding: 20px;">
 				<form name="cg" method="post" action="groups.php?action=success" autocomplete="off">
-					<tr><td><label for="name">'._("Nombre del grupo: ").'</label></td><td><input type="text" name="name" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
+					<tr><td><label for="name">'._("Group name: ").'</label></td><td><input type="text" name="name" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
+					<tr><td><label for="category">'._("Category: ").'</label></td><td>
+						<select name="category">
+						';
+						$query = $con->query("SELECT * FROM pl_categories")or die("Query error!");
+						while ($row = mysqli_fetch_array($query)) {
+							$category_id = $row['id'];
+							$category_name = $row['name'];
+							echo '<option value="'.$category_id.'">'.$category_name.'</option>';
+						}
+						echo '
+						</select>
+					</td></tr>
 					<tr><td/><td><h6 style="display:none" id="txt_user">'._("El nombre de grupo de 6 a 29 carácteres").'</h6></td></tr>
 					<tr><td><input type="submit" value="Enviar"/></td></tr>
 				</form>
@@ -33,10 +45,13 @@
 			$name = $_POST['name'];
 			$h = substr( md5(microtime()), 1, 18);
 
-			$System = new System();
+			$category_id = $_POST['category'];
 
-			$con = $System->conDB("../../config.json");
-    		$query = $con->query("INSERT INTO pl_groups(name,h) VALUES ('$name','$h')")or die("Error");
+			$query1 = $con->query("SELECT * FROM pl_categories WHERE id=$category_id")or die("Query error!");
+			$row1 = mysqli_fetch_array($query1);
+			$category_h = $row1['h'];
+
+    		$query = $con->query("INSERT INTO pl_groups(name,h,category_h) VALUES ('$name','$h','$category_h')")or die("Query error!");
     		echo "<p>¡Perfecto!</p><a href='groups.php?action'>Accept</a>";
     	} elseif($action == "edit") {
 
@@ -145,9 +160,10 @@
 					<table>
 						<thead>
 							<th>#</th>
-							<th>'._("Nombre").'</th>
-							<th>'._("Usuarios").'</th>
-							<th>'._("Acciones").'</th>
+							<th>'._("Name").'</th>
+							<th>'._("Users").'</th>
+							<th>'._("Category").'</th>
+							<th>'._("Actions").'</th>
 						</thead>
 						<tbody>
 		';
@@ -158,7 +174,13 @@
 
 					$group_h = $row['h'];
 
-					$query2 = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$group_h'");
+					$category_h = $row['category_h'];
+
+					$query1 = $con->query("SELECT * FROM pl_categories WHERE h='$category_h'")or die("Query error!");
+					$row1 = mysqli_fetch_array($query1);
+					$category_name = $row1['name'];
+
+					$query2 = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$group_h'")or die("Query error!");
 
 					echo "
 					<tr>
@@ -179,6 +201,7 @@
 
 					echo "
 					</td>
+					<td>".$category_name."</td>
 					<td><a href='groups.php?action=edit&h=".$row['h']."'>Editar</a> <a href='groups.php?action=delete&h=".$row['h']."'>Eliminar</a></td>
 					";
 				}

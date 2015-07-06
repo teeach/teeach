@@ -34,19 +34,25 @@
 			echo '
 				<h1>'._("Join a group").'</h1>
 				<p>'._("Select a group:").' </p>
-				<ul class="grouplist">
 					';
 
-				$query = $con->query("SELECT * FROM pl_groups")or die("Query error!");
-				while($row = mysqli_fetch_array($query)) {
-					$groupname = $row['name'];
-					$gh = $row['h'];
-					echo '<a href="group.php?action=send_request&group='.$gh.'"><li>'.$groupname.'</li></a>';
-				}
+				$query1 = $con->query("SELECT * FROM pl_categories")or die("Query error!");
+				while ($row1 = mysqli_fetch_array($query1)) {
+					$category_name = $row1['name'];
+					$category_h = $row1['h'];
+					echo '
+						<h3>'.$category_name.'</h3>
+						<ul class="grouplist">
+					';
 
-			echo '
-				</ul>
-			';
+					$query2 = $con->query("SELECT * FROM pl_groups WHERE category_h='$category_h'")or die("Query error!");
+					while ($row2 = mysqli_fetch_array($query2)) {
+						$groupname = $row2['name'];
+						$gh = $row2['h'];
+						echo '<a href="group.php?action=send_request&group='.$gh.'"><li>'.$groupname.'</li></a>';
+					}
+					echo '</ul>';
+				}
 
 		} elseif (@$_GET['action'] == "send_request") {
 
