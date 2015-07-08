@@ -112,7 +112,7 @@
                 </div>
             </div>
 			<center>
-				<table class="table">
+				<table class="ui_table">
 					<thead>
 						<th>#</th>
 						<th>'._("Title").'</th>

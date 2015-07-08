@@ -64,7 +64,7 @@
     		$groupname = $row['name'];
 
 			echo '
-			<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="groups.php?action">Grupos</a> >> Editar</h2>
+			<a href="groups.php?action"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="groups.php?action">Grupos</a> >> Editar</h2>
 			<form method="post" action="groups.php?action=update&h='.$h.'">
 				<label for="name">Nombre de grupo: </label><input type="text" name="name" value="'.$groupname.'"><br>
 				<input type="submit" value="Enviar">
@@ -156,7 +156,7 @@
 			</div>
 			</div>
 			<center>
-				<div class="table">
+				<div class="ui_table">
 					<table>
 						<thead>
 							<th>#</th>

@@ -173,22 +173,22 @@
                 	</ul>
                 </div>
             </div>
-			<center>
-                            <table class="table">
-                                    <thead>
-                                        <th></th>
-                                        <th>#</th>
-                                        <th>'._("Name").'</th>
-                                        <th>'._("Surname").'</th>
-                                        <th>'._("Username").'</th>
-                                        <th>'._("Email").'</th>
-                                        <th>'._("Phone").'</th>
-                                        <th>'._("Birthdate").'</th>
-                                        <th>'._("Home").'</th>
-                                        <th>'._("Privilege").'</th>
-                                        <th>'._("Actions").'</th>
-                                    </thead>
-                                    <tbody>';
+            <div class="ui_full_width">
+                <table class="ui_table">
+                    <thead>
+                        <th class="select"><input class="select_all" type="checkbox" /></th>
+                        <th>#</th>
+                        <th>'._("Name").'</th>
+                        <th>'._("Surname").'</th>
+                        <th>'._("Username").'</th>
+                        <th>'._("Email").'</th>
+                        <th>'._("Phone").'</th>
+                        <th>'._("Birthdate").'</th>
+                        <th>'._("Address").'</th>
+                        <th>'._("Privilege").'</th>
+                        <th class="actions">'._("Actions").'</th>
+                    </thead>
+                    <tbody>';
                                     
 				$con = $System->conDB("../../config.json");
 				$query = $con->query("SELECT * FROM pl_users");
@@ -215,7 +215,7 @@
 					}
 					echo "
 					<tr>
-						<td><input type='checkbox'></td>
+						<td class='select'><input type='checkbox' class='checkbox' /></td>
 						<td>".$row['id']."</td>
 						<td>".$nombre."</td>
 						<td>".$row['surname']."</td>
@@ -223,15 +223,18 @@
 						<td>".$row['email']."</td>
 						<td>".$row['phone']."</td>
 						<td>".$row['birthday']."</td>
-						<td>".$row['home']."</td>
+						<td>".$row['address']."</td>
 						<td>".$privilege."</td>
-						<td><a href='users.php?action=edit&h=".$row['h']."'>"._('Edit')."</a> <a href='users.php?action=delete&h=".$row['h']."'>"._('Del')."</a></td>
+						<td class='actions'>
+							<a class='ui_action' href='users.php?action=edit&h=".$row['h']."'>"._('Edit')."</a>
+                            <a class='ui_action' href='users.php?action=delete&h=".$row['h']."'>"._('Delete')."</a>
+                        </td>
 					</tr>";
 				}
 			echo "
 		</tbody>
 	</table>
-	</center>";
+	</div>";
 		}
 	?>
 </body>

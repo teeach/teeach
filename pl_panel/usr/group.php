@@ -204,23 +204,36 @@
 				<h1>'._("Users").'</h1>
 				<table>
 					<thead>
-						<th>Users</th>
+						<th><input type="checkbox"></th>
+						<th>'._("Name and surname").'</th>
+						<th>'._("Address").'</th>
+						<th>'._("Phone").'</th>
+						<th></th>
 					</thead>
-					<tbody>
+					<tbody>	
 			';
-			$query = $con->query("SELECT * FROM pl_groupuser WHERE groupid=$groupid");
-					while ($row = mysqli_fetch_array($query)) {
-						$userid = $row['userid'];
-						$query2 = $con->query("SELECT * FROM pl_users WHERE id=$userid");
-						$row2 = mysqli_fetch_array($query2);
+			$query = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$gh'");
+				while ($row = mysqli_fetch_array($query)) {
+					$user_h = $row['user_h'];
+					$query2 = $con->query("SELECT * FROM pl_users WHERE h='$user_h'");
+					$row2 = mysqli_fetch_array($query2);
 
-						$name = $row2['name'];
-						$surname1 = $row2['subname1'];
-						$surname2 = $row2['subname2'];
-						$user_h = $row2['h'];
+					$name = $row2['name'];
+					$surname = $row2['surname'];
+					$address = $row2['address'];
+					$phone = $row2['phone'];
 
-						echo '<tr><td><a href="profile.php?h='.$user_h.'">'.$name." ".$surname1." ".$surname2.'</a></td></tr>';
+					echo '<tr><td><input type="checkbox"></td>';
+
+					if ($row['status'] == "leader") {
+						echo '<td><a style="color:#0B0B3B; font-weight: bold " href="profile.php?h='.$user_h.'">'.$name." ".$surname.'</a></td>';
+					} else {
+						echo '<td><a href="profile.php?h='.$user_h.'">'.$name." ".$surname.'</a></td>';
 					}
+
+					echo '<td>'.$address.'</td><td>'.$phone.'</td><td><a href="#">'._("Email").'</a><a href="#">'._("Delete").'</a></td>';
+					echo '</tr>';
+				}
 
 			echo '
 				</tbody>

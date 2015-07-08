@@ -14,42 +14,10 @@
 	<link rel="stylesheet" href="../../src/css/main.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
 	<?php $System->set_head(); ?>
-	<script>
-    // CÓDIGO EN PRUEBAS!!! [TEST]
-		// Dadas la division que contiene todas las pestañas y la de la pestaña que se 
-		// quiere mostrar, la funcion oculta todas las pestañas a excepcion de esa.
-		function cambiarPestanna(pestannas,pestanna) {
-    
-    	// Obtiene los elementos con los identificadores pasados.
-    	pestanna = document.getElementById(pestanna.id);
-    	listaPestannas = document.getElementById(pestannas.id);
-    
-    	// Obtiene las divisiones que tienen el contenido de las pestañas.
-    	cpestanna = document.getElementById('c'+pestanna.id);
-    	listacPestannas = document.getElementById('contenido'+pestannas.id);
-    
-		i=0;
-    	// Recorre la lista ocultando todas las pestañas y restaurando el fondo 
-    	// y el padding de las pestañas.
-    	while (typeof listacPestannas.getElementsByTagName('div')[i] != 'undefined'){
-        	$(document).ready(function(){
-           		$(listacPestannas.getElementsByTagName('div')[i]).css('display','none');
-            	$(listaPestannas.getElementsByTagName('li')[i]).css('background','');
-            	$(listaPestannas.getElementsByTagName('li')[i]).css('padding-bottom','');
-        });
-        i += 1;
-    	}
- 
-   		$(document).ready(function(){
-        // Muestra el contenido de la pestaña pasada como parametro a la funcion,
-        // cambia el color de la pestaña y aumenta el padding para que tape el  
-        // borde superior del contenido que esta juesto debajo y se vea de este 
-        // modo que esta seleccionada.
-        $(cpestanna).css('display','');
-        $(pestanna).css('background','#fff');
-    }); 
-}
-	</script>
+    <!-- Tabs JS -->
+    <script src="../../src/js/tabs.js"></script>
+    <!-- Check All JS -->
+    <script src="../../src/js/check-all.js"></script>
 </head>
 <body onload="javascript:cambiarPestanna(pestanas,pestana1);">
 
@@ -111,29 +79,29 @@
             	<center>
 					<form action="settings.php?action=save" method="post">			
 						<div class="contenedor">
-						<div id="pestanas">
-            				<ul id=lista>
-                				<li id="pestana1"><a href="javascript:cambiarPestanna(pestanas,pestana1);">'._("Basic").'</a></li>
-                				<li id="pestana4"><a href="javascript:cambiarPestanna(pestanas,pestana4);">'._("Privacy").'</a></li>
-                				<li id="pestana3"><a href="javascript:cambiarPestanna(pestanas,pestana3);">'._("Advanced").'</a></li>
-                				<li id="pestana2"><a href="javascript:cambiarPestanna(pestanas,pestana2);">'._("About").'</a></li>
-            				</ul>
-        				</div> 
-        				<div id="contenidopestanas">
-           					<div id="cpestana1">
-                				<label for="centername">'._("Centername").': </label><input type="text" name="centername" value="'.$centername.'"><br>
-                				<label for="logo">'._("Logo").': </label><input type="text" name="logo" value="'.$logo.'"><br>
-                				<img src="'.$logo.'" alt="logo"><br>
-                				<label for="accesspass">'._("Accesspass").': </label><input type="text" name="accesspass" value="'.$accesspass.'">
-            				</div>
-            				<div id="cpestana2">
-            					<b>Teeach</b><br>
-            					<p>In Dev</p><br>
-                				'._("Server time: ").': '.date("d-m-Y H:i:s").'
-            				</div>
-            				<div id="cpestana3">
-            					<label for="JP">Join a group: </label>
-            					<select name="JP">';
+
+
+						<nav class="ui_tabs">
+                            <ul>
+                                <li class="active"><a href="#tab_01">'._("Basic").'</a></li>
+                                <li><a href="#tab_02">'._("Privacy").'</a></li>
+                                <li><a href="#tab_03">'._("Advanced").'</a></li>
+                                <li><a href="#tab_04">'._("About").'</a></li>
+                            </ul>        
+                        </nav>
+
+
+                        <div class="ui_tabs_content">
+                            <form class="ui_form">
+                                <div id="tab_01" class="ui_tab_content">
+                                    <label for="centername">'._("Centername").': </label><input type="text" name="centername" value="'.$centername.'"><br>
+                                    <label for="logo">'._("Logo").': </label><input type="text" name="logo" value="'.$logo.'"><br>
+                                    <img src="'.$logo.'" alt="logo"><br>
+                                    <label for="accesspass">'._("Accesspass").': </label><input type="text" name="accesspass" value="'.$accesspass.'">
+                                </div>
+                                <div id="tab_02" class="ui_tab_content">
+                                    <label for="JP">Join a group: </label>
+                                    <select name="JP">';
                                     switch($JP) {
                                         case 1:
                                             echo '
@@ -163,19 +131,23 @@
                                                 <option value="3">'._("Disabled").'</option>
                                             ';
                                     }
-                                echo '									
-            					</select>
-            				</div>
-            				<div id="cpestana4">
-            				';
-
-            				if ($sg == "true") {
-            					echo '<input type="checkbox" name="showgroups" checked>';
-            				} else {
-            					echo '<input type="checkbox" name="showgroups">';
-            				}
-            echo '            				
-            					<label for="showgroups">'._("Show groups in user profile").'</label>
+                                    echo '
+                                    </select>
+                                </div>
+                                <div id="tab_03" class="ui_tab_content">';
+                                if ($sg == "true") {
+                                    echo '<input type="checkbox" name="showgroups" checked>';
+                                } else {
+                                    echo '<input type="checkbox" name="showgroups">';
+                                }
+                                echo '                          
+                                        <label for="showgroups">'._("Show groups in user profile").'</label>
+                                    </form>
+                                </div>
+                                <div id="tab_04" class="ui_tab_content">
+                                <b>Teeach</b><br>
+                                <p>In Dev</p><br>
+                                '._("Server time: ").': '.date("d-m-Y H:i:s").'            				
             				</div>
    						</div>
 

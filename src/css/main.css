@@ -120,7 +120,7 @@ table {
 
 body {
     background: #EEE;    
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'RobotoLight', sans-serif;
 }
 
 * {
@@ -140,7 +140,7 @@ a:hover {
 h1 {
     font-size: 4rem;
     font-weight: 100;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'RobotoLight', sans-serif;
     color: #320;
 }
 
@@ -345,7 +345,7 @@ header a:hover {
 /*Header Admin Panel*/
 
 .admin_header {
-    box-shadow: 0 0 2px #aaa;
+    
 }
 
 .btn_back {
@@ -417,6 +417,159 @@ header a:hover {
     float: left;
     margin-right: 8px;
     margin-top: -4px;
+}
+
+/* Ui Tabs
+   =========================================================== */
+
+.ui_tabs {
+    display: inline-block;
+    /*padding-top: 20px;*/
+    width: 100%;
+}
+
+.ui_tabs ul {
+    border-top: 2px solid #320;
+    border-bottom: 2px solid #320;
+    display: inline-block;
+    width: 100%;
+}
+
+.ui_tabs li {
+    float: left;
+}
+
+.ui_tabs li a {
+    color: #320;
+    display: inline-block;
+    padding: 15px;
+    transition: none;
+}
+
+.ui_tabs li.active a {
+    background: #DDD;
+    border-bottom: 4px solid #320;
+    padding-bottom: 11px;
+}
+
+.ui_tabs li a:hover {
+    background: #DDD;
+    text-decoration: none;
+}
+
+.ui_tabs_content {
+    padding: 0px;    
+    margin: 0px auto;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.ui_tab_content {
+    display: none;
+}
+
+.ui_tab_content:first-child {
+    display: block;
+}
+
+
+/* Ui Table
+   =========================================================== */
+
+.ui_table {
+    display: inline-block;  
+    text-align: left;
+    width: 100%;
+}
+
+.ui_table thead, .ui_table tbody {
+    display: table;
+    width: 100%; 
+}
+
+.ui_table thead {
+    border-top: 2px solid #320;
+    border-bottom: 2px solid #320;     
+}
+
+.ui_table th, .ui_table td {
+    color: #320;    
+    padding: 15px;
+    white-space: nowrap;
+}
+
+.ui_table thead tr {
+    background: none !important;
+    
+}
+
+.ui_table tr:nth-child(odd) {
+    background: #DDD;
+    
+}
+
+.ui_table .select, .ui_table .actions {
+    width: 65px;
+}
+
+.ui_table .ui_action {
+    color: #000;
+}
+
+/* Ui Form
+   =========================================================== */
+
+.ui_form {
+    width: 100%;
+}
+
+.ui_form label {
+    width: 30%;
+}
+
+.ui_form input {
+    width: 70%;    
+}
+
+/* Ui Vertical Nav
+   =========================================================== */
+
+.ui_vertical_nav {    
+    width: 100%;
+}
+
+.ui_vertical_nav ul {
+    
+}
+
+.ui_vertical_nav li {
+    
+}
+
+.ui_vertical_nav li a {
+    color: #320;    
+    padding: 15px;
+    display: inline-block;
+    width: 100%;
+}
+
+.ui_vertical_nav li a:hover {
+    background: #DDD;
+}
+
+.ui_vertical_nav li.active a {
+    background: #DDD;
+    border-left: 4px solid #320;
+    padding-left: 11px;
+}
+
+
+/*===============================================================
+TRANSITIONS
+===============================================================*/
+
+.ui_head .ui_actions .ui_action {
+    transition: all 0.2s linear;
 }
 
 
@@ -638,6 +791,43 @@ input,button {
 input:hover, input:focus {
     box-shadow: 0 1px #320;
 }
+
+/* Ui Head
+   =========================================================== */
+
+.ui_head {
+    display: inline-block;    
+    width: 100%;
+}
+
+.ui_head_width_actions {
+    padding-bottom: 15px;    
+}
+
+.ui_head h2 {
+    color: #320;    
+    font-size: 32px;
+    font-weight: 300;
+    float: left;
+}
+
+.ui_head .ui_actions {
+    float: right;
+}
+
+.ui_head .ui_actions .ui_action {
+    background: #320;
+    border: 0px;
+    color: #FFF;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 8px;   
+}
+
+.ui_head .ui_actions .ui_action:hover {
+    background: #C96;      
+}
+
 /*
 ==================
 (c)2015 Teeach

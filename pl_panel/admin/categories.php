@@ -94,15 +94,13 @@
 				';
 
 			echo '
-			<center>
-				<div class="table">
-					<table>
-						<thead>
-							<th>#</th>
-							<th>'._("Name").'</th>
-							<th>'._("Actions").'</th>
-						</thead>
-						<tbody>
+				<table class="ui_table">
+					<thead>
+						<th>#</th>
+						<th>'._("Name").'</th>
+						<th>'._("Actions").'</th>
+					</thead>
+					<tbody>
 		';
 				$query = $con->query("SELECT * FROM pl_categories");
 
@@ -121,9 +119,7 @@
 				}
 			echo "
 		</tbody>
-	</table>
-	</div>
-	</center>";
+	</table>";
 		}
 	?>
 	

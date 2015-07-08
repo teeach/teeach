@@ -6,7 +6,9 @@
 				<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
 				<link rel='stylesheet' href='../../src/css/main.css'>
 				<link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+                <link rel='stylesheet' href='path/to/font-awesome/css/font-awesome.min.css'>
                 <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+                <script src='../../src/js/check-all.js'></script>
 			";
 			$lang = "es_ES";
 			putenv('LC_ALL='.$lang);

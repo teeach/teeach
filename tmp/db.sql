@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS `pl_users` (
   `name` char(29) CHARACTER SET utf8 NOT NULL,
   `surname` char(29) CHARACTER SET utf8 NOT NULL,
   `email` char(40) CHARACTER SET utf8 NOT NULL,
+  `address` text CHARACTER SET utf8 NOT NULL,
   `phone` int(9) NOT NULL,
   `level` int(3) NOT NULL,
   `h` char(13) CHARACTER SET utf8 NOT NULL,

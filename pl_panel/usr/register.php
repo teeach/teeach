@@ -20,7 +20,7 @@
 		$email = $_POST['email'];
 		$password = $_POST['password'];
 		$rpassword = $_POST['rpassword'];
-		$accesspass_form = $_POST['accesspass'];
+		@$accesspass_form = $_POST['accesspass'];
 
 		$query = $con->query("SELECT * FROM pl_settings WHERE property='accesspass'")or die("Query error!");
 		$row = mysqli_fetch_array($query);
