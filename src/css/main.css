@@ -779,7 +779,7 @@ footer .version {
 }
 
 /* INPUT */
-input,button {
+input {
     background-color: #eee;
     color: #320;
     border: 0;
@@ -788,8 +788,63 @@ input,button {
     border-radius: 5px;
 }
 
+input[type=submit],button {
+    background-color: #320;
+    color: #fff;
+    border: 0;
+    outline: 0;
+    border-radius: 5px;
+    padding: 10px 30px;
+    margin: 10px;
+    cursor: pointer;
+    font-family: 'RobotoLight', sans-serif;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+input[type=submit]:hover,button:hover {
+    background-color: #c96;
+    box-shadow: none;
+}
+
 input:hover, input:focus {
     box-shadow: 0 1px #320;
+}
+
+/*===============================================================
+UI ELEMENTS
+===============================================================*/
+
+.ui_full_width {
+    display: inline-block;
+    padding: 20px 80px;
+    width: 100%;
+}
+
+.ui_width_sidebar {
+    padding: 0px 0px 0px 20px;
+    width: 82%;
+}
+
+.ui_sidebar {
+    padding: 0px 20px 0px 0px;
+    width: 18%;
+}
+
+.ui_sidebar a {
+    transition: none;
+}
+
+.ui_sidebar a:hover {
+    text-decoration: none;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
 }
 
 /* Ui Head

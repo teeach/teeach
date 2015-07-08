@@ -201,14 +201,26 @@
 						<li><div class="actual_select"><a href="group.php?action=view&h='.$gh.'&page=users">'._("Users").'</a></div></li>
 					</ul>
 				</aside>
+
+
+				<div class="ui_sidebar left">
+                	<nav class="ui_vertical_nav">
+                    	<ul>
+                        	<li class="active"><a href="#">Recibidos</a></li>
+                        	<li><a href="#">Enviados</a></li>
+                    	</ul>
+                	</nav>                            
+            	</div>
+
+            	
 				<h1>'._("Users").'</h1>
-				<table>
+				<table class="ui_table">
 					<thead>
 						<th><input type="checkbox"></th>
 						<th>'._("Name and surname").'</th>
 						<th>'._("Address").'</th>
 						<th>'._("Phone").'</th>
-						<th></th>
+						<th>'._("Actions").'</th>
 					</thead>
 					<tbody>	
 			';
@@ -231,7 +243,7 @@
 						echo '<td><a href="profile.php?h='.$user_h.'">'.$name." ".$surname.'</a></td>';
 					}
 
-					echo '<td>'.$address.'</td><td>'.$phone.'</td><td><a href="#">'._("Email").'</a><a href="#">'._("Delete").'</a></td>';
+					echo '<td>'.$address.'</td><td>'.$phone.'</td><td><a href="#">'._("Email").'</a> <a href="#">'._("Delete").'</a></td>';
 					echo '</tr>';
 				}
 

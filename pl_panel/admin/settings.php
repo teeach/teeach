@@ -145,9 +145,9 @@
                                     </form>
                                 </div>
                                 <div id="tab_04" class="ui_tab_content">
-                                <b>Teeach</b><br>
-                                <p>In Dev</p><br>
-                                '._("Server time: ").': '.date("d-m-Y H:i:s").'            				
+                                <span style="font-weight: bold">Teeach</span><br>
+                                <p>Early Development Version</p><br>
+                                '._("Server time: ").' '.date("d-m-Y H:i:s").'            				
             				</div>
    						</div>
 
