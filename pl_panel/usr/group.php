@@ -20,6 +20,7 @@
 	<?php $System->set_head(); ?>
 	<title><?php echo _("Groups"); ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css">
+	<script src="../../ckeditor/ckeditor.js"></script>
 	
 </head>
 <body>
@@ -64,27 +65,37 @@
 			$row_settings = mysqli_fetch_array($query_settings);
 			$JP = $row_settings['value'];
 			
-			switch($JP) {
-				case 1:
-					//Direct ~ No need permission
-					$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','active')")or die("Query error!");
-					echo _("Great! You've joined to group. <a href='group.php?group=".$gh."&page=index'>Enter</a>");
-				case 2:
-					//Request ~ Need permission
-					$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','waiting')")or die("Query error!");
-					echo _("You've sent a request successfully! <a href='index.php'>Return to Index Page</a>");
-					break;
-				case 3:
-					//Diabled ~ Lock requests
-					echo _("The administrator has disabled the activation to groups. Try again later. <a href='index.php'>Accept</a>");
-				default:
-					//Error ~ Invalid setting
-					echo _("Error in table pl_settings The value of JP is invalid!");
+			if($JP == 1){
+				$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','active')")or die("Query error!");
+				echo _("Great! You've joined to group. <a href='group.php?h=".$gh."&page=index'>Enter</a>");
+			}elseif($JP == 2){
+				$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','waiting')")or die("Query error!");
+				echo _("You've sent a request successfully! <a href='index.php'>Return to Index Page</a>");
+			}elseif($JP == 3){
+				echo _("The administrator has disabled the activation to groups. Try again later. <a href='index.php'>Accept</a>");
+			}else{
+				echo _("Error in table pl_settings The value of JP is invalid!");
 			}
-
 			
-
 			
+			//~ switch($JP) {
+				//~ case 1:
+					//~ //Direct ~ No need permission
+					//~ $query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','active')")or die("Query error!");
+					//~ echo _("Great! You've joined to group. <a href='group.php?h=".$gh."&page=index'>Enter</a>");
+				//~ case 2:
+					//~ //Request ~ Need permission
+					//~ $query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','waiting')")or die("Query error!");
+					//~ echo _("You've sent a request successfully! <a href='index.php'>Return to Index Page</a>");
+					//~ break;
+				//~ case 3:
+					//~ //Diabled ~ Lock requests
+					//~ echo _("The administrator has disabled the activation to groups. Try again later. <a href='index.php'>Accept</a>");
+				//~ default:
+					//~ //Error ~ Invalid setting
+					//~ echo _("Error in table pl_settings The value of JP is invalid!");
+			//~ }
+
 
 		} elseif(@$_GET['action'] == "add") {
 
@@ -119,12 +130,36 @@
 						<select name="type">
 							<option value="1">'._("Homework").'</option>
 							<option value="2">'._("Exam").'</option>
+							<textarea cols="80" id="editor1" name="desc" rows="10"></textarea>
+							
 						</select>
 					</td></tr>
-					<tr><td><label for="desc">'._("Description:").' </label></td><td><textarea name="desc"></textarea></td></tr>
 					<tr><td></td><td><input type="submit" value='._("Accept").'></td></tr>
 				</table>
 			</form>
+			
+			<script type="text/javascript">  
+                CKEDITOR.replace( "editor1", { 
+                enterMode: CKEDITOR.ENTER_BR,
+                skin : "office2013",
+                toolbar : [
+                    { name: "document", groups: [ "mode", "document", "doctools" ], items: [ "Source", "-", "Save", "Preview", "-", "Templates" ] },
+                    { name: "clipboard", groups: ["undo"], items: ["Undo", "Redo" ] },
+                    { name: "editing", groups: [ "find", "selection"], items: ["Replace", "-", "SelectAll"] },
+                    "/",
+                    { name: "basicstyles", groups: [ "basicstyles", "cleanup" ], items: [ "Bold", "Italic", "Underline", "Strike", "Subscript", "Superscript", "-", "RemoveFormat" ] },
+                    { name: "paragraph", groups: [ "list", "indent", "blocks", "align"], items: [ "NumberedList", "BulletedList", "-", "Outdent", "Indent", "-", "Blockquote", "CreateDiv", "-", "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock" ] },
+                    "/",
+                    { name: "links", items: [ "Link", "Unlink" ] },
+                    { name: "insert", items: [ "Image", "Flash", "Table", "HorizontalRule", "Smiley", "SpecialChar", "Iframe" ] },
+                    "/",
+                    { name: "styles", items: [ "Styles", "Format", "Font", "FontSize" ] },
+                    { name: "colors", items: [ "TextColor", "BGColor" ] },
+                    { name: "tools", items: [ "Maximize"] }
+                ]
+                });      
+        </script>
+			
 			';
 
 		} elseif(@$_GET['action'] == "save_work") {
@@ -154,7 +189,7 @@
 			if ($privilege >= 2) {
 				echo '
 					<ul class="submenu">
-						<a href="group.php?action=new_work&h='.$gh.'"><li>'._("New").'</li></a>
+						<a href="group.php?action=new_work&h='.$gh.'"><li>'._("New work").'</li></a>
 					</ul>
 				';
 			}
@@ -171,13 +206,13 @@
 					<ul class="unit">
 					';
 
-					$query1 = $con->query("SELECT * FROM pl_units WHERE group=$groupid")or die("Query error!");
+					$query1 = $con->query("SELECT * FROM pl_units WHERE group_h='$gh'")or die("Query error!");
 					while($row1 = mysqli_fetch_array($query1)) {
-						$unitid = $row1['id'];
+						$uh = $row1['h'];
 						$unitname = $row1['name'];
 						echo '<li>'.$unitname.'</li>';
 						echo '<ul class="work">';
-						$query2 = $con->query("SELECT * FROM pl_works WHERE unit=$unitid")or die("Query error 2!");
+						$query2 = $con->query("SELECT * FROM pl_works WHERE unit_h='$uh'")or die("Query error 2!");
 						while($row2 = mysqli_fetch_array($query2)) {
 							$workname = $row2['name'];
 							$workdesc = $row2['description'];
