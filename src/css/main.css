@@ -474,46 +474,42 @@ header a:hover {
 
 
 /* Ui Table
-   =========================================================== */
-
+=========================================================== */
 .ui_table {
-    display: inline-block;  
-    text-align: left;
-    width: 100%;
+display: table;  
+text-align: left;
+width: 100%;
 }
-
-.ui_table thead, .ui_table tbody {
-    display: table;
-    width: 100%; 
-}
-
 .ui_table thead {
-    border-top: 2px solid #320;
-    border-bottom: 2px solid #320;     
+border-top: 2px solid #320;
+border-bottom: 2px solid #320;     
 }
-
 .ui_table th, .ui_table td {
-    color: #320;    
-    padding: 15px;
-    white-space: nowrap;
+color: #320;    
+padding: 15px;
+white-space: nowrap;
 }
-
 .ui_table thead tr {
-    background: none !important;
-    
+background: none !important;
 }
-
 .ui_table tr:nth-child(odd) {
-    background: #DDD;
-    
+background: #DDD;
 }
-
 .ui_table .select, .ui_table .actions {
-    width: 65px;
+text-align: center;
+width: 65px;
+}
+.ui_table .ui_action {
+color: #000;
 }
 
-.ui_table .ui_action {
-    color: #000;
+.ui_table .fa {
+    color: #320;
+    transition: all 0.2s ease;
+}
+
+.ui_table .fa:hover {
+    color: #c96;
 }
 
 /* Ui Form

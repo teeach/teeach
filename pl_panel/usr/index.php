@@ -86,5 +86,6 @@
 		</ul>
 		<a href="group.php?action=join">Join</a>
 	</section>
+	<?php echo $System->set_footer(); ?>
 </body>
 </html>

@@ -21,7 +21,6 @@
 	<title><?php echo _("Groups"); ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<script src="../../ckeditor/ckeditor.js"></script>
-	
 </head>
 <body>
 	<?php 
@@ -65,37 +64,27 @@
 			$row_settings = mysqli_fetch_array($query_settings);
 			$JP = $row_settings['value'];
 			
-			if($JP == 1){
-				$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','active')")or die("Query error!");
-				echo _("Great! You've joined to group. <a href='group.php?h=".$gh."&page=index'>Enter</a>");
-			}elseif($JP == 2){
-				$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','waiting')")or die("Query error!");
-				echo _("You've sent a request successfully! <a href='index.php'>Return to Index Page</a>");
-			}elseif($JP == 3){
-				echo _("The administrator has disabled the activation to groups. Try again later. <a href='index.php'>Accept</a>");
-			}else{
-				echo _("Error in table pl_settings The value of JP is invalid!");
+			switch($JP) {
+				case 1:
+					//Direct ~ No need permission
+					$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','active')")or die("Query error!");
+					echo _("Great! You've joined to group. <a href='group.php?group=".$gh."&page=index'>Enter</a>");
+				case 2:
+					//Request ~ Need permission
+					$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','waiting')")or die("Query error!");
+					echo _("You've sent a request successfully! <a href='index.php'>Return to Index Page</a>");
+					break;
+				case 3:
+					//Diabled ~ Lock requests
+					echo _("The administrator has disabled the activation to groups. Try again later. <a href='index.php'>Accept</a>");
+				default:
+					//Error ~ Invalid setting
+					echo _("Error in table pl_settings The value of JP is invalid!");
 			}
-			
-			
-			//~ switch($JP) {
-				//~ case 1:
-					//~ //Direct ~ No need permission
-					//~ $query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','active')")or die("Query error!");
-					//~ echo _("Great! You've joined to group. <a href='group.php?h=".$gh."&page=index'>Enter</a>");
-				//~ case 2:
-					//~ //Request ~ Need permission
-					//~ $query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','waiting')")or die("Query error!");
-					//~ echo _("You've sent a request successfully! <a href='index.php'>Return to Index Page</a>");
-					//~ break;
-				//~ case 3:
-					//~ //Diabled ~ Lock requests
-					//~ echo _("The administrator has disabled the activation to groups. Try again later. <a href='index.php'>Accept</a>");
-				//~ default:
-					//~ //Error ~ Invalid setting
-					//~ echo _("Error in table pl_settings The value of JP is invalid!");
-			//~ }
 
+			
+
+			
 
 		} elseif(@$_GET['action'] == "add") {
 
@@ -116,6 +105,15 @@
 			$queryadd = $con->query("INSERT INTO pl_groupuser(groupid,userid) VALUES($group_id,$user_id)")or die("Query error!");
 
 			echo '<a href="group.php?h='.$group_h.'">Accept</a>';
+
+		} elseif(@$_GET['action'] == "quit") {
+
+			$group_h = $_GET['group'];
+			$user_h = $_GET['user'];
+
+			$query = $con->query("DELETE FROM pl_groupuser WHERE group_h='$group_h' AND user_h='$user_h'")or die("Query error!");
+			
+			echo '<a href="group.php?action=view&h='.$group_h.'&page=users">Accept</a>';
 
 		} elseif(@$_GET['action'] == "new_work") {
 
@@ -159,7 +157,6 @@
                 ]
                 });      
         </script>
-			
 			';
 
 		} elseif(@$_GET['action'] == "save_work") {
@@ -182,84 +179,110 @@
 			$gh = $_GET['h'];
 			$query = $con->query("SELECT * FROM pl_groups WHERE h='$gh'")or die("Query error!");
 			$row = mysqli_fetch_array($query);
-			$groupid = $row['id'];
+			$groupname = $row['name'];
 
 			$privilege = $User->privilege;
 
 			if ($privilege >= 2) {
 				echo '
-					<ul class="submenu">
-						<a href="group.php?action=new_work&h='.$gh.'"><li>'._("New work").'</li></a>
-					</ul>
+					
 				';
 			}
 
 				echo '				
-					<aside>
-						<h3>'.$group_name.'</h3>
-						<ul>
-							<li><div class="actual_select"><a href="group.php?action=view&h='.$gh.'&page=index">'._("Works").'</a></div></li>
-							<li><a href="group.php?action=view&h='.$gh.'&page=users">'._("Users").'</a></li>
-						</ul>
-					</aside>
+					<div class="ui_full_width">
+            <div class="ui_head ui_head_width_actions">
+                <h2><i class="fa fa-users"></i> '.$groupname.'</h2>';
 
-					<ul class="unit">
-					';
 
-					$query1 = $con->query("SELECT * FROM pl_units WHERE group_h='$gh'")or die("Query error!");
-					while($row1 = mysqli_fetch_array($query1)) {
-						$uh = $row1['h'];
-						$unitname = $row1['name'];
-						echo '<li>'.$unitname.'</li>';
-						echo '<ul class="work">';
-						$query2 = $con->query("SELECT * FROM pl_works WHERE unit_h='$uh'")or die("Query error 2!");
-						while($row2 = mysqli_fetch_array($query2)) {
-							$workname = $row2['name'];
-							$workdesc = $row2['description'];
-							echo '<li>'.$workname.' » '.$workdesc.'</li>';
-						}
-						echo '</ul>';
-					}
+                if ($privilege >= 2) {  
+              		echo '
+                	<div class="ui_actions">
+                		<a href="group.php?action=new_work&h='.$gh.'"><button class="ui_action" class="ui_tooltip" title="'._("New Work").'"><i class="fa fa-plus"></i></button></a>
+                	</div>
+                	';
+            	}
+            echo '
+            	</div>
+            	<div class="ui_sidebar left">
+                <nav class="ui_vertical_nav">
+                    <ul>
+                        <li class="active"><a href="group.php?action=view&h='.$gh.'&page=index">'._("Works").'</a></li>
+                        <li><a href="group.php?action=view&h='.$gh.'&page=users">'._("Users").'</a></li>
+                    </ul>
+                </nav>                            
+            	</div>
+            
+            <div class="ui_width_sidebar right">
+			';
+
+			echo '<ul class="unit">';
+
+			$query1 = $con->query("SELECT * FROM pl_units WHERE group_h='$gh'")or die("Query error!");
+			while ($row1 = mysqli_fetch_array($query1)) {
+				$unit_h = $row1['h'];
+				$unit_name = $row1['name'];
+
 				echo '
-				</ul>
+					<li>'.$unit_name.'</li>
+					<ul class="work">
 				';
+
+				$query2 = $con->query("SELECT * FROM pl_works WHERE unit_h='$unit_h'")or die("Query error!");
+				while ($row2 = mysqli_fetch_array($query2)) {					
+					$work_h = $row2['h'];
+					$work_name = $row2['$name'];
+					$work_desc = $row2['description'];
+					$work_type = $row2['type'];
+
+					echo '<li>'.$work_name.'</li>';
+				}
+
+				echo '</ul>';
+			}
+
+			echo '</ul>';
 
 		} elseif(@$_GET['page'] == "users") {
 
 			$gh = $_GET['h'];
 
+			$query1 = $con->query("SELECT * FROM pl_groups WHERE h='$gh'")or die("Query error!");
+			$row1 = mysqli_fetch_array($query1);
+			$groupname = $row1['name'];
+
 			echo '
-				<aside>
-					<h3>'.$group_name.'</h3>
-					<ul>
-						<li><a href="group.php?action=view&h='.$gh.'&page=index">'._("Works").'</a></li>
-						<li><div class="actual_select"><a href="group.php?action=view&h='.$gh.'&page=users">'._("Users").'</a></div></li>
-					</ul>
-				</aside>
 
-
-				<div class="ui_sidebar left">
-                	<nav class="ui_vertical_nav">
-                    	<ul>
-                        	<li class="active"><a href="#">Recibidos</a></li>
-                        	<li><a href="#">Enviados</a></li>
-                    	</ul>
-                	</nav>                            
-            	</div>
-
-            	
-				<h1>'._("Users").'</h1>
-				<table class="ui_table">
-					<thead>
-						<th><input type="checkbox"></th>
-						<th>'._("Name and surname").'</th>
-						<th>'._("Address").'</th>
-						<th>'._("Phone").'</th>
-						<th>'._("Actions").'</th>
-					</thead>
-					<tbody>	
-			';
-			$query = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$gh'");
+			<div class="ui_full_width">
+            <div class="ui_head ui_head_width_actions">
+                <h2><i class="fa fa-users"></i> '.$groupname.'</h2>
+                <div class="ui_actions">
+                    <a href="group.php?action=add&h='.$gh.'"><button class="ui_action" class="ui_tooltip" title="Add New"><i class="fa fa-plus"></i></button></a>
+                    <!--<button class="ui_action" class="ui_tooltip" title="Remove Selections"><i class="fa fa-trash"></i></button>-->
+                </div>
+            </div>
+            <div class="ui_sidebar left">
+                <nav class="ui_vertical_nav">
+                    <ul>
+                        <li><a href="group.php?action=view&h='.$gh.'&page=index">'._("Works").'</a></li>
+                        <li class="active"><a href="group.php?action=view&h='.$gh.'&page=users">'._("Users").'</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <div class="ui_width_sidebar right">
+                
+                <table class="ui_table">
+                <thead>
+                    <th class="select"><input class="select_all" type="checkbox" /></th>
+                    <th>'._("Name and surname").'</th>
+                    <th>'._("Email").'</th>
+                    <th>'._("Address").'</th>
+                    <th>'._("Phone").'</th>
+                    <th class="actions">'._("Actions").'</th>
+                </thead>
+                <tbody>';
+                $query = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$gh'");
 				while ($row = mysqli_fetch_array($query)) {
 					$user_h = $row['user_h'];
 					$query2 = $con->query("SELECT * FROM pl_users WHERE h='$user_h'");
@@ -267,6 +290,7 @@
 
 					$name = $row2['name'];
 					$surname = $row2['surname'];
+					$email = $row2['email'];
 					$address = $row2['address'];
 					$phone = $row2['phone'];
 
@@ -278,7 +302,7 @@
 						echo '<td><a href="profile.php?h='.$user_h.'">'.$name." ".$surname.'</a></td>';
 					}
 
-					echo '<td>'.$address.'</td><td>'.$phone.'</td><td><a href="#">'._("Email").'</a> <a href="#">'._("Delete").'</a></td>';
+					echo '<td>'.$email.'</td><td>'.$address.'</td><td>'.$phone.'</td><td><a href="messages.php?action=new&to='.$user_h.'"><i class="fa fa-envelope"></i></a> <a href="group.php?action=quit&group='.$gh.'&user='.$user_h.'"><i class="fa fa-eraser"></i></a></td>';
 					echo '</tr>';
 				}
 
@@ -290,6 +314,6 @@
 		
 	?>		
 
-	<?php //$System->set_footer(); ?>
+	<?php $System->set_footer(); ?>
 </body>
 </html>

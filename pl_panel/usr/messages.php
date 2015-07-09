@@ -13,6 +13,7 @@
 	<meta charset="UTF-8">
 	<title><?php echo _("Messages");?> | Teeach </title>
 	<link rel="stylesheet" href="../../src/css/main.css">
+	<script src="../../ckeditor/ckeditor.js"></script>
 	<?php
 		$System = new System();
 		$con = $System->conDB("../../config.json");
@@ -45,17 +46,59 @@
 		$System->set_usr_menu($User->h,$User->privilege);
 
 		if (@$_GET['action'] == "new") {
-			echo '
-				<table>
 
+			if (isset($_GET['to'])) {
+
+				$to_h = $_GET['to'];
+				$query = $con->query("SELECT * FROM pl_users WHERE h='$to_h'")or die("Query error!");
+				$row = mysqli_fetch_array($query);
+				$username = $row['username'];
+
+				echo '
+					<table>
+						<form action="messages.php?action=send" method="POST">
+							<tr><td><label for="to">'._("To: (username)").'</label></td><td><input type="text" name="to" value="'.$username.'"></td></tr>
+							<tr><td><label for="subject">'._("Subject: ").'</label></td><td><input type="text" name="subject"></td></tr>
+							<tr><td></td><td><textarea cols="80" id="editor1" name="body" rows="10"></textarea></td></tr>
+							<tr><td><input type="submit" value="Enviar"></td></tr>
+						</form>
+					</table>
+				';
+			} else {
+
+				echo '
+				<table>
 					<form action="messages.php?action=send" method="POST">
 						<tr><td><label for="to">'._("To: (username)").'</label></td><td><input type="text" name="to"></td></tr>
 						<tr><td><label for="subject">'._("Subject: ").'</label></td><td><input type="text" name="subject"></td></tr>
-						<tr><td></td><td><textarea name="body" cols="50" rows="8"></textarea></td></tr>
+						<tr><td></td><td><textarea cols="80" id="editor1" name="body" rows="10"></textarea></td></tr>
 						<tr><td><input type="submit" value="Enviar"></td></tr>
 					</form>
-			</table>
-			';
+				</table>';
+			}
+				echo '
+					<script type="text/javascript">  
+                		CKEDITOR.replace( "editor1", { 
+                		enterMode: CKEDITOR.ENTER_BR,
+                		skin : "office2013",
+                		toolbar : [
+                    		{ name: "document", groups: [ "mode", "document", "doctools" ], items: [ "Source", "-", "Save", "Preview", "-", "Templates" ] },
+                    		{ name: "clipboard", groups: ["undo"], items: ["Undo", "Redo" ] },
+                    		{ name: "editing", groups: [ "find", "selection"], items: ["Replace", "-", "SelectAll"] },
+                    		"/",
+                    		{ name: "basicstyles", groups: [ "basicstyles", "cleanup" ], items: [ "Bold", "Italic", "Underline", "Strike", "Subscript", "Superscript", "-", "RemoveFormat" ] },
+                    		{ name: "paragraph", groups: [ "list", "indent", "blocks", "align"], items: [ "NumberedList", "BulletedList", "-", "Outdent", "Indent", "-", "Blockquote", "CreateDiv", "-", "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock" ] },
+                    		"/",
+                    		{ name: "links", items: [ "Link", "Unlink" ] },
+                    		{ name: "insert", items: [ "Image", "Flash", "Table", "HorizontalRule", "Smiley", "SpecialChar", "Iframe" ] },
+                    		"/",
+                    		{ name: "styles", items: [ "Styles", "Format", "Font", "FontSize" ] },
+                    		{ name: "colors", items: [ "TextColor", "BGColor" ] },
+                    		{ name: "tools", items: [ "Maximize"] }
+                		]
+                	});      
+        			</script>
+				';			
 
 		} elseif(@$_GET['action'] == "send") {
 
@@ -78,18 +121,25 @@
 			echo '<a href="messages.php">Aceptar</a>';
 
 		} elseif(@$_GET['action'] == "sent") {
+
 			echo '
-				<ul class="submenu">
-					<a href="messages.php?action=new"><li>'._("New").'</li></a>
-				</ul>
-				<aside>
-					<h3>'._("Mailbox").'</h3>
-					<ul>
-						<li><a href="messages.php">'._("Received").'</a></li>
-						<li><div class="actual_select"><a href="#">'._("Sent").'</a></div></li>
-					</ul>
-				</aside>
-                <div style = "width:500px; margin-left:270px;">
+				<div class="ui_head ui_head_width_actions">
+				<h2><i class="fa fa-envelope"></i> '._("Messages").'</h2>
+                
+                	<div class="ui_actions">
+                    	<a href="messages.php?action=new"><button class="ui_action" class="ui_tooltip" title="Add New"><i class="fa fa-plus"></i></button></a>
+                	</div>
+            	</div>
+
+            	<div class="ui_sidebar left">
+
+                <nav class="ui_vertical_nav">
+                    <ul>
+                        <li><a href="messages.php">'._("Received").'</a></li>
+                        <li class="active"><a href="messages.php?action=sent">'._("Sent").'</a></li>
+                    </ul>
+                </nav>                            
+            	</div>
 			';
 
 				$query = $con->query("SELECT * FROM pl_messages WHERE from_h='$User->h' ORDER BY id DESC")or die("Query error!");
@@ -129,18 +179,25 @@
 
 		} else {
 			echo '
-				<ul class="submenu">
-					<a href="messages.php?action=new"><li>'._("New").'</li></a>
-				</ul>
-				<aside>
-					<h3>'._("Mailbox").'</h3>
-					<ul>
-						<li><div class="actual_select"><a href="#">'._("Received").'</a></div></li>
-						<li><a href="messages.php?action=sent">'._("Sent").'</a></li>
-					</ul>
-				</aside>
+				<div class="ui_full_width">
+					<div class="ui_head ui_head_width_actions">
+						<h2><i class="fa fa-envelope"></i> '._("Messages").'</h2>
                 
-                <div style = "width:500px; margin-left:270px;">
+                		<div class="ui_actions">
+                   			<a href="messages.php?action=new"><button class="ui_action" class="ui_tooltip" title="Add New"><i class="fa fa-plus"></i></button></a>
+                		</div>
+            		</div>
+
+            		<div class="ui_sidebar left">
+
+                	<nav class="ui_vertical_nav">
+                    	<ul>
+                        	<li class="active"><a href="messages.php">'._("Received").'</a></li>
+                        	<li><a href="messages.php?action=sent">'._("Sent").'</a></li>
+                    	</ul>
+                	</nav>                            
+            		</div>
+            	</div>
 			';
 
 				$query = $con->query("SELECT * FROM pl_messages WHERE to_h='$User->h' ORDER BY id DESC")or die("Query error!");
