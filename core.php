@@ -8,6 +8,8 @@
 				<link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
                 <link rel='stylesheet' href='path/to/font-awesome/css/font-awesome.min.css'>
                 <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+                <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js'></script>
+                <link rel='stylesheet' href='../../src/css/jquery-ui.theme.min.css' />
                 <script src='../../src/js/check-all.js'></script>
 			";
 			$lang = "es_ES";
@@ -82,7 +84,7 @@
                                     $query2 = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query error!");
                                     $row2 = mysqli_fetch_array($query2);
                                     $groupname = $row2['name'];
-                                    echo '<li><a class="icon_users" href="group.php?action=view&h='.$group_h.'&page=index"><i class="fa fa-users"></i> '.$groupname.'</a></li>';
+                                    echo '<li><a class="icon_users" href="group.php?h='.$group_h.'&page=index"><i class="fa fa-users"></i> '.$groupname.'</a></li>';
                                 }
                             echo '                                
                             </ul>

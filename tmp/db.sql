@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS `pl_units` (
   `id` int(11) NOT NULL,
   `name` text NOT NULL,
   `h` varchar(99) NOT NULL,
-  `group_h` varchar(99) NOT NULL
+  `group_h` varchar(99) NOT NULL,
+  `status` varchar(25) CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `pl_users` (
@@ -68,7 +69,8 @@ CREATE TABLE IF NOT EXISTS `pl_users` (
   `pass` char(99) CHARACTER SET utf8 NOT NULL,
   `privilege` int(2) NOT NULL,
   `creation_date` datetime NOT NULL,
-  `last_time` datetime NOT NULL
+  `last_time` datetime NOT NULL,
+  `status` varchar(25) CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `pl_works` (
@@ -79,7 +81,8 @@ CREATE TABLE IF NOT EXISTS `pl_works` (
   `type` int(1) NOT NULL,
   `creation_date` datetime NOT NULL,
   `group_h` varchar(99) CHARACTER SET utf8 NOT NULL,
-  `unit_h` varchar(99) CHARACTER SET utf8 NOT NULL
+  `unit_h` varchar(99) CHARACTER SET utf8 NOT NULL,
+  `status` varchar(25) CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `pl_categories`

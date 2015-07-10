@@ -21,9 +21,26 @@
 	<title><?php echo _("Groups"); ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<script src="../../ckeditor/ckeditor.js"></script>
+	<script>
+		//Popups
+		function open_popup() {
+			$("#dialog").dialog();
+		};
+	</script>
 </head>
 <body>
-	<?php 
+	<?php
+
+		//Popups
+			echo '
+				<div id="dialog" title="New unit" style="display:none">
+					<form method="POST" action="group.php?action=save_unit&h='.$_GET['h'].'">
+						<label for="unit">'._("Name:").' </label><input type="text" name="unit"><br>
+						<input type="submit" value="Enviar">
+					</form>
+				</div>
+			';
+
 		$query = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
 		$row = mysqli_fetch_array($query);
 		$centername = $row['value'];
@@ -82,9 +99,47 @@
 					echo _("Error in table pl_settings The value of JP is invalid!");
 			}
 
+		} elseif(@$_GET['action'] == "view") {
 			
+			$work_h = $_GET['h'];
 
+			$query = $con->query("SELECT * FROM pl_works WHERE h='$work_h'")or die("Query error!");
+			$row = mysqli_fetch_array($query);
+
+			$work_name = $row['name'];
+			$work_desc = $row['description'];
+			$work_type = $row['type'];
+
+			echo '
+				<div class="ui_full_width">
+            		<div class="ui_head ui_head_width_actions">';
+
+			switch($work_type) {
+				case 1:
+					// Notes ~ Apuntes
+					echo '<h2><i class="fa fa-book"></i> '.$work_name.'</h2>';
+					break;
+				case 2:
+					//Homework ~ Tarea
+					echo '<h2><i class="fa fa-pencil"></i> '.$work_name.'</h2>';
+					break;
+				case 3:
+					//Exam ~ Examen
+					echo '<h2><i class="fa fa-pencil"></i> '.$work_name.'</h2>';
+					break;
+				default:
+					//Invalid type
+					die("Invalid type. Contact to administrator.");
+
+			}
 			
+			
+                		
+            echo '    	
+            	</div>
+					'.$work_desc.'
+            	</div>
+			';
 
 		} elseif(@$_GET['action'] == "add") {
 
@@ -113,28 +168,39 @@
 
 			$query = $con->query("DELETE FROM pl_groupuser WHERE group_h='$group_h' AND user_h='$user_h'")or die("Query error!");
 			
-			echo '<a href="group.php?action=view&h='.$group_h.'&page=users">Accept</a>';
+			echo '<a href="group.php?h='.$group_h.'&page=users">Accept</a>';
 
 		} elseif(@$_GET['action'] == "new_work") {
 
 			//Group Hash
 			$gh = $_GET['h'];
+			$unit_h = $_GET['unit'];
+
+			$query = $con->query("SELECT * FROM pl_units WHERE h='$unit_h'")or die("Query error!");
+			$row = mysqli_fetch_array($query);
+			$unit_name = $row['name'];
 
 			echo '
-			<form action="group.php?action=save_work&h='.$gh.'" method="POST">
+			<div class="ui_full_width">
+			<div class="ui_head ui_head_width_actions">
+				<h2>'.("New work in ").$unit_name.'</h2>
+			</div>
+			<form action="group.php?action=save_work&h='.$gh.'&unit='.$unit_h.'" method="POST">
 				<table>
 					<tr><td><label for="workname">'._("Workname").'</label></td><td><input type="text" name="workname"></td></tr>
 					<tr><td><label for="type">'._("Type").'</label></td><td>
 						<select name="type">
-							<option value="1">'._("Homework").'</option>
-							<option value="2">'._("Exam").'</option>
-							<textarea cols="80" id="editor1" name="desc" rows="10"></textarea>
-							
+							<option value="1">'._("Notes").'</option>
+							<option value="2">'._("Homework").'</option>
+							<option value="3">'._("Exam").'</option>
 						</select>
 					</td></tr>
+					<tr><td><label for="visible">'._("Visible").'</label></td><td><input type="checkbox" name="visible" checked="true"></td></tr>
+					<tr><td></td><td><textarea cols="80" id="editor1" name="desc" rows="10"></textarea></td></tr>
 					<tr><td></td><td><input type="submit" value='._("Accept").'></td></tr>
 				</table>
 			</form>
+			</div>
 			
 			<script type="text/javascript">  
                 CKEDITOR.replace( "editor1", { 
@@ -164,15 +230,37 @@
 			//Group Hash
 			$gh = $_GET['h'];
 
+			$unit_h = $_GET['unit'];
+
 			$workname = $_POST['workname'];
 			$type = $_POST['type'];
 			$desc = $_POST['desc'];
+			$visible = $_POST['visible'];
+
+			if($visible == "on") {
+				$status = "visible";
+			} else {
+				$status = "invisible";
+			}
+
 			$h = substr( md5(microtime()), 1, 18);
 			$date = date("Y-m-d H:i:s");
 
-			$query = $con->query("INSERT INTO pl_works(name,type,description,group_h,creation_date,h) VALUES('$workname',$type,'$desc','$gh','$date','$h')")or die("Query error!");
+			$query = $con->query("INSERT INTO pl_works(name,type,h,creation_date,description,unit_h,status) VALUES('$workname',$type,'$h','$date','$desc','$unit_h','$status')")or die("Query error!");
 
 			echo '<a href="group.php?h='.$gh.'&page=index">'._("Accept").'</a>';
+
+		} elseif(@$_GET['action'] == "save_unit") {
+
+			$unit = $_POST['unit'];
+			$h = substr( md5(microtime()), 1, 18);
+			$gh = $_GET['h'];
+
+			$query = $con->query("INSERT INTO pl_units(name,h,group_h) VALUES ('$unit','$h','$gh')")or die("Query error!");
+
+			echo "<a href='group.php?h=".$gh."&page=index'>Accept</a>";
+
+
 
 		} elseif(@$_GET['page'] == "index") {
 
@@ -207,8 +295,8 @@
             	<div class="ui_sidebar left">
                 <nav class="ui_vertical_nav">
                     <ul>
-                        <li class="active"><a href="group.php?action=view&h='.$gh.'&page=index">'._("Works").'</a></li>
-                        <li><a href="group.php?action=view&h='.$gh.'&page=users">'._("Users").'</a></li>
+                        <li class="active"><a href="group.php?h='.$gh.'&page=index">'._("Works").'</a></li>
+                        <li><a href="group.php?h='.$gh.'&page=users">'._("Users").'</a></li>
                     </ul>
                 </nav>                            
             	</div>
@@ -216,7 +304,7 @@
             <div class="ui_width_sidebar right">
 			';
 
-			echo '<ul class="unit">';
+			echo '<ul class="units">';
 
 			$query1 = $con->query("SELECT * FROM pl_units WHERE group_h='$gh'")or die("Query error!");
 			while ($row1 = mysqli_fetch_array($query1)) {
@@ -224,24 +312,30 @@
 				$unit_name = $row1['name'];
 
 				echo '
-					<li>'.$unit_name.'</li>
-					<ul class="work">
+					<li class="unit">'.$unit_name.'</li>
+					<ul class="works">
 				';
 
 				$query2 = $con->query("SELECT * FROM pl_works WHERE unit_h='$unit_h'")or die("Query error!");
 				while ($row2 = mysqli_fetch_array($query2)) {					
 					$work_h = $row2['h'];
-					$work_name = $row2['$name'];
+					$work_name = $row2['name'];
 					$work_desc = $row2['description'];
 					$work_type = $row2['type'];
 
-					echo '<li>'.$work_name.'</li>';
+					echo '<a href="group.php?action=view&h='.$work_h.'"><li class="work">'.$work_name.'</li></a>';
 				}
 
-				echo '</ul>';
+				echo '
+					<a href="group.php?action=new_work&h='.$h.'&unit='.$unit_h.'"><li class="new_work">'._("New Work").'</li></a>
+				</ul>';
 			}
 
-			echo '</ul>';
+			echo '
+				<a onclick="open_popup()"><li class="new_unit">'._("New unit").'</li></a>
+			</ul>';
+
+			
 
 		} elseif(@$_GET['page'] == "users") {
 
@@ -264,8 +358,8 @@
             <div class="ui_sidebar left">
                 <nav class="ui_vertical_nav">
                     <ul>
-                        <li><a href="group.php?action=view&h='.$gh.'&page=index">'._("Works").'</a></li>
-                        <li class="active"><a href="group.php?action=view&h='.$gh.'&page=users">'._("Users").'</a></li>
+                        <li><a href="group.php?h='.$gh.'&page=index">'._("Works").'</a></li>
+                        <li class="active"><a href="group.php?h='.$gh.'&page=users">'._("Users").'</a></li>
                     </ul>
                 </nav>
             </div>

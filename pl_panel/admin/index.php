@@ -1,6 +1,5 @@
 <?php
 	include("../../core.php");
-	//~ include("../../usr.php");
 	$System = new System();
 ?>
 
