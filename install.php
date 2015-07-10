@@ -45,12 +45,12 @@
 				<center>
 				<h1>'._("Terms").'</h1>
 				
-					'._("Teeach is the only smart software for administration of educational databases.").'<br>
-					'._("We still doesn't have the contract.").'<br>
-					'._("Even so, if you press Accept button, you will accept our future terms that we will tell through email.").'<br>
-					'._("To register this software we reserve the right to send promocional mails from Teeach and our affiliates.").'<br>
-					'._("Teeach is open source and you can obtain it code in GitHub clicking").'<a href="http://github.com/sergio98/Teeach-dev" target="_blank"> '._("here.").'</a><br>
-					'._("Thanks by trust in Teeach!").'<br>
+					'._("Teeach is a opensource smart software for administration of educational databases.").'<br>
+					'._("We still don't have a terms of use contract.").'<br>
+					'._("Even so, if you press Accept button, you will accept our future terms that we will tell you through email.").'<br>
+					'._("By subscribing to this software we reserve the right to send promotional mails from Teeach and our affiliates.").'<br>
+					'._("Teeach is open source and you can obtain it's code in GitHub by clicking").'<a href="http://github.com/sergio98/Teeach-dev" target="_blank"> '._("here.").'</a><br>
+					'._("Thanks for your trust in Teeach!").'<br>
 				
 				<button onclick="goStep3();">'._("Accept and next").'</button>
 				</center>
