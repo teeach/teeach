@@ -24,17 +24,32 @@
 				<table style="padding: 20px;">
 				<form name="cu" method="post" action="posts.php?action=success" autocomplete="off">
 					<tr><td><label for="title">'._("Title:").'</label></td><td><input type="text" name="title" required/></td></tr>
-					<tr><td>'._("Body: ").'</td><td><textarea name="body" rows="6" cols="50" required></textarea></td></tr>
+					<tr><td>'._("Body: ").'</td><td><textarea id="editor1" name="body" rows="6" cols="50" required></textarea></td></tr>
 					<tr><td></td><td><input type="submit" value="Enviar"/></td></tr>
 				</form>
 				</table>
 				
-				<script type="text/javascript">
-                    window.onload = function()
-                    {
-                        CKEDITOR.replace( "body" );
-                    };
-                </script>
+				<script type="text/javascript">  
+                		CKEDITOR.replace( "editor1", { 
+                		enterMode: CKEDITOR.ENTER_BR,
+                		skin : "office2013",
+                		toolbar : [
+                    		{ name: "document", groups: [ "mode", "document", "doctools" ], items: [ "Source", "-", "Save", "Preview", "-", "Templates" ] },
+                    		{ name: "clipboard", groups: ["undo"], items: ["Undo", "Redo" ] },
+                    		{ name: "editing", groups: [ "find", "selection"], items: ["Replace", "-", "SelectAll"] },
+                    		"/",
+                    		{ name: "basicstyles", groups: [ "basicstyles", "cleanup" ], items: [ "Bold", "Italic", "Underline", "Strike", "Subscript", "Superscript", "-", "RemoveFormat" ] },
+                    		{ name: "paragraph", groups: [ "list", "indent", "blocks", "align"], items: [ "NumberedList", "BulletedList", "-", "Outdent", "Indent", "-", "Blockquote", "CreateDiv", "-", "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock" ] },
+                    		"/",
+                    		{ name: "links", items: [ "Link", "Unlink" ] },
+                    		{ name: "insert", items: [ "Image", "Flash", "Table", "HorizontalRule", "Smiley", "SpecialChar", "Iframe" ] },
+                    		"/",
+                    		{ name: "styles", items: [ "Styles", "Format", "Font", "FontSize" ] },
+                    		{ name: "colors", items: [ "TextColor", "BGColor" ] },
+                    		{ name: "tools", items: [ "Maximize"] }
+                		]
+                	});      
+        			</script>
 			';
 		} elseif ($action == "success") {
 			
@@ -60,21 +75,36 @@
     		$body = $row['body'];
 
     		echo '
-				<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="posts.php?action">Posts</a> >> <a href="posts.php?action=new">Editar</a></h2>
+				<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>
 				<table style="padding: 20px;">
 				<form name="cu" method="post" action="posts.php?action=update&h='.$h.'" autocomplete="off">
 					<tr><td><label for="title">'._("Title:").'</label></td><td><input type="text" name="title" value="'.$title.'" required/></td></tr>
-					<tr><td>'._("Body: ").'</td><td><textarea name="body" rows="6" cols="50" required>'.$body.'</textarea></td></tr>
+					<tr><td>'._("Body: ").'</td><td><textarea name="body" id="editor1" rows="6" cols="50" required>'.$body.'</textarea></td></tr>
 					<tr><td></td><td><input type="submit" value="Guardar"/></td></tr>
 				</form>
 				</table>
 				
-				 <script type="text/javascript">
-                                        window.onload = function()
-                                        {
-                                                CKEDITOR.replace( "body" );
-                                        };
-                                </script>
+				 <script type="text/javascript">  
+                		CKEDITOR.replace( "editor1", { 
+                		enterMode: CKEDITOR.ENTER_BR,
+                		skin : "office2013",
+                		toolbar : [
+                    		{ name: "document", groups: [ "mode", "document", "doctools" ], items: [ "Source", "-", "Save", "Preview", "-", "Templates" ] },
+                    		{ name: "clipboard", groups: ["undo"], items: ["Undo", "Redo" ] },
+                    		{ name: "editing", groups: [ "find", "selection"], items: ["Replace", "-", "SelectAll"] },
+                    		"/",
+                    		{ name: "basicstyles", groups: [ "basicstyles", "cleanup" ], items: [ "Bold", "Italic", "Underline", "Strike", "Subscript", "Superscript", "-", "RemoveFormat" ] },
+                    		{ name: "paragraph", groups: [ "list", "indent", "blocks", "align"], items: [ "NumberedList", "BulletedList", "-", "Outdent", "Indent", "-", "Blockquote", "CreateDiv", "-", "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock" ] },
+                    		"/",
+                    		{ name: "links", items: [ "Link", "Unlink" ] },
+                    		{ name: "insert", items: [ "Image", "Flash", "Table", "HorizontalRule", "Smiley", "SpecialChar", "Iframe" ] },
+                    		"/",
+                    		{ name: "styles", items: [ "Styles", "Format", "Font", "FontSize" ] },
+                    		{ name: "colors", items: [ "TextColor", "BGColor" ] },
+                    		{ name: "tools", items: [ "Maximize"] }
+                		]
+                	});      
+        			</script>
     		';
 
     	} elseif($action == "update") {

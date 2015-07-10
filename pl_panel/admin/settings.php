@@ -94,12 +94,24 @@
                         <div class="ui_tabs_content">
                             <form class="ui_form">
                                 <div id="tab_01" class="ui_tab_content">
-                                    <label for="centername">'._("Centername").': </label><input type="text" name="centername" value="'.$centername.'"><br>
-                                    <label for="logo">'._("Logo").': </label><input type="text" name="logo" value="'.$logo.'"><br>
-                                    <img src="'.$logo.'" alt="logo"><br>
-                                    <label for="accesspass">'._("Accesspass").': </label><input type="text" name="accesspass" value="'.$accesspass.'">
+                                    <table>
+                                        <tr><td><label for="centername">'._("Centername").': </label></td><td><input type="text" name="centername" value="'.$centername.'"></td></tr>
+                                        <tr><td><label for="logo">'._("Logo").': </label></td><td><input type="text" name="logo" value="'.$logo.'"></td></tr>
+                                        <tr><td></td><td><img src="'.$logo.'" alt="logo"></td></tr>
+                                        <tr><td><label for="accesspass">'._("Accesspass").': </label></td><td><input type="text" name="accesspass" value="'.$accesspass.'"></td></tr>
+                                    </table>    
                                 </div>
-                                <div id="tab_02" class="ui_tab_content">
+                                
+                                <div id="tab_02" class="ui_tab_content">';
+                                    if ($sg == "true") {
+                                        echo '<input type="checkbox" name="showgroups" checked>';
+                                    } else {
+                                        echo '<input type="checkbox" name="showgroups">';
+                                    }
+                                        echo '                          
+                                            <label for="showgroups">'._("Show groups in user profile").'</label>
+                                        </div>
+                                <div id="tab_03" class="ui_tab_content">
                                     <label for="JP">Join a group: </label>
                                     <select name="JP">';
                                     switch($JP) {
@@ -132,16 +144,7 @@
                                             ';
                                     }
                                     echo '
-                                    </select>
-                                </div>
-                                <div id="tab_03" class="ui_tab_content">';
-                                if ($sg == "true") {
-                                    echo '<input type="checkbox" name="showgroups" checked>';
-                                } else {
-                                    echo '<input type="checkbox" name="showgroups">';
-                                }
-                                echo '                          
-                                        <label for="showgroups">'._("Show groups in user profile").'</label>
+                                        </select>                                
                                     </form>
                                 </div>
                                 <div id="tab_04" class="ui_tab_content">

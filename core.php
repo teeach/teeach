@@ -65,7 +65,7 @@
             $username = $row['username'];
             $profile_photo = $row['photo'];
 
-            if ($profile_photo = " ") {
+            if ($profile_photo == "") {
                 $profile_photo = "../../src/ico/user.png";
             }
 

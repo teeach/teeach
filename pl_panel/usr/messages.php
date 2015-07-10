@@ -22,18 +22,7 @@
 	?>
 
 <style>
-    .message{
-        float:left;
-        width:600px;
-        border-radius:5px;
-        margin:10px;
-        background:#242424;
-        color: white;
-        padding: 10px;
-    }
-    .fa{
-        cursor:pointer;
-    }
+    
 </style>
 
 </head>
@@ -55,26 +44,37 @@
 				$username = $row['username'];
 
 				echo '
+				<div class="ui_full_width">
+					<div class="ui_head ui_head_width_actions">
+						<h2><i class="fa fa-envelope"></i> '._("New Message").'</h2>
+					</div>
 					<table>
 						<form action="messages.php?action=send" method="POST">
 							<tr><td><label for="to">'._("To: (username)").'</label></td><td><input type="text" name="to" value="'.$username.'"></td></tr>
 							<tr><td><label for="subject">'._("Subject: ").'</label></td><td><input type="text" name="subject"></td></tr>
 							<tr><td></td><td><textarea cols="80" id="editor1" name="body" rows="10"></textarea></td></tr>
-							<tr><td><input type="submit" value="Enviar"></td></tr>
+							<tr><td></td><td><input type="submit" value="Enviar"></td></tr>
 						</form>
 					</table>
+				</div>
 				';
 			} else {
 
 				echo '
-				<table>
-					<form action="messages.php?action=send" method="POST">
-						<tr><td><label for="to">'._("To: (username)").'</label></td><td><input type="text" name="to"></td></tr>
-						<tr><td><label for="subject">'._("Subject: ").'</label></td><td><input type="text" name="subject"></td></tr>
-						<tr><td></td><td><textarea cols="80" id="editor1" name="body" rows="10"></textarea></td></tr>
-						<tr><td><input type="submit" value="Enviar"></td></tr>
-					</form>
-				</table>';
+				<div class="ui_full_width">
+					<div class="ui_head ui_head_width_actions">
+						<h2><i class="fa fa-envelope"></i> '._("New Message").'</h2>
+					</div>
+					<table>
+						<form action="messages.php?action=send" method="POST">
+							<tr><td><label for="to">'._("To: (username)").'</label></td><td><input type="text" name="to"></td></tr>
+							<tr><td><label for="subject">'._("Subject: ").'</label></td><td><input type="text" name="subject"></td></tr>
+							<tr><td></td><td><textarea cols="80" id="editor1" name="body" rows="10"></textarea></td></tr>
+							<tr><td></td><td><input type="submit" value="Enviar"></td></tr>
+						</form>
+					</table>
+				</div>
+				';
 			}
 				echo '
 					<script type="text/javascript">  
@@ -123,6 +123,7 @@
 		} elseif(@$_GET['action'] == "sent") {
 
 			echo '
+			<div class="ui_full_width">
 				<div class="ui_head ui_head_width_actions">
 				<h2><i class="fa fa-envelope"></i> '._("Messages").'</h2>
                 
@@ -140,6 +141,8 @@
                     </ul>
                 </nav>                            
             	</div>
+
+            	<div class="ui_width_sidebar right">
 			';
 
 				$query = $con->query("SELECT * FROM pl_messages WHERE from_h='$User->h' ORDER BY id DESC")or die("Query error!");
@@ -149,17 +152,21 @@
 					$to_h = $row['to_h'];
 					$subject = $row['subject'];
 					$date = $row['date'];
-
-					$to = $System->get_user_by_id2($to_h, $con);
-
+					$body = $row['body'];
 					$h = $row['h'];
 
+					$query1 = $con->query("SELECT * FROM pl_users WHERE h='$to_h'")or die("Query error!");
+					$row1 = mysqli_fetch_array($query1);
 
-					echo'<div id="'.$h.'" class="'.$h.' message">'.$to->name.' '.$to->surname1.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+					$to_name = $row1['name'];
+					$to_surname = $row1['surname'];
+
+					echo'<div id="'.$h.'" class="'.$h.' message">'.$to_name.' '.$to_surname.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 				}
                 
                 echo'
                     </div>
+                </div>
                 ';
 
 		} elseif(@$_GET['action'] == "view") {
@@ -197,7 +204,8 @@
                     	</ul>
                 	</nav>                            
             		</div>
-            	</div>
+
+            		<div class="ui_width_sidebar right">
 			';
 
 				$query = $con->query("SELECT * FROM pl_messages WHERE to_h='$User->h' ORDER BY id DESC")or die("Query error!");
@@ -218,6 +226,7 @@
 				}
             echo '
                 </div>
+            </div>
             ';
 
 
