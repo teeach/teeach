@@ -3,6 +3,7 @@
 	include("../../core.php");
 
 	$System = new System();
+	$System->check_admin();
 ?>
 
 <!DOCTYPE html>

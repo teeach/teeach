@@ -25,13 +25,12 @@
         }
                 
 		function set_header($centername) {
+
 			echo '
 				<header id="header">
     				<div class="main_title">
         				<h1>'.$centername.'</h1>
     				</div>
-    				
-			
 			';
 		}
 
@@ -165,6 +164,43 @@
             }
 
             return $str;
+        }
+
+        function check_usr() {
+            @session_start();
+            if(!isset($_SESSION['h'])) {
+                header('Location: ../../index.php');
+            }
+        }
+
+        function check_admin() {
+            @session_start();
+            if(!isset($_SESSION['h'])) {
+                header('Location: ../../index.php');
+            }
+
+            $h = $_SESSION['h'];
+
+            $fp = fopen("../../config.json", "r");
+            $rfile = fread($fp, filesize("../../config.json"));
+
+            $json = json_decode($rfile);
+
+            $dbserver = $json->{"dbserver"};
+            $dbuser = $json->{"dbuser"};
+            $dbpass = $json->{"dbpass"};
+            $database = $json->{"database"};
+
+            $con = mysqli_connect($dbserver, $dbuser, $dbpass, $database)or die("Error al conectar BD!");
+
+            $query = $con->query("SELECT * FROM pl_users WHERE h='$h'")or die("Query error!");
+            $row = mysqli_fetch_array($query);
+            $privilege = $row['privilege'];
+
+            if($privilege < 3) {
+                die("Only administrators can enter here.");
+            }
+
         }
 
     }

@@ -152,10 +152,10 @@ body {
     font-family: 'RobotoBold', sans-serif;
 }
 
-/* Mesasges
+/* Notification
    =========================================================== */
 
-.message {
+.notification {
     background: #d1d1d1;
     border-left: 4px solid #320;
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.30);

@@ -6,6 +6,8 @@
     $h = $_SESSION['h'];
 
     $System = new System();
+    $System->check_usr();
+    
     $connection = $System->conDB("../../config.json");
     $User = $System->get_user_by_id($h, $connection);
 

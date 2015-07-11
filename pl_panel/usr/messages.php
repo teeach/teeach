@@ -5,6 +5,7 @@
 	include("../../core.php");
 
 	$System = new System();
+	$System->check_usr();
 ?>
 
 <!DOCTYPE html>

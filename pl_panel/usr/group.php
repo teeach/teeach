@@ -2,6 +2,8 @@
 	session_start();
 	include('../../core.php');
 	$System = new System();
+	$System->check_usr();
+	
 	$con = $System->conDB("../../config.json");
 	$User = $System->get_user_by_id($_SESSION['h'], $con);
 

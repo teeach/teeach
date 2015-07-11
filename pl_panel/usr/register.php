@@ -1,6 +1,7 @@
 <?php
 	include("../../core.php");
 	$System = new System;
+	
 	$con = $System->conDB("../../config.json");
 ?>
 
@@ -59,13 +60,16 @@
 		$accesspass = $row['value'];
 
 		echo '
-			<h1>'._("New account").'</h1>
-			<form action="register.php?action=success" method="post">
-				<table>
-					<tr><td><label for="username">'._("Username: ").'</label></td><td><input type="text" name="username"></td></tr>
-					<tr><td><label for="email">'._("Email: ").'</label></td><td><input type="text" name="email"></td></tr>
-					<tr><td><label for="password">'._("Password: ").'</label></td><td><input type="password" name="password"></td></tr>
-					<tr><td><label for="rpassword">'._("Repeat password: ").'</label></td><td><input type="password" name="rpassword"></td></tr>
+			<div class="ui_full_width">
+            	<div class="ui_head ui_head_width_actions">
+					<h1><i class="fa fa-user-plus"></i> '._("New account").'</h1>
+				</div>
+				<form action="register.php?action=success" method="post">
+					<table>
+						<tr><td><label for="username">'._("Username: ").'</label></td><td><input type="text" name="username"></td></tr>
+						<tr><td><label for="email">'._("Email: ").'</label></td><td><input type="text" name="email"></td></tr>
+						<tr><td><label for="password">'._("Password: ").'</label></td><td><input type="password" name="password"></td></tr>
+						<tr><td><label for="rpassword">'._("Repeat password: ").'</label></td><td><input type="password" name="rpassword"></td></tr>
 		';
 
 		if ($accesspass != "") {
@@ -73,9 +77,10 @@
 		}
 
 		echo '
-				<tr><td></td><td><input type="submit" value="'._("Register").'"></td></tr>
-			</table>
-			</form>
+						<tr><td></td><td><input type="submit" value="'._("Register").'"></td></tr>
+					</table>
+				</form>
+			</div>
 		';
 	}
 		

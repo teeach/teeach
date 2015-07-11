@@ -1,11 +1,12 @@
 <?php
 	include('../../core.php');
-	//~ include('../../usr.php');
 
 	$get_usr = $_GET['h'];
 
 	$System = new System();
-	session_start();
+	$System->check_usr();
+	
+	@session_start();
 
 	$con = $System->conDB("../../config.json");
 	$User = $System->get_user_by_id($_SESSION['h'], $con);

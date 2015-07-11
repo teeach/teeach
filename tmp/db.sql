@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS `pl_users` (
   `phone` int(9) NOT NULL,
   `level` int(3) NOT NULL,
   `h` char(13) CHARACTER SET utf8 NOT NULL,
+  `lang` varchar(5) CHARACTER SET utf8 NOT NULL,
   `photo` text CHARACTER SET utf8 NOT NULL,
   `birthday` date NOT NULL,
   `home` char(29) CHARACTER SET utf8 NOT NULL,

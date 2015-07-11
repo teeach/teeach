@@ -1,6 +1,7 @@
 <?php
 	include("../../core.php");
 	$System = new System("../../config.json");
+	$System->check_usr();
 ?>
 
 <!DOCTYPE html>

@@ -66,7 +66,7 @@
             if(isset($_GET['err'])) {
                 $err = $_GET['err'];
                 if($err == "autf") {
-                    echo '<div class="message"><p>'._("Username or password are incorrect.").'</p></div>';
+                    echo '<div class="notification"><p>'._("Username or password are incorrect.").'</p></div>';
                 }
             }
         ?>	
@@ -79,7 +79,7 @@
                 <input type="submit" value="<?php echo _("Log in");?>" />
             </form>
             <a class="extra_link" href="register.php"><?php echo _("Create acount &raquo;"); ?></a>
-        </div>  
+        </div>
     </div>
 
 	<?php $System->set_footer(); ?>
