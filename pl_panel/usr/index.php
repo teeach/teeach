@@ -8,6 +8,8 @@
 
 	$con = $System->conDB("../../config.json");
 	$User = $System->get_user_by_id($_SESSION['h'], $con);
+	
+	include("../../locale/".$System->load_locale().".php");
 ?>
 
 <!DOCTYPE html>
@@ -72,7 +74,7 @@
 	<div class="ui_width_sidebar right">
 	<section id="index_groups">
 		<div class="sectiontitle">
-			<?php echo _("Groups"); ?>
+			<?php echo $lang["groups"]; ?>
 		</div>
 		<ul>
 			<?php

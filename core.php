@@ -12,11 +12,11 @@
                 <link rel='stylesheet' href='../../src/css/jquery-ui.theme.min.css' />
                 <script src='../../src/js/check-all.js'></script>
 			";
-			$lang = "es_ES";
-			putenv('LC_ALL='.$lang);
-			setlocale(LC_ALL, $lang);
-			bindtextdomain("app", "../../locale");
-			textdomain("app");
+			//~ $lang = "es_ES";
+			//~ putenv('LC_ALL='.$lang);
+			//~ setlocale(LC_ALL, $lang);
+			//~ bindtextdomain("app", "../../locale");
+			//~ textdomain("app");
 			date_default_timezone_set("Europe/Madrid");
 		}
 
@@ -40,6 +40,29 @@
                     ©2015 Teeach<br>
                     Early development version
                 </footer>";
+		}
+
+		function load_locale(){
+			
+			@session_start();
+						
+			$con = $this->conDB("../../config.json");
+            $query2 = $con->query("SELECT * FROM pl_settings WHERE property='lang'")or die("Query error!");
+			$row2 = mysqli_fetch_array($query2);
+			
+            if(isset($_SESSION['h'])) {
+				$user_h = $_SESSION['h'];
+				$query = $con->query("SELECT * FROM pl_users WHERE h='$user_h'")or die("Query error!");
+				$row = mysqli_fetch_array($query);
+				if($row["lang"] == ""){
+					$lang = $row2["value"];
+				}else{
+					$lang = $row["lang"];
+				}
+			}else{
+				$lang = $row2["value"];
+			}
+			return $lang;
 		}
 
 		function set_usr_menu($h,$p) {
