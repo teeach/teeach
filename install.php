@@ -139,6 +139,7 @@
 						<tr><td><label for="centername">'._("Centername: ").'</label></td><td><input type="text" name="centername"></td></tr>
 						<tr><td><label for="logo">'._("Logo: ").'</label></td><td><input type="text" name="logo"></td></tr>
 						<tr><td><label for="logo">'._("Accesspass: ").'</label></td><td><input type="text" name="accesspass"></td></tr>
+						<tr><td><label for="lang">'._("Language: ").'</label></td><td><input type="text" name="lang"></td></tr>
 					</table>
 					<h3>'._("Your account").'</h3>
 					<table>
@@ -174,12 +175,14 @@
 			$centername = $_POST['centername'];
 			$logo = $_POST['logo'];
 			$accesspass = $_POST['accesspass'];
+			$lang = $_POST['lang'];
 
 			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('centername','$centername')")or die("Query error!");
 			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('logo','$logo')")or die("Query error!");
 			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('accesspass','$accesspass')")or die("Query error!");
 			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('JP','2')")or die("Query error!");
 			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('showgroups','true')")or die("Query error!");
+			$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('lang','$lang')")or die("Query error!");
 
 			echo '
 				<h1>'._("The End").'</h1>
