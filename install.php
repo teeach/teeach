@@ -139,7 +139,12 @@
 						<tr><td><label for="centername">'._("Centername: ").'</label></td><td><input type="text" name="centername"></td></tr>
 						<tr><td><label for="logo">'._("Logo: ").'</label></td><td><input type="text" name="logo"></td></tr>
 						<tr><td><label for="logo">'._("Accesspass: ").'</label></td><td><input type="text" name="accesspass"></td></tr>
-						<tr><td><label for="lang">'._("Language: ").'</label></td><td><input type="text" name="lang"></td></tr>
+						<tr><td><label for="lang">'._("Language: ").'</label></td><td>
+							<select name="lang">
+								<option value="es_ES">es_ES</option>
+								<option value="en_EN">en_EN</option>
+							</select>
+						</td></tr>
 					</table>
 					<h3>'._("Your account").'</h3>
 					<table>
