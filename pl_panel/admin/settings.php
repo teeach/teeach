@@ -5,6 +5,7 @@
 	$System = new System;
     $System->check_admin();
     $con = $System->conDB("../../config.json");
+    include("../../locale/".$System->load_locale().".php");
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +31,7 @@
 			$centername = $_POST['centername'];
 			$logo = $_POST['logo'];
 			$accesspass = $_POST['accesspass'];
+			$lang_val = $_POST['lang'];
 			@$showgroups = $_POST['showgroups'];
             $JP = $_POST['JP'];
 
@@ -39,11 +41,12 @@
 				$showgroups = "false";
 			}
 
-			$query = $con->query("UPDATE pl_settings SET value='$centername' WHERE property='centername'")or die("Query error!");
-			$query = $con->query("UPDATE pl_settings SET value='$logo' WHERE property='logo'")or die("Query error!");
-			$query = $con->query("UPDATE pl_settings SET value='$accesspass' WHERE property='accesspass'")or die("Query error!");
-			$query = $con->query("UPDATE pl_settings SET value='$showgroups' WHERE property='showgroups'")or die("Query error!");
-            $query = $con->query("UPDATE pl_settings SET value=$JP WHERE property='JP'")or die("Query error!");
+			$query = $con->query("UPDATE pl_settings SET value='$centername' WHERE property='centername'")or die("Query error 1!");
+			$query = $con->query("UPDATE pl_settings SET value='$logo' WHERE property='logo'")or die("Query error 2!");
+			$query = $con->query("UPDATE pl_settings SET value='$accesspass' WHERE property='accesspass'")or die("Query error 3!");
+			$query = $con->query("UPDATE pl_settings SET value='$showgroups' WHERE property='showgroups'")or die("Query error 4!");
+            $query = $con->query("UPDATE pl_settings SET value=$JP WHERE property='JP'")or die("Query error 5!");
+            $query = $con->query("UPDATE pl_settings SET value='$lang_val' WHERE property='lang'")or die("Query error 6!");
 
 			echo '<a href="settings.php?action">Accept</a>';
 
@@ -55,6 +58,7 @@
 			$query_accesspass = $con->query("SELECT * FROM pl_settings WHERE property='accesspass'");
 			$query_sg = $con->query("SELECT * FROM pl_settings WHERE property='showgroups'");
             $query_JP = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
+            $query_lang = $con->query("SELECT * FROM pl_settings WHERE property='lang'");
 
 			//Arrays
 			$row_centername = mysqli_fetch_array($query_centername);
@@ -62,6 +66,7 @@
 			$row_accesspass = mysqli_fetch_array($query_accesspass);
 			$row_sg = mysqli_fetch_array($query_sg);
             $row_JP = mysqli_fetch_array($query_JP);
+            $row_lang = mysqli_fetch_array($query_lang);
 
 			//Values
 			$centername = $row_centername['value'];
@@ -69,6 +74,7 @@
 			$accesspass = $row_accesspass['value'];
 			$sg = $row_sg['value'];
             $JP = $row_JP['value'];
+            $lang_val = $row_lang['value'];
 
 
 			echo '
@@ -145,7 +151,14 @@
                                             ';
                                     }
                                     echo '
-                                        </select>                                
+                                        </select> 
+									<br>
+									<label for="lang">'.$lang["language"].': </label>
+									<select name="lang">
+										<option value="es_ES" ';if($lang_val == "es_ES") echo "selected";echo' >es_ES</option>
+										<option value="en_EN" ';if($lang_val == "en_EN") echo "selected";echo'>en_EN</option>
+									</select>
+									
                                     </form>
                                 </div>
                                 <div id="tab_04" class="ui_tab_content">

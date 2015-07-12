@@ -11,12 +11,15 @@
     $connection = $System->conDB("../../config.json");
     $User = $System->get_user_by_id($h, $connection);
 
+	include("../../locale/".$System->load_locale().".php");
+
     if (@$_GET['action']=="success") {
         $error = 0;
 		$name = $_POST['name'];
 		$surname = $_POST['surname'];
 		$email = $_POST['email'];
 		$url_img = $_POST['url_img'];
+		$lang_val = $_POST['lang'];
         if($_POST['act_password'] != $_POST['new_password']){
             
             $t_hasher = new PasswordHash(8, FALSE);
@@ -43,6 +46,7 @@
             $query = $connection->query("update pl_users set surname='$surname' where id=$User->id")or die("Error!");
             $query = $connection->query("update pl_users set email='$email' where id=$User->id")or die("Error!");
             $query = $connection->query("update pl_users set photo='$url_img' where id=$User->id")or die("Error!");
+            $query = $connection->query("UPDATE pl_users SET lang='$lang_val' WHERE id=$User->id")or die("Query error 5!");
             //~ header("Location: profile.php?h=".$User->h);
         }
 	}
@@ -73,6 +77,12 @@
 			<form method="post" action="editprofile.php?action=success" name="perfil" style="padding: 10px">
 				<tr><td><label for="name">'._("Name: ").'</label></td><td><input type="text" name="name" value="'.$User->name.'"></td></tr>
 				<tr><td>'._("Surname: ").'</td><td><input type="text" name="surname" value="'.$User->surname.'"></td></tr>
+				<tr><td>'.$lang["language"].'</td><td>
+					<select name="lang">
+						<option value="es_ES"'; if($System->load_locale() == "es_ES") echo"selected";  echo'>es_ES</option>
+						<option value="en_EN"'; if($System->load_locale() == "en_EN") echo"selected";  echo'>en_EN</option>
+					</select>
+				</td></tr>
 				<tr><td><label for="email">'._("Email: ").'</label></td><td><input type="text" name="email" value="'.$User->email.'"></td></tr>			
 				<tr><td>'._("Change password <br>(Not changed if left blank): ").'</td><td>Actual password: <input type="password" name="act_password"></td><td>New password: <input type="password" name="new_password"></td></tr>
 				<tr><td>'._("Profile photo: ").'</td><td><input id="photo_url" type="text" value="'.$User->photo.'" name="url_img"></td></tr>
