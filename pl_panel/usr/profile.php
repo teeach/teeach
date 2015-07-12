@@ -11,7 +11,7 @@
 	$con = $System->conDB("../../config.json");
 	$User = $System->get_user_by_id($_SESSION['h'], $con);
 
-	$query = $con->query("SELECT * FROM pl_users WHERE h='$get_usr'")or die("Query error!");
+	$query = $con->query("SELECT * FROM pl_users WHERE h='$get_usr'")or die("Query error 1!");
 	$row = mysqli_fetch_array($query);
 	$profile_name = $row['name'];
 	$profile_surname = $row['surname'];
@@ -61,7 +61,7 @@
 
 
 	<?php
-		$query = $con->query("SELECT * FROM pl_settings WHERE property='showgroups'")or die("Query error!");
+		$query = $con->query("SELECT * FROM pl_settings WHERE property='showgroups'")or die("Query error 2!");
 		$row = mysqli_fetch_array($query);
 		$showgroups = $row['value'];
 		if ($showgroups == "true") {
@@ -74,15 +74,14 @@
 			';
 
 			$userid = $User->id;
-				$query = $con->query("SELECT * FROM pl_groupuser WHERE userid=$userid")or die("Query Error!");
+				$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$get_usr'")or die("Query Error 3!");
 				while ($row = mysqli_fetch_array($query)) {
-					$groupid = $row['groupid'];
-					$query2 = $con->query("SELECT * FROM pl_groups WHERE id=$groupid")or die("Query Error!");
+					$group_h = $row['group_h'];
+					$query2 = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query Error 4!");
 					$row2 = mysqli_fetch_array($query2);
 					$groupname = $row2['name'];
-					$grouph = $row2['h'];
 
-					echo '<tr><td><a href="group.php?h='.$grouph.'">'.$groupname.'</a></td></tr>';
+					echo '<tr><td><a href="group.php?h='.$group_h.'">'.$groupname.'</a></td></tr>';
 				}
 
 				echo '</tbody></table>';

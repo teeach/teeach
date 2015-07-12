@@ -11,7 +11,7 @@
     $connection = $System->conDB("../../config.json");
     $User = $System->get_user_by_id($h, $connection);
 
-	include("../../locale/".$System->load_locale().".php");
+	include("../../src/lang/".$System->load_locale().".php");
 
     if (@$_GET['action']=="success") {
         $error = 0;
@@ -47,7 +47,7 @@
             $query = $connection->query("update pl_users set email='$email' where id=$User->id")or die("Error!");
             $query = $connection->query("update pl_users set photo='$url_img' where id=$User->id")or die("Error!");
             $query = $connection->query("UPDATE pl_users SET lang='$lang_val' WHERE id=$User->id")or die("Query error 5!");
-            //~ header("Location: profile.php?h=".$User->h);
+            header("Location: profile.php?h=".$User->h);
         }
 	}
     
@@ -62,6 +62,7 @@
 	<?php
 		$System = new System();
 		$System->set_head(); 
+		
 	?>
 </head>
 <body>
@@ -71,16 +72,20 @@
 		$centername = $row['value'];
 		$System->set_header($centername);
 		$System->set_usr_menu($User->h,$User->privilege);
-	
+		
+		$query_langs = $connection->query("SELECT * FROM pl_langs");
+		
 		echo '
 			<table>
 			<form method="post" action="editprofile.php?action=success" name="perfil" style="padding: 10px">
 				<tr><td><label for="name">'._("Name: ").'</label></td><td><input type="text" name="name" value="'.$User->name.'"></td></tr>
 				<tr><td>'._("Surname: ").'</td><td><input type="text" name="surname" value="'.$User->surname.'"></td></tr>
 				<tr><td>'.$lang["language"].'</td><td>
-					<select name="lang">
-						<option value="es_ES"'; if($System->load_locale() == "es_ES") echo"selected";  echo'>es_ES</option>
-						<option value="en_EN"'; if($System->load_locale() == "en_EN") echo"selected";  echo'>en_EN</option>
+					<select name="lang">';
+					while($row_langs = mysqli_fetch_array($query_langs)){
+						echo'<option value="'.$row_langs["lang"].'" ';if($System->load_locale() == $row_langs["lang"]) echo "selected";echo' >'.$row_langs["lang"].'</option>';
+					}
+					echo'
 					</select>
 				</td></tr>
 				<tr><td><label for="email">'._("Email: ").'</label></td><td><input type="text" name="email" value="'.$User->email.'"></td></tr>			

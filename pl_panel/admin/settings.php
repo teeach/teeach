@@ -5,7 +5,7 @@
 	$System = new System;
     $System->check_admin();
     $con = $System->conDB("../../config.json");
-    include("../../locale/".$System->load_locale().".php");
+    include("../../src/lang/".$System->load_locale().".php");
 ?>
 
 <!DOCTYPE html>
@@ -59,6 +59,7 @@
 			$query_sg = $con->query("SELECT * FROM pl_settings WHERE property='showgroups'");
             $query_JP = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
             $query_lang = $con->query("SELECT * FROM pl_settings WHERE property='lang'");
+            $query_langs = $con->query("SELECT * FROM pl_langs");
 
 			//Arrays
 			$row_centername = mysqli_fetch_array($query_centername);
@@ -154,9 +155,12 @@
                                         </select> 
 									<br>
 									<label for="lang">'.$lang["language"].': </label>
-									<select name="lang">
-										<option value="es_ES" ';if($lang_val == "es_ES") echo "selected";echo' >es_ES</option>
-										<option value="en_EN" ';if($lang_val == "en_EN") echo "selected";echo'>en_EN</option>
+									<select name="lang">';
+									while($row_langs = mysqli_fetch_array($query_langs)){
+										echo'<option value="'.$row_langs["lang"].'" ';if($lang_val == $row_langs["lang"]) echo "selected";echo' >'.$row_langs["lang"].'</option>';
+									}
+									echo'
+										
 									</select>
 									
                                     </form>

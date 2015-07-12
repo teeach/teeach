@@ -9,7 +9,7 @@
 	$con = $System->conDB("../../config.json");
 	$User = $System->get_user_by_id($_SESSION['h'], $con);
 	
-	include("../../locale/".$System->load_locale().".php");
+	include("../../src/lang/".$System->load_locale().".php");
 ?>
 
 <!DOCTYPE html>
