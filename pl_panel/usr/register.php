@@ -62,7 +62,7 @@
 		echo '
 			<div class="ui_full_width">
             	<div class="ui_head ui_head_width_actions">
-					<h1><i class="fa fa-user-plus"></i> '._("New account").'</h1>
+					<h1><i class="fa fa-user-plus" style="cursor: default"></i> '._("New account").'</h1>
 				</div>
 				<form action="register.php?action=success" method="post">
 					<table>

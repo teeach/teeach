@@ -1,0 +1,11 @@
+#index_groups {
+	display: inline-block;
+	border: 1px solid #c96;
+}
+
+.sectiontitle {
+	background-color: #c96;
+	padding: 10px;
+	font-weight: bold;
+	color: #fff;
+}

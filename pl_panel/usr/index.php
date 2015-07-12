@@ -15,7 +15,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title><?php echo "Hola, $User->name | Teeach"; ?></title>
-	<link rel="stylesheet" href="../../src/css/main.css">
+	<link rel="stylesheet" href="../../src/css/index.css">
 	<?php
 		$System->set_head();
 	?>
@@ -34,8 +34,10 @@
 	$System->set_usr_menu($User->h,$User->privilege);
 
 		echo "
-			<section id='posts'>
-				<h1>Posts</h1><br><br>
+		<div class='ui_full_width'>
+			<div class='ui_sidebar left'>
+				<section id='posts'>
+					<h1>Posts</h1><br><br>
 				";
 
 		$query = $con->query("SELECT * FROM pl_posts ORDER BY id DESC");
@@ -64,9 +66,11 @@
 
 		echo "
 			</section>
+			</div>
 		";
 	?>
-	<section id="groups">
+	<div class="ui_width_sidebar right">
+	<section id="index_groups">
 		<div class="sectiontitle">
 			<?php echo _("Groups"); ?>
 		</div>
@@ -85,8 +89,16 @@
 				}
 			?>
 		</ul>
-		<a href="group.php?action=join">Join</a>
+
+		<?php
+			if($User->privilege >= 3) {
+				echo '<a href="group.php?action=create"><button>Create</button></a>';
+			}
+		?>
+		<a href="group.php?action=join"><button>Join</button></a>
 	</section>
+	</div>
+	</div>
 	<?php echo $System->set_footer(); ?>
 </body>
 </html>

@@ -36,7 +36,7 @@
 		//Popups
 			echo '
 				<div id="dialog" title="New unit" style="display:none">
-					<form method="POST" action="group.php?action=save_unit&h='.$_GET['h'].'">
+					<form method="POST" action="group.php?action=save_unit&h='.@$_GET['h'].'">
 						<label for="unit">'._("Name:").' </label><input type="text" name="unit"><br>
 						<input type="submit" value="Enviar">
 					</form>
@@ -49,7 +49,43 @@
 		$System->set_header($centername);
 		$System->set_usr_menu($User->h,$User->privilege);
 
-		if (@$_GET['action'] == "join") {
+		if (@$_GET['action'] == "create") {
+
+			echo '
+				<h1>'._("Create a group").'</h1>
+				<table>
+					<form method="POST" action="group.php?action=confirm_create">
+						<tr><td><label for="name">'._("Name: ").'</label></td><td><input type="text" name="name"></td></tr>
+						<tr><td><label for="category">'._("Category: ").'</label></td><td>
+							<select name="category">';
+								$query = $con->query("SELECT * FROM pl_categories");
+								while($row = mysqli_fetch_array($query)) {
+									$name = $row['name'];
+									$h = $row['h'];
+
+									echo '<option value="'.$h.'">'.$name.'</option>';
+								}
+						echo ' </select>
+						</td></tr>
+						<tr><td></td><td><input type="submit" value="'._("Create").'"></td></tr>
+					</form>
+				</table>
+			';
+
+		} elseif (@$_GET['action'] == "confirm_create") {
+
+			$group_name = $_POST['name'];
+			$category_h = $_POST['category'];
+
+			$h = substr( md5(microtime()), 1, 18);
+
+			//Create group
+			$query = $con->query("INSERT INTO pl_groups(name,h,category_h) VALUES ('$group_name','$h','$category_h')")or die("Query error!");
+
+			//Create first leader
+			$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$h','$User->h','leader')")or die("Query error!");
+
+		} elseif (@$_GET['action'] == "join") {
 			echo '
 				<h1>'._("Join a group").'</h1>
 				<p>'._("Select a group:").' </p>
@@ -343,6 +379,10 @@
 
 			$gh = $_GET['h'];
 
+			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query error!");
+			$row_status = mysqli_fetch_array($query_status);
+			$status = $row_status['status'];
+
 			$query1 = $con->query("SELECT * FROM pl_groups WHERE h='$gh'")or die("Query error!");
 			$row1 = mysqli_fetch_array($query1);
 			$groupname = $row1['name'];
@@ -398,8 +438,13 @@
 						echo '<td><a href="profile.php?h='.$user_h.'">'.$name." ".$surname.'</a></td>';
 					}
 
-					echo '<td>'.$email.'</td><td>'.$address.'</td><td>'.$phone.'</td><td><a href="messages.php?action=new&to='.$user_h.'"><i class="fa fa-envelope"></i></a> <a href="group.php?action=quit&group='.$gh.'&user='.$user_h.'"><i class="fa fa-eraser"></i></a></td>';
-					echo '</tr>';
+					echo '<td>'.$email.'</td><td>'.$address.'</td><td>'.$phone.'</td><td><a href="messages.php?action=new&to='.$user_h.'"><i class="fa fa-envelope"></i></a>';
+
+					if ($status == "leader") {
+						echo ' <a href="group.php?action=quit&group='.$gh.'&user='.$user_h.'"><i class="fa fa-eraser"></i></a>';
+					}
+					
+					echo '</td></tr>';
 				}
 
 			echo '
