@@ -2,6 +2,8 @@
 	include("../../core.php");
 	$System = new System();
 	$System->check_admin();
+
+	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
 ?>
 
 <!DOCTYPE html>
@@ -10,20 +12,43 @@
 	<meta charset="UTF-8">
 	<title>Admin | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css" />
-	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
+	<link rel="stylesheet" href="../../src/css/admin.css">
+	<?php $System->set_head(); ?>
 </head>
 <body>
-	<h1><?php echo _("Administration"); ?></h1>
-	<div id="admin_menu">
-		<a href="users.php?action"><img class="icon" src="../../src/ico/users.png" alt="Users" style="border-radius: 100%"><?php echo _("Users"); ?></a>
-		<a href="groups.php?action"><?php echo _("Groups"); ?></a>
-		<!--<a href="organization.php?action"><img src="../../src/ico/university.png" alt="University" class="icon" style="border-radius: 100%"></a>-->
-		<a href="posts.php?action"><img src="../../src/ico/pencil.png" alt="Posts" class="icon" style="border-radius: 100%"><?php echo _("Posts");?></a>		
-		<a href="settings.php?action"><img class="icon" src="../../src/ico/settings.png" alt="Settings"><?php echo _("Settings"); ?></a>
-	</div>
-	<br>
-	<a href="../usr/index.php">Volver al panel de Usuario</a>
-	<br>
-	<p>Hora del servidor: <?php echo date("d-m-Y H:i:s")?></p>
+	<header id="header" class="admin">
+            <div class="main_title">
+                <h1><i class="fa fa-wrench"></i> <?php echo $lang["administration"]; ?></h1>
+            </div>
+                    
+            <a class="goto_user_panel" href="../usr"><?php echo $lang["return_usr_panel"]; ?></a>
+        </header>
+        
+        <div class="admin_panel">
+            <div class="admin_panel_item">
+                <a href="users.php?action">
+                    <i class="fa fa-user"></i>
+                    <h2><?php echo $lang['users']; ?></h2>
+                </a>
+            </div>
+            <div class="admin_panel_item">
+                <a href="groups.php?action">
+                    <i class="fa fa-users"></i>
+                    <h2><?php echo $lang['groups']; ?></h2>
+                </a>
+            </div>
+            <div class="admin_panel_item">
+                <a href="posts.php?action">
+                    <i class="fa fa-pencil"></i>
+                    <h2><?php echo $lang['posts']; ?></h2>
+                </a>
+            </div>
+            <div class="admin_panel_item">
+                <a href="settings.php?action">
+                    <i class="fa fa-cog"></i>
+                    <h2><?php echo $lang['settings']; ?></h2>
+                </a>
+            </div>
+        </div>
 </body>
 </html>

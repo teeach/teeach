@@ -7,6 +7,8 @@
 	$con = $System->conDB("../../config.json");
 	$User = $System->get_user_by_id($_SESSION['h'], $con);
 
+	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+
 	@$h = $_GET['h'];
 
 	$query = $con->query("SELECT * FROM pl_groups WHERE h='$h'")or die(_("This group doesn't exist."));
@@ -20,7 +22,7 @@
 <head>
 	<meta charset="UTF-8">
 	<?php $System->set_head(); ?>
-	<title><?php echo _("Groups"); ?> | Teeach</title>
+	<title><?php echo $lang["groups"]; ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<script src="../../ckeditor/ckeditor.js"></script>
 	<script>
@@ -35,9 +37,9 @@
 
 		//Popups
 			echo '
-				<div id="dialog" title="New unit" style="display:none">
+				<div id="dialog" title="'.$lang["new_unit"].'" style="display:none">
 					<form method="POST" action="group.php?action=save_unit&h='.@$_GET['h'].'">
-						<label for="unit">'._("Name:").' </label><input type="text" name="unit"><br>
+						<label for="unit">'.$lang["name"].': </label><input type="text" name="unit"><br>
 						<input type="submit" value="Enviar">
 					</form>
 				</div>
@@ -47,16 +49,16 @@
 		$row = mysqli_fetch_array($query);
 		$centername = $row['value'];
 		$System->set_header($centername);
-		$System->set_usr_menu($User->h,$User->privilege);
+		$System->set_usr_menu($User->h,$User->privilege,$lang);
 
 		if (@$_GET['action'] == "create") {
 
 			echo '
-				<h1>'._("Create a group").'</h1>
+				<h1>'.$lang["create_a_group"].'</h1>
 				<table>
 					<form method="POST" action="group.php?action=confirm_create">
-						<tr><td><label for="name">'._("Name: ").'</label></td><td><input type="text" name="name"></td></tr>
-						<tr><td><label for="category">'._("Category: ").'</label></td><td>
+						<tr><td><label for="name">'.$lang["name"].': </label></td><td><input type="text" name="name"></td></tr>
+						<tr><td><label for="category">'.$lang["category"].': </label></td><td>
 							<select name="category">';
 								$query = $con->query("SELECT * FROM pl_categories");
 								while($row = mysqli_fetch_array($query)) {
@@ -67,7 +69,7 @@
 								}
 						echo ' </select>
 						</td></tr>
-						<tr><td></td><td><input type="submit" value="'._("Create").'"></td></tr>
+						<tr><td></td><td><input type="submit" value="Create"></td></tr>
 					</form>
 				</table>
 			';
@@ -85,10 +87,12 @@
 			//Create first leader
 			$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$h','$User->h','leader')")or die("Query error!");
 
+			echo '<a href="group.php?h='.$h.'&page=index">'._("Accept").'</a>';
+
 		} elseif (@$_GET['action'] == "join") {
 			echo '
-				<h1>'._("Join a group").'</h1>
-				<p>'._("Select a group:").' </p>
+				<h1>'.$lang["join_group"].'</h1>
+				<p>'.$lang["select_group"].' </p>
 					';
 
 				$query1 = $con->query("SELECT * FROM pl_categories")or die("Query error!");
@@ -221,27 +225,27 @@
 			echo '
 			<div class="ui_full_width">
 			<div class="ui_head ui_head_width_actions">
-				<h2>'.("New work in ").$unit_name.'</h2>
+				<h2>'.$lang["new_work_in"].$unit_name.'</h2>
 			</div>
 			<form action="group.php?action=save_work&h='.$gh.'&unit='.$unit_h.'" method="POST">
 				<table>
-					<tr><td><label for="workname">'._("Workname").'</label></td><td><input type="text" name="workname"></td></tr>
-					<tr><td><label for="type">'._("Type").'</label></td><td>
+					<tr><td><label for="workname">'.$lang["workname"].'</label></td><td><input type="text" name="workname"></td></tr>
+					<tr><td><label for="type">'.$lang["type"].'</label></td><td>
 						<select name="type">
-							<option value="1">'._("Notes").'</option>
-							<option value="2">'._("Homework").'</option>
-							<option value="3">'._("Exam").'</option>
+							<option value="1">'.$lang["notes"].'</option>
+							<option value="2">'.$lang["homework"].'</option>
+							<option value="3">'.$lang["exam"].'</option>
 						</select>
 					</td></tr>
-					<tr><td><label for="visible">'._("Visible").'</label></td><td><input type="checkbox" name="visible" checked="true"></td></tr>
+					<tr><td><label for="visible">'.$lang["visible"].'</label></td><td><input type="checkbox" name="visible" checked="true"></td></tr>
 					<tr><td></td><td><textarea cols="80" id="editor1" name="desc" rows="10"></textarea></td></tr>
-					<tr><td></td><td><input type="submit" value='._("Accept").'></td></tr>
+					<tr><td></td><td><input type="submit" value='.$lang["accept"].'></td></tr>
 				</table>
 			</form>
 			</div>
 			
 			<script type="text/javascript">  
-                CKEDITOR.replace( "editor1", { 
+                CKEDITOR.replace( "editor1", {
                 enterMode: CKEDITOR.ENTER_BR,
                 skin : "office2013",
                 toolbar : [
@@ -286,7 +290,7 @@
 
 			$query = $con->query("INSERT INTO pl_works(name,type,h,creation_date,description,unit_h,status) VALUES('$workname',$type,'$h','$date','$desc','$unit_h','$status')")or die("Query error!");
 
-			echo '<a href="group.php?h='.$gh.'&page=index">'._("Accept").'</a>';
+			echo '<a href="group.php?h='.$gh.'&page=index">'.$lang["accept"].'</a>';
 
 		} elseif(@$_GET['action'] == "save_unit") {
 
@@ -296,7 +300,7 @@
 
 			$query = $con->query("INSERT INTO pl_units(name,h,group_h) VALUES ('$unit','$h','$gh')")or die("Query error!");
 
-			echo "<a href='group.php?h=".$gh."&page=index'>Accept</a>";
+			echo "<a href='group.php?h=".$gh."&page=index'>".$lang['accept']."</a>";
 
 
 
@@ -324,7 +328,7 @@
                 if ($privilege >= 2) {  
               		echo '
                 	<div class="ui_actions">
-                		<a href="group.php?action=new_work&h='.$gh.'"><button class="ui_action" class="ui_tooltip" title="'._("New Work").'"><i class="fa fa-plus"></i></button></a>
+                		<a href="group.php?action=new_work&h='.$gh.'"><button class="ui_action" class="ui_tooltip" title="'.$lang["new_work"].'"><i class="fa fa-plus"></i></button></a>
                 	</div>
                 	';
             	}
@@ -333,8 +337,8 @@
             	<div class="ui_sidebar left">
                 <nav class="ui_vertical_nav">
                     <ul>
-                        <li class="active"><a href="group.php?h='.$gh.'&page=index">'._("Works").'</a></li>
-                        <li><a href="group.php?h='.$gh.'&page=users">'._("Users").'</a></li>
+                        <li class="active"><a href="group.php?h='.$gh.'&page=index">'.$lang["works"].'</a></li>
+                        <li><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>
                     </ul>
                 </nav>                            
             	</div>
@@ -370,7 +374,7 @@
 			}
 
 			echo '
-				<a onclick="open_popup()"><li class="new_unit">'._("New unit").'</li></a>
+				<a onclick="open_popup()"><li class="new_unit">'.$lang["new_unit"].'</li></a>
 			</ul>';
 
 			
@@ -400,8 +404,8 @@
             <div class="ui_sidebar left">
                 <nav class="ui_vertical_nav">
                     <ul>
-                        <li><a href="group.php?h='.$gh.'&page=index">'._("Works").'</a></li>
-                        <li class="active"><a href="group.php?h='.$gh.'&page=users">'._("Users").'</a></li>
+                        <li><a href="group.php?h='.$gh.'&page=index">'.$lang["works"].'</a></li>
+                        <li class="active"><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>
                     </ul>
                 </nav>
             </div>
@@ -411,11 +415,11 @@
                 <table class="ui_table">
                 <thead>
                     <th class="select"><input class="select_all" type="checkbox" /></th>
-                    <th>'._("Name and surname").'</th>
-                    <th>'._("Email").'</th>
-                    <th>'._("Address").'</th>
-                    <th>'._("Phone").'</th>
-                    <th class="actions">'._("Actions").'</th>
+                    <th>'.$lang["name_and_surname"].'</th>
+                    <th>'.$lang["email"].'</th>
+                    <th>'.$lang["address"].'</th>
+                    <th>'.$lang["phone"].'</th>
+                    <th class="actions">'.$lang["actions"].'</th>
                 </thead>
                 <tbody>';
                 $query = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$gh'");

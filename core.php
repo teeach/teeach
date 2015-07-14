@@ -64,11 +64,24 @@
 			}
 			return $lang;
 		}
+		
+		function parse_lang($json){
+			$fp = fopen($json, "r");
+            $rfile = fread($fp, filesize($json));
 
-		function set_usr_menu($h,$p) {
+            $json_lang = json_decode($rfile);
+			
+			$lang = [];
+			foreach ($json_lang as $index => $row_lang) {
+				$lang[$index] = $row_lang;
+			}
+			return $lang;
+		}
+
+		function set_usr_menu($h,$p,$lang) {
             $fp = fopen("../../config.json", "r");
             $rfile = fread($fp, filesize("../../config.json"));
-
+			
             $json = json_decode($rfile);
 
             $dbserver = $json->{"dbserver"};
@@ -90,15 +103,16 @@
             if ($profile_photo == "") {
                 $profile_photo = "../../src/ico/user.png";
             }
-
+			
+			
             //Main Menu
             echo '
             <header>
                 <nav class="main_menu">
                     <ul>
-                        <li><a href="index.php">'._("Index").'</a></li>
+                        <li><a href="index.php">'.$lang["index"].'</a></li>
                         <li>
-                            <a href="#">'._("Groups").'</a>
+                            <a href="#">'.$lang["groups"].'</a>
                             <ul>';
                                 $query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$h'")or die("Query error!");
                                 while($row1 = mysqli_fetch_array($query)) {
@@ -111,20 +125,20 @@
                             echo '                                
                             </ul>
                          </li>
-                        <li><a href="diary.php">'._("Diary").'</a></li>
-                        <li><a href="messages.php">'._("Messages").'</a></li>
+                        <li><a href="diary.php">'.$lang["diary"].'</a></li>
+                        <li><a href="messages.php">'.$lang["messages"].'</a></li>
                     
             ';
         //If you're Admin...
 		if ($p >= 3) {
 			echo '				
     			<li>
-                    <a href="../admin">'._("Admin").'</a>
+                    <a href="../admin">'.$lang["admin"].'</a>
                     <ul>
-                        <li><a class="icon_users" href="../admin/users.php?action"><i class="fa fa-users"></i> '._("Users").'</a></li>
-                        <li><a class="icon_org" href="../admin/groups.php?action"><i class="fa fa-graduation-cap"></i> '._("Groups").'</a></li>
-                        <li><a class="icon_post" href="../admin/posts.php?action"><i class="fa fa-pencil"></i> '._("Posts").'</a></li>
-                        <li><a class="icon_config" href="../admin/settings.php?action"><i class="fa fa-cog"></i> '._("Settings").'</a></li>
+                        <li><a class="icon_users" href="../admin/users.php?action"><i class="fa fa-users"></i> '.$lang["users"].'</a></li>
+                        <li><a class="icon_org" href="../admin/groups.php?action"><i class="fa fa-graduation-cap"></i> '.$lang["groups"].'</a></li>
+                        <li><a class="icon_post" href="../admin/posts.php?action"><i class="fa fa-pencil"></i> '.$lang["posts"].'</a></li>
+                        <li><a class="icon_config" href="../admin/settings.php?action"><i class="fa fa-cog"></i> '.$lang["settings"].'</a></li>
                     </ul>
                 </li>
 			';
@@ -140,11 +154,11 @@
                         <li class="view_profile">
                         <a href="profile.php?h='.$h.'">
                             '.$name." ".$surname.'
-                            <span>'._("View profile").'</span>
+                            <span>'.$lang["view_profile"].'</span>
                         </a>
                         </li>
-                        <li class="edit_profile"><a href="editprofile.php"><i class="fa fa-pencil"></i> '._("Edit profile").'</a></li>
-                        <li class="logout_user"><a href="logout.php"><i class="fa fa-sign-out"></i> '._("Log out").'</a></li>
+                        <li class="edit_profile"><a href="editprofile.php"><i class="fa fa-pencil"></i> '.$lang["edit_profile"].'</a></li>
+                        <li class="logout_user"><a href="logout.php"><i class="fa fa-sign-out"></i> '.$lang["log_out"].'</a></li>
                     </ul>
                 </li>
             </ul>

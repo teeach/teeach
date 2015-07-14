@@ -5,6 +5,8 @@
 	$System = new System();
 	$System->check_admin();
 	$con = $System->conDB("../../config.json");
+
+	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
 ?>
 
 <!DOCTYPE html>
@@ -23,7 +25,7 @@
 			echo '
 				<table style="padding: 20px;">
 				<form name="cg" method="post" action="categories.php?action=success" autocomplete="off">
-					<tr><td><label for="name">'._("Nombre: ").'</label></td><td><input type="text" name="name" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
+					<tr><td><label for="name">'.$lang["name"].': </label></td><td><input type="text" name="name" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
 					<tr><td/><td><h6 style="display:none" id="txt_user">'._("El nombre de grupo de 6 a 29 carácteres").'</h6></td></tr>
 					<tr><td><input type="submit" value="Enviar"/></td></tr>
 				</form>
@@ -83,12 +85,12 @@
 
 				<div class="admin_hmenu">
 					<a href="groups.php?action"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>				
-					<h2><a href="index.php">Admin</a> >> <a href="groups.php?action">'._("Groups").'</a> >> <a href="categories.php?action">'._("Categories").'</a></h2>
+					<h2><a href="index.php">Admin</a> >> <a href="groups.php?action">'.$lang["groups"].'</a> >> <a href="categories.php?action">'.$lang["categories"].'</a></h2>
                 </div>
 
 				<div class="submenu">
 					<ul>
-                    	<a href="categories.php?action=new"><li><img src="../../src/ico/add.png">'._("New").'</li></a>
+                    	<a href="categories.php?action=new"><li><img src="../../src/ico/add.png">'.$lang["new"].'</li></a>
                 	</ul>
              	</div>
              </div>
@@ -98,8 +100,8 @@
 				<table class="ui_table">
 					<thead>
 						<th>#</th>
-						<th>'._("Name").'</th>
-						<th>'._("Actions").'</th>
+						<th>'.$lang["name"].'</th>
+						<th>'.$lang["actions"].'</th>
 					</thead>
 					<tbody>
 		';
@@ -115,7 +117,7 @@
 					<tr>
 						<td>".$row['id']."</td>
 						<td>".$row['name']."</td>
-						<td><a href='categories.php?action=edit&h=".$row['h']."'>"._('Edit')."</a> <a href='categories.php?action=delete&h=".$row['h']."'>"._('Delete')."</a></td>
+						<td><a href='categories.php?action=edit&h=".$row['h']."'>".$lang['edit']."</a> <a href='categories.php?action=delete&h=".$row['h']."'>".$lang['delete']."</a></td>
 					";
 				}
 			echo "

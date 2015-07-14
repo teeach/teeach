@@ -602,7 +602,7 @@ TRANSITIONS
     height: 64px;
 }
 
-/* Container
+/* Container Login
 =========================================================== */
 .container {
     background: #d1d1d1;
@@ -618,6 +618,7 @@ TRANSITIONS
 
 .container h1 {
     font-size: 32px; 
+    font-family: 'RobotoBold',sans-serif;
     text-align: center;
 }
 

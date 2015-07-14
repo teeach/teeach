@@ -4,13 +4,15 @@
 
 	$System = new System();
 	$System->check_admin();
+
+	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo _("Users"); ?> | Teeach</title>
+	<title><?php echo $lang["users"]; ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
 	<script>
@@ -52,19 +54,19 @@
 				<a href="users.php?action"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>
 				<table style="padding: 20px;">
 				<form name="cu" method="post" action="users.php?action=success" autocomplete="off">
-					<tr><td><label for="usr">'._("Usuario: ").'</label></td><td><input type="text" name="user" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
+					<tr><td><label for="usr">'.$lang["user"].': </label></td><td><input type="text" name="user" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
 					<tr><td/><td><h6 style="display:none" id="txt_user">El nombre de usuario de 6 a 29 carácteres</h6></td></tr>
-					<tr><td><label for="name">'._("Nombre: ").'</label></td><td><input type="text" name="name" required/></td></tr>
-					<tr><td><label for="surname">'._("Apellido: ").'</label></td><td><input type="text" name="surname" required/></td></tr>
-					<tr><td><label for="email">'._("Correo: ").'</label></td><td><input type="email" name="email" required/></td></tr>
-					<tr><td><label for="phone">'._("Teléfono: ").'</label></td><td><input type="tel" name="phone" required onblur="checkPhone()"/></td></tr>
-					<tr><td><label for="home">'._("Localidad: ").'</label></td><td><input type="text" name="home" required/></td></tr>
-					<tr><td><label for="birth">'._("Nacimiento: ").'</label></td><td><input type="date" name="birth" required/></td></tr>
-					<tr><td><label for="privilege">'._("Privilegios: ").'</label></td><td>
+					<tr><td><label for="name">'.$lang["name"].': </label></td><td><input type="text" name="name" required/></td></tr>
+					<tr><td><label for="surname">'.$lang["surname"].': </label></td><td><input type="text" name="surname" required/></td></tr>
+					<tr><td><label for="email">'.$lang["email"].': </label></td><td><input type="email" name="email" required/></td></tr>
+					<tr><td><label for="phone">'.$lang["phone"].': </label></td><td><input type="tel" name="phone" required onblur="checkPhone()"/></td></tr>
+					<tr><td><label for="home">'.$lang["address"].': </label></td><td><input type="text" name="address" required/></td></tr>
+					<tr><td><label for="birth">'.$lang["birthdate"].': </label></td><td><input type="date" name="birth" required/></td></tr>
+					<tr><td><label for="privilege">'.$lang["privilege"].': </label></td><td>
 						<select name="privilege">
-							<option value="1">'._("Student").'</option>
-							<option value="2">'._("Teacher").'</option>
-							<option value="3">'._("Administrator").'</option>
+							<option value="1">'.$lang["student"].'</option>
+							<option value="2">'.$lang["teacher"].'</option>
+							<option value="3">'.$lang["administrator"].'</option>
 						</select>
 					</td></tr>
 					<tr><td><input type="submit" value="Enviar" onclick="comprobarformulario()"/></td></tr>
@@ -78,7 +80,7 @@
 			$surname = $_POST['surname'];
 			$email = $_POST['email'];
 			$phone = $_POST['phone'];
-			$home = $_POST['home'];
+			$address = $_POST['address'];
 			$birth = $_POST['birth'];
 			$privilege = $_POST['privilege'];
     		$h = substr( md5(microtime()), 1, 18);
@@ -87,8 +89,8 @@
             $pass = $t_hasher->HashPassword($password);
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("INSERT INTO pl_users(username,name,surname,email,phone,home,birthday,h,pass,privilege) VALUES ('$user','$name','$surname','$email',$phone,'$home','$birth','$h','$pass',$privilege)")or die("Error");
-    		echo "<p>¡Perfecto la contraseña es: ".$password."</p><a href='users.php?action'>Aceptar</a>";
+    		$query = $con->query("INSERT INTO pl_users(username,name,surname,email,phone,address,birthday,h,pass,privilege) VALUES ('$user','$name','$surname','$email',$phone,'$address','$birth','$h','$pass',$privilege)")or die("Error");
+    		echo "<p>¡Perfecto la contraseña es: ".$password."</p><a href='users.php?action'>".$lang['accept']."</a>";
 
     	} elseif($action == "edit") {
 
@@ -102,19 +104,19 @@
 				<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="users.php?action">Usuarios</a> >> Edit</h2>
 				<table style="padding: 20px;">
 				<form name="cu" method="post" action="users.php?action=update&h='.$h.'" autocomplete="off">
-					<tr><td><label for="usr">'._("Username: ").'</label></td><td><input type="text" name="user" value="'.$row["username"].'" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
+					<tr><td><label for="usr">'.$lang["user"].': </label></td><td><input type="text" name="user" value="'.$row["username"].'" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
 					<tr><td/><td><h6 style="display:none" id="txt_user">El nombre de usuario de 6 a 29 carácteres</h6></td></tr>
-					<tr><td><label for="name">'._("Name: ").'</label></td><td><input type="text" name="name" value="'.$row['name'].'" required/></td></tr>
-					<tr><td><label for="surname">'._("Surname: ").'</label></td><td><input type="text" name="surname" value="'.$row['surname'].'" required/></td></tr>
-					<tr><td><label for="email">'._("Email: ").'</label></td><td><input type="email" name="email" value="'.$row['email'].'" required/></td></tr>
-					<tr><td><label for="phone">'._("Phone: ").'</label></td><td><input type="tel" name="phone" value="'.$row['phone'].'" required onblur="checkPhone()"/></td></tr>
-					<tr><td><label for="home">'._("Home: ").'</label></td><td><input type="text" name="home" value="'.$row['home'].'" required/></td></tr>
-					<tr><td><label for="birth">'._("Birthdate: ").'</label></td><td><input type="date" name="birth" value="'.$row['birthday'].'" required/></td></tr>
-					<tr><td><label for="privilege">Privilegios: </label></td><td>
+					<tr><td><label for="name">'.$lang["name"].': </label></td><td><input type="text" name="name" value="'.$row['name'].'" required/></td></tr>
+					<tr><td><label for="surname">'.$lang["surname"].': </label></td><td><input type="text" name="surname" value="'.$row['surname'].'" required/></td></tr>
+					<tr><td><label for="email">'.$lang["email"].': </label></td><td><input type="email" name="email" value="'.$row['email'].'" required/></td></tr>
+					<tr><td><label for="phone">'.$lang["phone"].': </label></td><td><input type="tel" name="phone" value="'.$row['phone'].'" required onblur="checkPhone()"/></td></tr>
+					<tr><td><label for="home">'.$lang["address"].': </label></td><td><input type="text" name="address" value="'.$row['home'].'" required/></td></tr>
+					<tr><td><label for="birth">'.$lang["birthdate"].': </label></td><td><input type="date" name="birth" value="'.$row['birthday'].'" required/></td></tr>
+					<tr><td><label for="privilege">'.$lang["privilege"].': </label></td><td>
 						<select name="privilege">
-							<option value="1">'._("Student").'</option>
-							<option value="2">'._("Teacher").'</option>
-							<option value="3">'._("Administrator").'</option>
+							<option value="1">'.$lang["student"].'</option>
+							<option value="2">'.$lang["teacher"].'</option>
+							<option value="3">'.$lang["administrator"].'</option>
 						</select>
 					</td></tr>
 					<tr><td><input type="submit" value="Enviar" onclick="comprobarformulario()"/></td></tr>
@@ -131,14 +133,14 @@
     		$surname = $_POST['surname'];
     		$email = $_POST['email'];
     		$phone = $_POST['phone'];
-    		$home = $_POST['home'];
+    		$address = $_POST['address'];
     		$birth = $_POST['birth'];
     		$privilege = $_POST['privilege'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("UPDATE pl_users SET username='$username',name='$name',surname='$surname',email='$email',phone='$phone',home='$home',birthday='$birth',privilege=$privilege WHERE h='$h'")or die("Query error!");
+    		$query = $con->query("UPDATE pl_users SET username='$username',name='$name',surname='$surname',email='$email',phone='$phone',address='$address',birthday='$birth',privilege=$privilege WHERE h='$h'")or die("Query error!");
 
-    		echo "<a href='users.php?action'>Aceptar</a>";
+    		echo "<a href='users.php?action'>".$lang['accept']."</a>";
 
     	} elseif($action == "delete") {
 
@@ -151,7 +153,7 @@
     		$privilege = $row['privilege'];
 
     		if ($privilege == 4) {
-    			die("<h1>"._('What are you doing!?')."</h1><p>"._('You cannot delete the general admin because the database will be destroyed!')."</p><a href='users.php?action'>"._('Accept')."</a>");
+    			die("<h1>"._('What are you doing!?')."</h1><p>"._('You cannot delete the general admin because the database will be destroyed!')."</p><a href='users.php?action'>".$lang['accept']."</a>");
     		}
 
     		$query = $con->query("DELETE FROM pl_users WHERE h='$h'")or die("Query error!");
@@ -165,12 +167,12 @@
 
 				<div class="admin_hmenu">
 					<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>				
-					<h2><a href="index.php">Admin</a> >> <a href="users.php?action">'._("Users").'</a></h2>
+					<h2><a href="index.php">Admin</a> >> <a href="users.php?action">'.$lang["users"].'</a></h2>
                 </div>
 
 				<div class="submenu">
 					<ul>
-                    	<a href="users.php?action=new"><li><img src="../../src/ico/add.png">'._("New").'</li></a>
+                    	<a href="users.php?action=new"><li><img src="../../src/ico/add.png">'.$lang["new"].'</li></a>
                 	</ul>
                 </div>
             </div>
@@ -179,15 +181,15 @@
                     <thead>
                         <th class="select"><input class="select_all" type="checkbox" /></th>
                         <th>#</th>
-                        <th>'._("Name").'</th>
-                        <th>'._("Surname").'</th>
-                        <th>'._("Username").'</th>
-                        <th>'._("Email").'</th>
-                        <th>'._("Phone").'</th>
-                        <th>'._("Birthdate").'</th>
-                        <th>'._("Address").'</th>
-                        <th>'._("Privilege").'</th>
-                        <th class="actions">'._("Actions").'</th>
+                        <th>'.$lang["name"].'</th>
+                        <th>'.$lang["surname"].'</th>
+                        <th>'.$lang["user"].'</th>
+                        <th>'.$lang["email"].'</th>
+                        <th>'.$lang["phone"].'</th>
+                        <th>'.$lang["birthdate"].'</th>
+                        <th>'.$lang["address"].'</th>
+                        <th>'.$lang["privilege"].'</th>
+                        <th class="actions">'.$lang["actions"].'</th>
                     </thead>
                     <tbody>';
                                     
@@ -203,16 +205,16 @@
 
 					switch($row['privilege']) {
 						case 1:
-							$privilege = _("User");
+							$privilege = $lang["user"];
 							break;
 						case 2:
-							$privilege = _("Teacher");
+							$privilege = $lang["teacher"];
 							break;
 						case 3:
-							$privilege = _("Admin");
+							$privilege = $lang["admin"];
 							break;
 						case 4:
-							$privilege = _("Admin");
+							$privilege = $lang["admin"];
 					}
 					echo "
 					<tr>
@@ -227,8 +229,8 @@
 						<td>".$row['address']."</td>
 						<td>".$privilege."</td>
 						<td class='actions'>
-							<a class='ui_action' href='users.php?action=edit&h=".$row['h']."'>"._('Edit')."</a>
-                            <a class='ui_action' href='users.php?action=delete&h=".$row['h']."'>"._('Delete')."</a>
+							<a class='ui_action' href='users.php?action=edit&h=".$row['h']."'>".$lang['edit']."</a>
+                            <a class='ui_action' href='users.php?action=delete&h=".$row['h']."'>".$lang['delete']."</a>
                         </td>
 					</tr>";
 				}

@@ -6,21 +6,23 @@
 
 	$System = new System();
 	$System->check_usr();
+	$System = new System();
+	$con = $System->conDB("../../config.json");
+	$User = $System->get_user_by_id($_SESSION['h'], $con);
+
+	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+	
+	$System->set_head();
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo _("Messages");?> | Teeach </title>
+	<title><?php echo $lang["messages"];?> | Teeach </title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<script src="../../ckeditor/ckeditor.js"></script>
-	<?php
-		$System = new System();
-		$con = $System->conDB("../../config.json");
-		$User = $System->get_user_by_id($_SESSION['h'], $con);
-		$System->set_head();
-	?>
+
 
 <style>
     
@@ -33,7 +35,7 @@
 		$row = mysqli_fetch_array($query);
 		$centername = $row['value'];
 		$System->set_header($centername);
-		$System->set_usr_menu($User->h,$User->privilege);
+		$System->set_usr_menu($User->h,$User->privilege,$lang);
 
 		if (@$_GET['action'] == "new") {
 
@@ -47,12 +49,12 @@
 				echo '
 				<div class="ui_full_width">
 					<div class="ui_head ui_head_width_actions">
-						<h2><i class="fa fa-envelope"></i> '._("New Message").'</h2>
+						<h2><i class="fa fa-envelope"></i> '.$lang["new_message"].'</h2>
 					</div>
 					<table>
 						<form action="messages.php?action=send" method="POST">
-							<tr><td><label for="to">'._("To: (username)").'</label></td><td><input type="text" name="to" value="'.$username.'"></td></tr>
-							<tr><td><label for="subject">'._("Subject: ").'</label></td><td><input type="text" name="subject"></td></tr>
+							<tr><td><label for="to">'.$lang["to"].': </label></td><td><input type="text" name="to" value="'.$username.'"></td></tr>
+							<tr><td><label for="subject">'.$lang["subject"].': </label></td><td><input type="text" name="subject"></td></tr>
 							<tr><td></td><td><textarea cols="80" id="editor1" name="body" rows="10"></textarea></td></tr>
 							<tr><td></td><td><input type="submit" value="Enviar"></td></tr>
 						</form>
@@ -64,12 +66,12 @@
 				echo '
 				<div class="ui_full_width">
 					<div class="ui_head ui_head_width_actions">
-						<h2><i class="fa fa-envelope"></i> '._("New Message").'</h2>
+						<h2><i class="fa fa-envelope"></i> '.$lang["new_message"].'</h2>
 					</div>
 					<table>
 						<form action="messages.php?action=send" method="POST">
-							<tr><td><label for="to">'._("To: (username)").'</label></td><td><input type="text" name="to"></td></tr>
-							<tr><td><label for="subject">'._("Subject: ").'</label></td><td><input type="text" name="subject"></td></tr>
+							<tr><td><label for="to">'.$lang["to"].'</label></td><td><input type="text" name="to"></td></tr>
+							<tr><td><label for="subject">'.$lang["subject"].'</label></td><td><input type="text" name="subject"></td></tr>
 							<tr><td></td><td><textarea cols="80" id="editor1" name="body" rows="10"></textarea></td></tr>
 							<tr><td></td><td><input type="submit" value="Enviar"></td></tr>
 						</form>
@@ -119,14 +121,14 @@
 
 			$query2 = $con->query("INSERT INTO pl_messages(from_h,to_h,subject,body,h,date) VALUES('$from','$to','$subject','$body','$h','$date')")or die("Query error!");
 
-			echo '<a href="messages.php">Aceptar</a>';
+			echo '<a href="messages.php">'.$lang["accept"].'</a>';
 
 		} elseif(@$_GET['action'] == "sent") {
 
 			echo '
 			<div class="ui_full_width">
 				<div class="ui_head ui_head_width_actions">
-				<h2><i class="fa fa-envelope"></i> '._("Messages").'</h2>
+				<h2><i class="fa fa-envelope"></i> '.$lang["messages"].'</h2>
                 
                 	<div class="ui_actions">
                     	<a href="messages.php?action=new"><button class="ui_action" class="ui_tooltip" title="Add New"><i class="fa fa-plus"></i></button></a>
@@ -137,8 +139,8 @@
 
                 <nav class="ui_vertical_nav">
                     <ul>
-                        <li><a href="messages.php">'._("Received").'</a></li>
-                        <li class="active"><a href="messages.php?action=sent">'._("Sent").'</a></li>
+                        <li><a href="messages.php">'.$lang["received"].'</a></li>
+                        <li class="active"><a href="messages.php?action=sent">'.$lang["sent"].'</a></li>
                     </ul>
                 </nav>                            
             	</div>
@@ -189,7 +191,7 @@
 			echo '
 				<div class="ui_full_width">
 					<div class="ui_head ui_head_width_actions">
-						<h2><i class="fa fa-envelope"></i> '._("Messages").'</h2>
+						<h2><i class="fa fa-envelope"></i> '.$lang["messages"].'</h2>
                 
                 		<div class="ui_actions">
                    			<a href="messages.php?action=new"><button class="ui_action" class="ui_tooltip" title="Add New"><i class="fa fa-plus"></i></button></a>
@@ -200,8 +202,8 @@
 
                 	<nav class="ui_vertical_nav">
                     	<ul>
-                        	<li class="active"><a href="messages.php">'._("Received").'</a></li>
-                        	<li><a href="messages.php?action=sent">'._("Sent").'</a></li>
+                        	<li class="active"><a href="messages.php">'.$lang["received"].'</a></li>
+                        	<li><a href="messages.php?action=sent">'.$lang["sent"].'</a></li>
                     	</ul>
                 	</nav>                            
             		</div>

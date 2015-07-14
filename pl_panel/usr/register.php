@@ -3,6 +3,8 @@
 	$System = new System;
 	
 	$con = $System->conDB("../../config.json");
+
+	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
 ?>
 
 <!DOCTYPE html>
@@ -62,14 +64,14 @@
 		echo '
 			<div class="ui_full_width">
             	<div class="ui_head ui_head_width_actions">
-					<h1><i class="fa fa-user-plus" style="cursor: default"></i> '._("New account").'</h1>
+					<h1><i class="fa fa-user-plus" style="cursor: default"></i> '.$lang["new_account"].'</h1>
 				</div>
 				<form action="register.php?action=success" method="post">
 					<table>
-						<tr><td><label for="username">'._("Username: ").'</label></td><td><input type="text" name="username"></td></tr>
-						<tr><td><label for="email">'._("Email: ").'</label></td><td><input type="text" name="email"></td></tr>
-						<tr><td><label for="password">'._("Password: ").'</label></td><td><input type="password" name="password"></td></tr>
-						<tr><td><label for="rpassword">'._("Repeat password: ").'</label></td><td><input type="password" name="rpassword"></td></tr>
+						<tr><td><label for="username">'.$lang["username"].': </label></td><td><input type="text" name="username"></td></tr>
+						<tr><td><label for="email">'.$lang["email"].': </label></td><td><input type="text" name="email"></td></tr>
+						<tr><td><label for="password">'.$lang["password"].': </label></td><td><input type="password" name="password"></td></tr>
+						<tr><td><label for="rpassword">'.$lang["repeat_password"].': </label></td><td><input type="password" name="rpassword"></td></tr>
 		';
 
 		if ($accesspass != "") {

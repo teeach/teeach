@@ -9,7 +9,8 @@
 	$con = $System->conDB("../../config.json");
 	$User = $System->get_user_by_id($_SESSION['h'], $con);
 	
-	include("../../src/lang/".$System->load_locale().".php");
+	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+    
 ?>
 
 <!DOCTYPE html>
@@ -33,13 +34,13 @@
 	$row = mysqli_fetch_array($query);
 	$centername = $row['value'];
 	$System->set_header($centername);
-	$System->set_usr_menu($User->h,$User->privilege);
+	$System->set_usr_menu($User->h,$User->privilege,$lang);
 
 		echo "
 		<div class='ui_full_width'>
 			<div class='ui_sidebar left'>
 				<section id='posts'>
-					<h1>Posts</h1><br><br>
+					<h1>".$lang['posts']."</h1><br><br>
 				";
 
 		$query = $con->query("SELECT * FROM pl_posts ORDER BY id DESC");
@@ -74,6 +75,7 @@
 	<div class="ui_width_sidebar right">
 	<section id="index_groups">
 		<div class="sectiontitle">
+			
 			<?php echo $lang["groups"]; ?>
 		</div>
 		<ul>
@@ -94,10 +96,13 @@
 
 		<?php
 			if($User->privilege >= 3) {
-				echo '<a href="group.php?action=create"><button>Create</button></a>';
+				echo '<a href="group.php?action=create"><button>'.$lang["create"].'</button></a>';
 			}
+		
+		echo '
+			<a href="group.php?action=join"><button>'.$lang["join"].'</button></a>
+		';
 		?>
-		<a href="group.php?action=join"><button>Join</button></a>
 	</section>
 	</div>
 	</div>

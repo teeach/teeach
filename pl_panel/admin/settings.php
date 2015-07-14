@@ -5,14 +5,15 @@
 	$System = new System;
     $System->check_admin();
     $con = $System->conDB("../../config.json");
-    include("../../src/lang/".$System->load_locale().".php");
+    $lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+    
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo _("Settings"); ?> | Teeach</title>
+	<title><?php echo $lang["settings"]; ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
 	<?php $System->set_head(); ?>
@@ -47,7 +48,42 @@
 			$query = $con->query("UPDATE pl_settings SET value='$showgroups' WHERE property='showgroups'")or die("Query error 4!");
             $query = $con->query("UPDATE pl_settings SET value=$JP WHERE property='JP'")or die("Query error 5!");
             $query = $con->query("UPDATE pl_settings SET value='$lang_val' WHERE property='lang'")or die("Query error 6!");
-
+		
+			if($_FILES["up_lang"]["size"] != 0){
+				$target_dir = "../../src/lang/";
+				$target_file = $target_dir . basename($_FILES["up_lang"]["name"]);
+				$uploadOk = 1;
+				$fileType = pathinfo($target_file,PATHINFO_EXTENSION);
+				// Allow certain file formats
+				if($fileType != "json") {
+					echo "Sorry, only json files are allowed.";
+					$uploadOk = 0;
+				}
+				// Check if $uploadOk is set to 0 by an error
+				if ($uploadOk == 0) {
+					echo "Sorry, your file was not uploaded.";
+				// if everything is ok, try to upload file
+				} else {
+					$fp_langs = fopen("../../src/lang/langs.json", "r+");
+					$rfile_langs = fread($fp_langs, filesize("../../src/lang/langs.json"));
+					fclose($fp_langs);
+					$json_langs = json_decode($rfile_langs);
+					$filename = explode(".", basename( $_FILES["up_lang"]["name"]))[0];
+					if(!in_array($filename,$json_langs->{"langs"})){
+						$json_langs->{"langs"}[] = $filename;
+					}
+					
+					if (move_uploaded_file($_FILES["up_lang"]["tmp_name"], $target_file)) {
+						$fp_langs = fopen("../../src/lang/langs.json", "w");
+						fwrite($fp_langs, json_encode($json_langs));
+						fclose($fp_langs);
+						
+					} else {
+						echo "Sorry, there was an error uploading your file.";
+					}
+				}
+			}
+			
 			echo '<a href="settings.php?action">Accept</a>';
 
 		} else {
@@ -59,7 +95,6 @@
 			$query_sg = $con->query("SELECT * FROM pl_settings WHERE property='showgroups'");
             $query_JP = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
             $query_lang = $con->query("SELECT * FROM pl_settings WHERE property='lang'");
-            $query_langs = $con->query("SELECT * FROM pl_langs");
 
 			//Arrays
 			$row_centername = mysqli_fetch_array($query_centername);
@@ -81,20 +116,20 @@
 			echo '
             <div class="admin_header">
                 <div class="admin_hmenu">
-                    <a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="settings.php?action">'._("Settings").'</a></h2>
+                    <a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="settings.php?action">'.$lang["settings"].'</a></h2>
 			    </div>
             </div>
             	<center>
-					<form action="settings.php?action=save" method="post">			
+					<form action="settings.php?action=save" method="post" enctype="multipart/form-data">			
 						<div class="contenedor">
 
 
 						<nav class="ui_tabs">
                             <ul>
-                                <li class="active"><a href="#tab_01">'._("Basic").'</a></li>
-                                <li><a href="#tab_02">'._("Privacy").'</a></li>
-                                <li><a href="#tab_03">'._("Advanced").'</a></li>
-                                <li><a href="#tab_04">'._("About").'</a></li>
+                                <li class="active"><a href="#tab_01">'.$lang["basic"].'</a></li>
+                                <li><a href="#tab_02">'.$lang["privacy"].'</a></li>
+                                <li><a href="#tab_03">'.$lang["advanced"].'</a></li>
+                                <li><a href="#tab_04">'.$lang["about"].'</a></li>
                             </ul>        
                         </nav>
 
@@ -103,10 +138,10 @@
                             <form class="ui_form">
                                 <div id="tab_01" class="ui_tab_content">
                                     <table>
-                                        <tr><td><label for="centername">'._("Centername").': </label></td><td><input type="text" name="centername" value="'.$centername.'"></td></tr>
-                                        <tr><td><label for="logo">'._("Logo").': </label></td><td><input type="text" name="logo" value="'.$logo.'"></td></tr>
+                                        <tr><td><label for="centername">'.$lang["centername"].': </label></td><td><input type="text" name="centername" value="'.$centername.'"></td></tr>
+                                        <tr><td><label for="logo">'.$lang["logo"].': </label></td><td><input type="text" name="logo" value="'.$logo.'"></td></tr>
                                         <tr><td></td><td><img src="'.$logo.'" alt="logo"></td></tr>
-                                        <tr><td><label for="accesspass">'._("Accesspass").': </label></td><td><input type="text" name="accesspass" value="'.$accesspass.'"></td></tr>
+                                        <tr><td><label for="accesspass">'.$lang["accesspass"].': </label></td><td><input type="text" name="accesspass" value="'.$accesspass.'"></td></tr>
                                     </table>    
                                 </div>
                                 
@@ -117,10 +152,10 @@
                                         echo '<input type="checkbox" name="showgroups">';
                                     }
                                         echo '                          
-                                            <label for="showgroups">'._("Show groups in user profile").'</label>
+                                            <label for="showgroups">'.$lang["show_groups_prf"].'</label>
                                         </div>
                                 <div id="tab_03" class="ui_tab_content">
-                                    <label for="JP">Join a group: </label>
+                                    <label for="JP">'.$lang["join_group"].': </label>
                                     <select name="JP">';
                                     switch($JP) {
                                         case 1:
@@ -156,12 +191,17 @@
 									<br>
 									<label for="lang">'.$lang["language"].': </label>
 									<select name="lang">';
-									while($row_langs = mysqli_fetch_array($query_langs)){
-										echo'<option value="'.$row_langs["lang"].'" ';if($lang_val == $row_langs["lang"]) echo "selected";echo' >'.$row_langs["lang"].'</option>';
-									}
-									echo'
-										
+										$fp_langs = fopen("../../src/lang/langs.json", "r");
+										$rfile_langs = fread($fp_langs, filesize("../../src/lang/langs.json"));
+										$json_langs = json_decode($rfile_langs);
+										foreach ($json_langs->{"langs"} as $index => $row_langs) {
+											echo '<option value="'.$row_langs.'"';if($lang_val == $row_langs) echo "selected";echo'>'.$row_langs.'</option>';
+										}
+										echo'
 									</select>
+									<br>
+									<label for="up_lang">'.$lang["upload_lang"].': </label>
+									<input type="file" name="up_lang">
 									
                                     </form>
                                 </div>
@@ -172,7 +212,7 @@
             				</div>
    						</div>
 
-   						<input type="submit" value="'._("Save").'">
+   						<input type="submit" value="'.$lang["save"].'">
 
    					</form>
     			</center>

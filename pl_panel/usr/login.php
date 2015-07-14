@@ -38,6 +38,9 @@
 <?php
 	session_start();
 	include('../../core.php');
+	$System = new System();
+	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+	$System->set_head();
 	if (isset($_SESSION['h'])) {
 		$user_h = $row['h'];
 		$time = date("Y-m-d H:i:s");
@@ -53,11 +56,8 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo _("Log in"); ?> | Teeach</title>
-	<?php
-		$System = new System();
-		$System->set_head();
-	?>
+	<title><?php echo $lang["log_in"]; ?> | Teeach</title>
+
 </head>
 
 <body>	
@@ -71,14 +71,14 @@
             }
         ?>	
         <div class="container">
-            <h1><?php echo _("Log in"); ?></h1>
+            <h1><?php echo $lang["log_in"]; ?></h1>
             
             <form class="login" method="POST" action="login.php?action=check" autocomplete="off">
-                <label class="username"><input type="text" id="usuario" name="usuario" placeholder="<?php echo _("Username");?>" required></label>
-                <label class="password"><input type="password" id="pass" name="pass" placeholder="<?php echo _("Password");?>"  /></label> 
-                <input type="submit" value="<?php echo _("Log in");?>" />
+                <label class="username"><input type="text" id="usuario" name="usuario" placeholder="<?php echo $lang["username"];?>" required></label>
+                <label class="password"><input type="password" id="pass" name="pass" placeholder="<?php echo $lang["password"];?>"  /></label>
+                <input type="submit" value="<?php echo $lang["log_in"];?>" />
             </form>
-            <a class="extra_link" href="register.php"><?php echo _("Create acount &raquo;"); ?></a>
+            <a class="extra_link" href="register.php"><?php echo $lang["create_account"]."&raquo"; ?></a>
         </div>
     </div>
 

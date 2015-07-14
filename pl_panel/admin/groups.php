@@ -5,13 +5,15 @@
 	$System = new System();
 	$System->check_admin();
 	$con = $System->conDB("../../config.json");
+
+	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo _("Groups"); ?> | Teeach</title>
+	<title><?php echo $lang["groups"]; ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
 </head>
@@ -24,8 +26,8 @@
 				<a href="groups.php?action"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>
 				<table style="padding: 20px;">
 				<form name="cg" method="post" action="groups.php?action=success" autocomplete="off">
-					<tr><td><label for="name">'._("Group name: ").'</label></td><td><input type="text" name="name" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
-					<tr><td><label for="category">'._("Category: ").'</label></td><td>
+					<tr><td><label for="name">'.$lang["group_name"].'</label></td><td><input type="text" name="name" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
+					<tr><td><label for="category">'.$lang["category"].'</label></td><td>
 						<select name="category">
 						';
 						$query = $con->query("SELECT * FROM pl_categories")or die("Query error!");
@@ -53,13 +55,13 @@
 			$category_h = $row1['h'];
 
     		$query = $con->query("INSERT INTO pl_groups(name,h,category_h) VALUES ('$name','$h','$category_h')")or die("Query error!");
-    		echo "<p>¡Perfecto!</p><a href='groups.php?action'>Accept</a>";
+    		echo "<p>¡Perfecto!</p><a href='groups.php?action'>".$lang['accept']."</a>";
     	} elseif($action == "edit") {
 
     		$h = $_GET['h'];
 
     		$System->conDB("../../config.json");
-    		$query = $con->query("SELECT * FROM pl_groups WHERE h='$h'");
+    		$query = $con->query("SELECT * FROM pl_groups WHERE h='$h'")or die("Query error!");
     		$row = mysqli_fetch_array($query);
 
     		$groupname = $row['name'];
@@ -135,13 +137,13 @@
 
 				<div class="admin_hmenu">
 					<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>				
-					<h2><a href="index.php">Admin</a> >> <a href="users.php?action">'._("Groups").'</a></h2>
+					<h2><a href="index.php">Admin</a> >> <a href="users.php?action">'.$lang["groups"].'</a></h2>
                 </div>
 
 			<div class="submenu">
 				<ul>
-					<a href="groups.php?action=new"><li>'._("New").'</li></a>
-					<a href="categories.php?action"><li>'._("Categories").'</li></a>
+					<a href="groups.php?action=new"><li>'.$lang["new"].'</li></a>
+					<a href="categories.php?action"><li>'.$lang["categories"].'</li></a>
 				';
 
 			$query_setting = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
@@ -149,7 +151,7 @@
 			$JP = $row_setting['value'];
 
 			if($JP == 2) {
-				echo '<a href="groups.php?action=requests"><li>'._("Requests").'</li></a>';
+				echo '<a href="groups.php?action=requests"><li>'.$lang["requests"].'</li></a>';
 			}
 
 			echo '
@@ -161,10 +163,10 @@
 					<table>
 						<thead>
 							<th>#</th>
-							<th>'._("Name").'</th>
-							<th>'._("Users").'</th>
-							<th>'._("Category").'</th>
-							<th>'._("Actions").'</th>
+							<th>'.$lang["name"].'</th>
+							<th>'.$lang["users"].'</th>
+							<th>'.$lang["category"].'</th>
+							<th>'.$lang["actions"].'</th>
 						</thead>
 						<tbody>
 		';

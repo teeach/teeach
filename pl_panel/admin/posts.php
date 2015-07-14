@@ -4,13 +4,15 @@
 
 	$System = new System();
     $System->check_admin();
+
+    $lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo _("Posts"); ?> | Teeach</title>
+	<title><?php echo $lang["posts"]; ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
 	<script type="text/javascript" src="../../ckeditor/ckeditor.js"></script>
@@ -24,14 +26,14 @@
 				<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>
 				<table style="padding: 20px;">
 				<form name="cu" method="post" action="posts.php?action=success" autocomplete="off">
-					<tr><td><label for="title">'._("Title:").'</label></td><td><input type="text" name="title" required/></td></tr>
-					<tr><td>'._("Body: ").'</td><td><textarea id="editor1" name="body" rows="6" cols="50" required></textarea></td></tr>
+					<tr><td><label for="title">'.$lang["title"].': </label></td><td><input type="text" name="title" required/></td></tr>
+					<tr><td>'.$lang["body"].'</td><td><textarea id="editor1" name="body" rows="6" cols="50" required></textarea></td></tr>
 					<tr><td></td><td><input type="submit" value="Enviar"/></td></tr>
 				</form>
 				</table>
 				
-				<script type="text/javascript">  
-                		CKEDITOR.replace( "editor1", { 
+				<script type="text/javascript">
+                		CKEDITOR.replace( "editor1", {
                 		enterMode: CKEDITOR.ENTER_BR,
                 		skin : "office2013",
                 		toolbar : [
@@ -61,15 +63,15 @@
     		$author = $_SESSION['h'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("insert into pl_posts(title,body,h,author) values('$title','$body','$h','$author')")or die("Query Error!");
-    		echo "<p>¡Perfecto!</p><a href='posts.php?action'>Aceptar</a>";
+    		$query = $con->query("INSERT INTO pl_posts(title,body,h,author) VALUES('$title','$body','$h','$author')")or die("Query Error!");
+    		echo "<p>¡Perfecto!</p><a href='posts.php?action'>".$lang['accept']."</a>";
 
     	} elseif($action == "edit") {
 
     		$h = $_GET['h'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("select * from pl_posts where h='$h'")or die("Query error!");
+    		$query = $con->query("SELECT * FROM pl_posts WHERE h='$h'")or die("Query error!");
     		$row = mysqli_fetch_array($query);
 
     		$title = $row['title'];
@@ -79,8 +81,8 @@
 				<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>
 				<table style="padding: 20px;">
 				<form name="cu" method="post" action="posts.php?action=update&h='.$h.'" autocomplete="off">
-					<tr><td><label for="title">'._("Title:").'</label></td><td><input type="text" name="title" value="'.$title.'" required/></td></tr>
-					<tr><td>'._("Body: ").'</td><td><textarea name="body" id="editor1" rows="6" cols="50" required>'.$body.'</textarea></td></tr>
+					<tr><td><label for="title">'.$lang["title"].': </label></td><td><input type="text" name="title" value="'.$title.'" required/></td></tr>
+					<tr><td>'.$lang["body"].': </td><td><textarea name="body" id="editor1" rows="6" cols="50" required>'.$body.'</textarea></td></tr>
 					<tr><td></td><td><input type="submit" value="Guardar"/></td></tr>
 				</form>
 				</table>
@@ -115,7 +117,7 @@
     		$body = $_POST['body'];
 
     		$System->conDB("../../config.json");
-    		$query = $con->query("update pl_posts set title='$title',body='$body' where h='$h'")or die("Query error!");
+    		$query = $con->query("UPDATE pl_posts SET title='$title',body='$body' WHERE h='$h'")or die("Query error!");
 
     		echo "Actualizado. <a href='posts.php?action'>Aceptar</a>";
 
@@ -124,7 +126,7 @@
     		$h = $_GET['h'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("delete from pl_posts where h='$h'")or die("Query error!");
+    		$query = $con->query("DELETE FROM pl_posts WHERE h='$h'")or die("Query error!");
 
     		echo "Eliminado. <a href='posts.php?action'>Aceptar</a>";
 
@@ -134,11 +136,11 @@
 			<div class="admin_header">
 				<div class="admin_hmenu">
 					<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a>				
-					<h2><a href="index.php">Admin</a> >> <a href="posts.php?action">'._("Posts").'</a></h2>
+					<h2><a href="index.php">Admin</a> >> <a href="posts.php?action">'.$lang["posts"].'</a></h2>
                 </div>
 				<div class="submenu">
 					<ul>
-                    	<a href="posts.php?action=new"><li><img src="../../src/ico/add.png">'._("New").'</li></a>
+                    	<a href="posts.php?action=new"><li><img src="../../src/ico/add.png">'.$lang["new"].'</li></a>
                 	</ul>
                 </div>
             </div>
@@ -146,14 +148,14 @@
 				<table class="ui_table">
 					<thead>
 						<th>#</th>
-						<th>'._("Title").'</th>
-						<th>'._("Body").'</th>
-						<th>'._("Actions").'</th>
+						<th>'.$lang["title"].'</th>
+						<th>'.$lang["body"].'</th>
+						<th>'.$lang["actions"].'</th>
 					</thead>
 					<tbody>
 		';
 				$con = $System->conDB("../../config.json");
-				$query = $con->query("select * from pl_posts");
+				$query = $con->query("SELECT * FROM pl_posts");
 				while($row = mysqli_fetch_array($query)) {
 					echo "
 					<tr>

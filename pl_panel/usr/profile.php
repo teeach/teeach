@@ -11,6 +11,8 @@
 	$con = $System->conDB("../../config.json");
 	$User = $System->get_user_by_id($_SESSION['h'], $con);
 
+	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+
 	$query = $con->query("SELECT * FROM pl_users WHERE h='$get_usr'")or die("Query error 1!");
 	$row = mysqli_fetch_array($query);
 	$profile_name = $row['name'];
@@ -35,7 +37,7 @@
 		$row = mysqli_fetch_array($query);
 		$centername = $row['value'];
 		$System->set_header($centername);
-		$System->set_usr_menu($User->h,$User->privilege);
+		$System->set_usr_menu($User->h,$User->privilege,$lang);
 	?>
 
 	<table class="profile_table">
@@ -52,7 +54,7 @@
 			<td><?php echo "<h1>".$profile_name."</h1>";
 			echo $profile_surname; 
 			if ($User->h==$get_usr) {
-				echo "<br><a href='editprofile.php?action'>Editar mi información</a>";
+				echo "<br><a href='editprofile.php?action'>".$lang['edit_my_info']."</a>";
 			}?></td>
 
 		</tr>
@@ -68,7 +70,7 @@
 			echo '
 				<table>
 					<thead>
-						<th>Mis grupos</th>
+						<th>'.$lang["your_groups"].'</th>
 					</thead>
 					<tbody>
 			';

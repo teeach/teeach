@@ -1,0 +1,76 @@
+/*===============================================================
+ADMIN PANEL
+===============================================================*/
+
+.admin_panel {
+    display: inline-block;
+    padding: 20px 80px;
+    width: 100%;
+}
+
+.admin_panel_item {
+    float: left;
+    padding: 0px 10px;
+    text-align: center;
+    width: 25%;
+}
+
+.admin_panel_item a {
+    border: 1px solid #DEDEDE;
+    color: #320;
+    display: inline-block;
+    padding: 10px 30px 30px 30px;
+    width: 100%;
+}
+
+.admin_panel_item a:hover {
+    background: #DEDEDE;
+    text-decoration: none;
+}
+
+.admin_panel_item i {   
+    font-size: 32px;
+    padding: 20px;
+
+}
+
+.admin_panel_item h2 {
+    font-size: 32px;
+}
+
+/* Breadcrumbs
+   =========================================================== */
+
+.ui_breadcrumbs {
+    
+}
+
+.ui_breadcrumbs li {
+    display: inline-block;
+    padding: 18px 0px
+}
+
+.ui_breadcrumbs li:before {
+    content: "\f105";
+    font-family: FontAwesome;
+    font-size: 20px;
+}
+
+.ui_breadcrumbs li a {
+    color: #320;
+    display: inline-block;
+    font-size: 20px;
+    padding: 2px 15px;    
+}
+
+
+
+.goto_user_panel {
+    color: #332200;
+    float: right;
+    padding: 22px 0px
+}
+
+.goto_user_panel:hover {
+    text-decoration: underline;
+}
