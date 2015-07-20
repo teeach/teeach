@@ -38,7 +38,7 @@
 			echo "
                 <footer>
                     ©2015 Teeach<br>
-                    Pre-Alpha
+                    Early development version
                 </footer>";
 		}
 
@@ -125,7 +125,7 @@
                             echo '                                
                             </ul>
                          </li>
-                        <!--<li><a href="diary.php">'.$lang["diary"].'</a></li>-->
+                        <li><a href="diary.php">'.$lang["diary"].'</a></li>
                         <li><a href="messages.php">'.$lang["messages"].'</a></li>
                     
             ';
@@ -194,7 +194,7 @@
 
         function rand_string( $length ) {
             $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-			$str = "";
+
             $size = strlen( $chars );
             for( $i = 0; $i < $length; $i++ ) {
                 $str .= $chars[ rand( 0, $size - 1 ) ];

@@ -21,7 +21,7 @@
 	<meta charset="UTF-8">
 	<title><?php echo $lang["messages"];?> | Teeach </title>
 	<link rel="stylesheet" href="../../src/css/main.css">
-	<script src="../../src/ckeditor/ckeditor.js"></script>
+	<script src="../../ckeditor/ckeditor.js"></script>
 
 
 <style>
@@ -111,10 +111,6 @@
 			$row = mysqli_fetch_array($query);
 
 			$to = $row['h'];
-
-			if ($to == "") {
-				die($lang["user_not_exist"]);
-			}
 
 			$subject = $_POST['subject'];
 			$body = $_POST['body'];

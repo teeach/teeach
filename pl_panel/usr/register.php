@@ -11,7 +11,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo $lang["register"]; ?> | Teeach</title>
+	<title><?php echo _("Register"); ?> | Teeach</title>
 	<?php $System->set_head(); ?>
 </head>
 <body>
@@ -30,11 +30,11 @@
 		$accesspass = $row['value'];
 
 		if ($password != $rpassword) {
-			die($lang['passwords_not_match']."<br><a href='register.php'>".$lang['accept']."</a>");
+			die("The passwords don't match.<br><a href='register.php'>Accept</a>");
 		}
 
 		if ($accesspass_form != $accesspass) {
-			die($lang['incorrect_accesspass']."<br><a href='register.php'>".$lang['accept']."</a>");
+			die("Accesspass incorrect.<br><a href='register.php'>Accept</a>");
 		}
 
 		require '../../PasswordHash.php';
@@ -51,9 +51,9 @@
 		$centername = $row2['value'];
 
 		echo '
-			<h1>'.$lang["hi"]." ".$username.'</h1>
-			<p>'.$lang["welcome_teeach_from"]." ".$centername.'</p>
-			<a href="login.php">'.$lang["log_in"].'</a>
+			<h1>'._("Hi")." ".$username.'</h1>
+			<p>'._("Welcome to Teeach from")." ".$centername.'</p>
+			<a href="login.php">'._("Log in").'</a>
 		';
 
 	} else {
@@ -75,11 +75,11 @@
 		';
 
 		if ($accesspass != "") {
-			echo '<tr><td><label for="accesspass">'.$lang["accesspass"].': </label></td><td><input type="text" name="accesspass"></td></tr>';
+			echo '<tr><td><label for="accesspass">Accesspass: </label></td><td><input type="text" name="accesspass"></td></tr>';
 		}
 
 		echo '
-						<tr><td></td><td><input type="submit" value="'.$lang["register"].'"></td></tr>
+						<tr><td></td><td><input type="submit" value="'._("Register").'"></td></tr>
 					</table>
 				</form>
 			</div>

@@ -117,7 +117,7 @@
 				//~Group Data
 				$groupname = $row_group['name'];
 
-				echo "<a href='groups.php?action=accept_request&request_id=".$request_id."'><li>".$name." ".$surname." ".$lang['wants_to_join']." ".$groupname.". ".$lang['click_here_accept']."</li></a>";
+				echo "<a href='groups.php?action=accept_request&request_id=".$request_id."'><li>".$name." ".$surname." wants join to ".$groupname.". Click here to accept this request.</li></a>";
 			}
 
 			echo "<br><a href='groups.php?action'>Back</a>";
