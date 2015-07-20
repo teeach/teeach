@@ -14,10 +14,10 @@
 		$dbserver = $json->{'dbserver'};
 		$dbuser = $json->{'dbuser'};
 		$dbpass = $json->{'dbpass'};
-		$database = $json->{'database'};	
+		$database = $json->{'database'};
 
 		$con = mysqli_connect($dbserver, $dbuser, $dbpass, $database);
-		$query = $con->query("select * from pl_users where username='$usuario'");
+		$query = $con->query("SELECT * FROM pl_users WHERE username='$usuario'");
 		$row = mysqli_fetch_array($query);
 			$userid = $row['id'];
 			$pass_db = $row['pass'];
@@ -66,7 +66,7 @@
             if(isset($_GET['err'])) {
                 $err = $_GET['err'];
                 if($err == "autf") {
-                    echo '<div class="notification"><p>'._("Username or password are incorrect.").'</p></div>';
+                    echo '<div class="notification"><p>'.$lang["username_password_incorrect"].'</p></div>';
                 }
             }
         ?>	

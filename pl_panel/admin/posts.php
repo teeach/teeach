@@ -15,7 +15,7 @@
 	<title><?php echo $lang["posts"]; ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
-	<script type="text/javascript" src="../../ckeditor/ckeditor.js"></script>
+	<script type="text/javascript" src="../../src/ckeditor/ckeditor.js"></script>
 </head>
 <body>
 

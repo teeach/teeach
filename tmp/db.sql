@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS `pl_groupuser` (
 
 CREATE TABLE IF NOT EXISTS `pl_messages` (
   `id` int(11) NOT NULL,
-  `from_h` int(11) NOT NULL,
-  `to_h` int(11) NOT NULL,
+  `from_h` varchar(99) CHARACTER SET utf8 NOT NULL,
+  `to_h` varchar(99) CHARACTER SET utf8 NOT NULL,
   `subject` varchar(99) CHARACTER SET utf8 NOT NULL,
   `body` longtext CHARACTER SET utf8 NOT NULL,
   `h` varchar(99) CHARACTER SET utf8 NOT NULL,
@@ -83,7 +83,8 @@ CREATE TABLE IF NOT EXISTS `pl_works` (
   `creation_date` datetime NOT NULL,
   `group_h` varchar(99) CHARACTER SET utf8 NOT NULL,
   `unit_h` varchar(99) CHARACTER SET utf8 NOT NULL,
-  `status` varchar(25) CHARACTER SET utf8 NOT NULL
+  `status` varchar(25) CHARACTER SET utf8 NOT NULL,
+  'attachment' text CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `pl_categories`

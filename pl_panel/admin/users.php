@@ -176,7 +176,7 @@
                 	</ul>
                 </div>
             </div>
-            <div class="ui_full_width">
+            <center>
                 <table class="ui_table">
                     <thead>
                         <th class="select"><input class="select_all" type="checkbox" /></th>
@@ -237,7 +237,7 @@
 			echo "
 		</tbody>
 	</table>
-	</div>";
+	</center>";
 		}
 	?>
 </body>

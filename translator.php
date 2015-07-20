@@ -128,6 +128,8 @@ if($action == "save"){
 						<table>
 						<tr><td><input type="text" class="new_val"></td><td><div style="padding:5px;border-radius:5px;width:35px;height:20px;background:gray;" class="add_val">Add</div></td></tr>
 						</table>
+						Subir a sevidor <input type="checkbox" name="upload" checked>
+						<br>
 						<input type="submit" value="Save">
 						</form>
 					';
