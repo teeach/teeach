@@ -70,6 +70,7 @@
     "administration": "Administraci\u00f3n",
     "return_usr_panel": "Volver al panel de usuario",
     "hello": "Hola",
+    "hi":"Hola",
     "next": "Siguiente",
     "php_version_incompatible": "\u00a1Qu\u00e9 desgracia! Tu versi\u00f3n de PHP no es compatible. Por favor, actualiza PHP 5.4 por lo menos (recomendamos 5.6)",
     "thanks_teeach": "Gracias por elegir Teeach.",
@@ -102,5 +103,17 @@
     "initial_settings":"Ajustes iniciales",
     "your_center":"Tu centro",
     "your_account":"Tu cuenta",
-    "new_account":"Nueva cuenta"
+    "new_account":"Nueva cuenta",
+    "already_group":"Ya perteneces a ese grupo o ya has enviado una petición.",
+    "not_permission":"No tienes permiso para acceder aquí.",
+    "wants_to_join":"quiere unirse a",
+    "click_here_accept":"Haz clic aquí para aceptar la petición.",
+    "attachments_files":"Archivos adjuntos",
+    "add_attachment":"Añadir archivo",
+    "user_not_exist":"Ese usuario no existe.",
+    "incorrect_accesspass":"Contraseña de acceso incorrecta.",
+    "passwords_not_match":"Las contraseñas no coinciden.",
+    "welcome_teeach_from":"Bienvenido al Teeach de",
+    "register":"Registrarse",
+    "username_password_incorrect":"Usuario o contraseña incorrectos."
 }

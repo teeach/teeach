@@ -323,8 +323,13 @@ header a:hover {
     font-size: 13px;
 }
 
-/* User Menu
+/* Posts
    =========================================================== */
+
+#posts h2 {
+    font-size: 2.5rem;
+}
+
 #admin_menu {
     padding: 10px;
 }
@@ -814,6 +819,19 @@ TRANSITIONS
 
 .units a:hover {
     text-decoration: none;
+}
+
+.add_attachments {
+    cursor: pointer;
+    padding: 10px 30px;
+    background-color: #fff;
+    border: 1px solid #320;
+    border-radius: 2px;
+    transition: all 0.2s ease;
+}
+
+.add_attachments:hover {
+    background-color: #eee;
 }
 
 

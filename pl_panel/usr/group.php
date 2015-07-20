@@ -24,7 +24,7 @@
 	<?php $System->set_head(); ?>
 	<title><?php echo $lang["groups"]; ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css">
-	<script src="../../ckeditor/ckeditor.js"></script>
+	<script src="../../src/ckeditor/ckeditor.js"></script>
 	<script>
 		//Popups
 		function open_popup() {
@@ -40,7 +40,7 @@
 				<div id="dialog" title="'.$lang["new_unit"].'" style="display:none">
 					<form method="POST" action="group.php?action=save_unit&h='.@$_GET['h'].'">
 						<label for="unit">'.$lang["name"].': </label><input type="text" name="unit"><br>
-						<input type="submit" value="Enviar">
+						<input type="submit" value="'.$lang["save"].'">
 					</form>
 				</div>
 			';
@@ -118,6 +118,13 @@
 			$gh = $_GET['group'];
 			$user_h = $User->h;
 
+			$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$user_h'")or die("Query error!");
+			while ($row = mysqli_fetch_array($query)) {
+				if($gh == $row['group_h']) {
+					die($lang["already_group"]." <a href='index.php'>".$lang["accept"]."</a>");
+				}
+			}
+
 			//Check Settings
 			$query_settings = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
 			$row_settings = mysqli_fetch_array($query_settings);
@@ -151,6 +158,7 @@
 			$work_name = $row['name'];
 			$work_desc = $row['description'];
 			$work_type = $row['type'];
+			$attachment_json = $row['attachment'];
 
 			echo '
 				<div class="ui_full_width">
@@ -175,11 +183,18 @@
 
 			}
 			
-			
-                		
+			$attachments = json_decode($attachment_json);
+            
             echo '    	
             	</div>
 					'.$work_desc.'
+            	</div>
+            
+            	<div>';
+            	foreach($attachments as $attachment){
+					echo'<a href="../../'.$attachment->{"path"}.'">'.$attachment->{"name"}.'</a><br>';
+				}
+				echo'
             	</div>
 			';
 
@@ -214,6 +229,14 @@
 
 		} elseif(@$_GET['action'] == "new_work") {
 
+			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query error!");
+			$row_status = mysqli_fetch_array($query_status);
+			$status = $row_status['status'];
+			
+			if($status != "leader") {
+				die($lang["not_permission"]." <a href='group.php?h=".$h."&page=index'>".$lang['accept']."</a>");
+			}
+
 			//Group Hash
 			$gh = $_GET['h'];
 			$unit_h = $_GET['unit'];
@@ -225,9 +248,9 @@
 			echo '
 			<div class="ui_full_width">
 			<div class="ui_head ui_head_width_actions">
-				<h2>'.$lang["new_work_in"].$unit_name.'</h2>
+				<h2>'.$lang["new_work_in"].' '.$unit_name.'</h2>
 			</div>
-			<form action="group.php?action=save_work&h='.$gh.'&unit='.$unit_h.'" method="POST">
+			<form action="group.php?action=save_work&h='.$gh.'&unit='.$unit_h.'" method="POST" enctype="multipart/form-data">
 				<table>
 					<tr><td><label for="workname">'.$lang["workname"].'</label></td><td><input type="text" name="workname"></td></tr>
 					<tr><td><label for="type">'.$lang["type"].'</label></td><td>
@@ -239,8 +262,10 @@
 					</td></tr>
 					<tr><td><label for="visible">'.$lang["visible"].'</label></td><td><input type="checkbox" name="visible" checked="true"></td></tr>
 					<tr><td></td><td><textarea cols="80" id="editor1" name="desc" rows="10"></textarea></td></tr>
-					<tr><td></td><td><input type="submit" value='.$lang["accept"].'></td></tr>
-				</table>
+					<tr><td>'.$lang["attachments_files"].'</td><td class="attachments"></td><td></td></tr>
+					<tr><td><div class="add_attachments">'.$lang["add_attachment"].'</div></td></tr>
+					<tr><td></td><td><input type="submit" value='.$lang["save"].'></td></tr>
+					</table>
 			</form>
 			</div>
 			
@@ -265,6 +290,17 @@
                 ]
                 });      
         </script>
+        
+        <script>
+		var attachments = 0;
+		
+		$( ".add_attachments" ).click(function() {
+			$( ".attachments" ).append("<input type=\"file\" name=\""+attachments+"\"><br>" );
+			attachments += 1;
+		});
+        
+        
+        </script>
 			';
 
 		} elseif(@$_GET['action'] == "save_work") {
@@ -288,9 +324,51 @@
 			$h = substr( md5(microtime()), 1, 18);
 			$date = date("Y-m-d H:i:s");
 
-			$query = $con->query("INSERT INTO pl_works(name,type,h,creation_date,description,unit_h,status) VALUES('$workname',$type,'$h','$date','$desc','$unit_h','$status')")or die("Query error!");
+			$upload_error = 0;
 
-			echo '<a href="group.php?h='.$gh.'&page=index">'.$lang["accept"].'</a>';
+			$attachments = [];
+
+			foreach($_FILES as $key=>$file){
+				$target_dir = "uploads/";
+				$info = new SplFileInfo($file["name"]);
+				$extension = $info->getExtension();
+				$target_file = $target_dir . $System->rand_string(10).'.'.$extension;
+				
+				if (move_uploaded_file($file["tmp_name"], '../../'.$target_file)) {
+					$file_data = [];
+					$file_data["path"] = $target_file;
+					$file_data["name"] = $file["name"];
+					$attachments[] = $file_data;
+				} else {
+					$upload_error = +1;
+				}	
+			}
+			
+			$attachment_json = json_encode($attachments);
+			
+			//~ echo $attachment_json;
+			
+			
+			if ($upload_error == 0) {
+				$query = $con->query("INSERT INTO pl_works(name,type,h,creation_date,description,unit_h,status,attachment) VALUES('$workname',$type,'$h','$date','$desc','$unit_h','$status','$attachment_json')")or die("Query error!");
+				echo '<a href="group.php?h='.$gh.'&page=index">'.$lang["accept"].'</a>';
+			}else {
+				echo ''.$lang["upload_error"].' <a href="group.php?h='.$gh.'&page=index">'.$lang["return"].'</a>';
+			}	
+
+			//~ if($_FILES["attachment"]["size"] != 0){
+				//~ $target_dir = "uploads/";
+				//~ $info = new SplFileInfo($_FILES["attachment"]["name"]);
+				//~ $extension = $info->getExtension();
+				//~ $target_file = $target_dir . $System->rand_string(10).'.'.$extension;
+				//~ 
+				//~ if (move_uploaded_file($_FILES["attachment"]["tmp_name"], '../../'.$target_file)) {
+					//~ $query = $con->query("INSERT INTO pl_works(name,type,h,creation_date,description,unit_h,status,attachment) VALUES('$workname',$type,'$h','$date','$desc','$unit_h','$status','$target_file')")or die("Query error!");
+					//~ echo '<a href="group.php?h='.$gh.'&page=index">'.$lang["accept"].'</a>';
+				//~ } else {
+					//~ echo ''.$lang["upload_error"].' <a href="group.php?h='.$gh.'&page=index">'.$lang["return"].'</a>';
+				//~ }
+			//~ }
 
 		} elseif(@$_GET['action'] == "save_unit") {
 
@@ -302,7 +380,13 @@
 
 			echo "<a href='group.php?h=".$gh."&page=index'>".$lang['accept']."</a>";
 
+		} elseif(@$_GET['action'] == "accept_request") {
 
+			$request_id = $_GET['request_id'];
+
+			$query = $con->query("UPDATE pl_groupuser SET status='active' WHERE id=$request_id")or die("Query error!");
+
+			echo "<a href='index.php'>Accept</a>";
 
 		} elseif(@$_GET['page'] == "index") {
 
@@ -311,13 +395,10 @@
 			$row = mysqli_fetch_array($query);
 			$groupname = $row['name'];
 
-			$privilege = $User->privilege;
-
-			if ($privilege >= 2) {
-				echo '
-					
-				';
-			}
+			//USER STATUS
+			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$gh' AND user_h='$User->h'")or die("Query error!");
+			$row_status = mysqli_fetch_array($query_status);
+			$status = $row_status['status'];
 
 				echo '				
 					<div class="ui_full_width">
@@ -325,10 +406,10 @@
                 <h2><i class="fa fa-users"></i> '.$groupname.'</h2>';
 
 
-                if ($privilege >= 2) {  
+                if ($status == "leader") {  
               		echo '
                 	<div class="ui_actions">
-                		<a href="group.php?action=new_work&h='.$gh.'"><button class="ui_action" class="ui_tooltip" title="'.$lang["new_work"].'"><i class="fa fa-plus"></i></button></a>
+                		<a href="#"><button class="ui_action" class="ui_tooltip" title="'.$lang["new_work"].'"><i class="fa fa-plus"></i></button></a>
                 	</div>
                 	';
             	}
@@ -338,7 +419,13 @@
                 <nav class="ui_vertical_nav">
                     <ul>
                         <li class="active"><a href="group.php?h='.$gh.'&page=index">'.$lang["works"].'</a></li>
-                        <li><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>
+                        <li><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>';
+
+                        if ($status == "leader") {
+                        	echo '<li><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].'</a></li>';
+                        }
+
+                echo '
                     </ul>
                 </nav>                            
             	</div>
@@ -368,16 +455,19 @@
 					echo '<a href="group.php?action=view&h='.$work_h.'"><li class="work">'.$work_name.'</li></a>';
 				}
 
-				echo '
-					<a href="group.php?action=new_work&h='.$h.'&unit='.$unit_h.'"><li class="new_work">'._("New Work").'</li></a>
-				</ul>';
+				if ($status == "leader") {
+					echo '
+						<a href="group.php?action=new_work&h='.$h.'&unit='.$unit_h.'"><li class="new_work">'._("New Work").'</li></a>';	
+				}
+				echo '</ul>';				
 			}
 
-			echo '
-				<a onclick="open_popup()"><li class="new_unit">'.$lang["new_unit"].'</li></a>
-			</ul>';
+			if ($status == "leader") {
+				echo '
+					<a onclick="open_popup()"><li class="new_unit">'.$lang["new_unit"].'</li></a>';
+			}
 
-			
+			echo '</ul>';
 
 		} elseif(@$_GET['page'] == "users") {
 
@@ -405,7 +495,11 @@
                 <nav class="ui_vertical_nav">
                     <ul>
                         <li><a href="group.php?h='.$gh.'&page=index">'.$lang["works"].'</a></li>
-                        <li class="active"><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>
+                        <li class="active"><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>';
+                        if ($status == "leader") {
+                        	echo '<li><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].'</a></li>';
+                        }
+                    echo '
                     </ul>
                 </nav>
             </div>
@@ -455,6 +549,64 @@
 				</tbody>
 				</table>
 			';
+		} elseif(@$_GET['page'] == "requests") {
+
+			$gh = $_GET['h'];
+
+			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query error!");
+			$row_status = mysqli_fetch_array($query_status);
+			$status = $row_status['status'];
+
+			$query1 = $con->query("SELECT * FROM pl_groups WHERE h='$gh'")or die("Query error!");
+			$row1 = mysqli_fetch_array($query1);
+			$groupname = $row1['name'];
+
+			if($status != "leader") {
+				die($lang["not_permission"]." <a href='group.php?h=".$h."&page=index'>".$lang['accept']."</a>");
+			}
+
+			echo '
+				<div class="ui_full_width">
+            		<div class="ui_head ui_head_width_actions">
+                		<h2><i class="fa fa-users"></i> '.$groupname.'</h2>
+            		</div>
+            		<div class="ui_sidebar left">
+                		<nav class="ui_vertical_nav">
+                    		<ul>
+                        		<li><a href="group.php?h='.$gh.'&page=index">'.$lang["works"].'</a></li>
+                        		<li><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>
+                        		<li class="active"><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].'</a></li>
+                    		</ul>
+                		</nav>
+            		</div>            
+            		<div class="ui_width_sidebar right">
+			';
+
+			$query = $con->query("SELECT * FROM pl_groupuser WHERE status='waiting'")or die("Query error!");
+			while ($row = mysqli_fetch_array($query)) {
+
+				$group_h = $row['group_h'];
+				$user_h = $row['user_h'];
+				$request_id = $row['id'];
+
+				$query_group = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query error!");
+				$query_user = $con->query("SELECT * FROM pl_users WHERE h='$user_h'")or die("Query error!");
+
+				$row_group = mysqli_fetch_array($query_group);
+				$row_user = mysqli_fetch_array($query_user);
+
+				//~User Data
+				$name = $row_user['name'];
+				$surname = $row_user['surname'];
+
+				//~Group Data
+				$groupname = $row_group['name'];
+
+				echo "<a href='group.php?action=accept_request&request_id=".$request_id."'><li>".$name." ".$surname." ".$lang['wants_to_join']." ".$groupname.". ".$lang['click_here_accept']."</li></a>";
+			}
+
+			echo '</div></div>';
+
 		}
 		
 	?>		

@@ -207,7 +207,7 @@
                                 </div>
                                 <div id="tab_04" class="ui_tab_content">
                                 <span style="font-weight: bold">Teeach</span><br>
-                                <p>Early Development Version</p><br>
+                                <p>Version 0.1 Pre-Alpha</p><br>
                                 '._("Server time: ").' '.date("d-m-Y H:i:s").'            				
             				</div>
    						</div>

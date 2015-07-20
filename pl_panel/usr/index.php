@@ -17,7 +17,7 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo "Hola, $User->name | Teeach"; ?></title>
+	<title><?php echo "Hi, $User->name | Teeach"; ?></title>
 	<link rel="stylesheet" href="../../src/css/index.css">
 	<?php
 		$System->set_head();
@@ -37,11 +37,9 @@
 	$System->set_usr_menu($User->h,$User->privilege,$lang);
 
 		echo "
-		<div class='ui_full_width'>
-			<div class='ui_sidebar left'>
-				<section id='posts'>
-					<h1>".$lang['posts']."</h1><br><br>
-				";
+			<section id='posts'>
+				<h1>".$lang['posts']."</h1><br><br>
+			";
 
 		$query = $con->query("SELECT * FROM pl_posts ORDER BY id DESC");
 		while($row = mysqli_fetch_array($query)) {
@@ -73,7 +71,7 @@
 		";
 	?>
 	<div class="ui_width_sidebar right">
-	<section id="index_groups">
+	<!--<section id="index_groups">
 		<div class="sectiontitle">
 			
 			<?php echo $lang["groups"]; ?>
@@ -84,12 +82,14 @@
 				$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query 1 Error!");
 				while ($row = mysqli_fetch_array($query)) {
 					$group_h = $row['group_h'];
-					$query2 = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query 2 Error!");
-					$row2 = mysqli_fetch_array($query2);
-					$groupname = $row2['name'];
-					//~ $grouph = $row2['h'];
-
-					echo '<li><a href="group.php?h='.$group_h.'&page=index">'.$groupname.'</a></li>';
+					$status = $row['status'];					
+					if($status != "waiting") {
+						$query2 = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query 2 Error!");
+						$row2 = mysqli_fetch_array($query2);
+						$groupname = $row2['name'];
+						//~ $grouph = $row2['h'];
+						echo '<li><a href="group.php?h='.$group_h.'&page=index">'.$groupname.'</a></li>';
+					}					
 				}
 			?>
 		</ul>
@@ -103,7 +103,7 @@
 			<a href="group.php?action=join"><button>'.$lang["join"].'</button></a>
 		';
 		?>
-	</section>
+	</section>-->
 	</div>
 	</div>
 	<?php echo $System->set_footer(); ?>
