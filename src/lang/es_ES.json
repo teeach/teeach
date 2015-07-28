@@ -115,5 +115,6 @@
     "passwords_not_match":"Las contraseñas no coinciden.",
     "welcome_teeach_from":"Bienvenido al Teeach de",
     "register":"Registrarse",
-    "username_password_incorrect":"Usuario o contraseña incorrectos."
+    "username_password_incorrect":"Usuario o contraseña incorrectos.",
+    "reply":"Responder"
 }

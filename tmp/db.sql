@@ -66,7 +66,6 @@ CREATE TABLE IF NOT EXISTS `pl_users` (
   `lang` varchar(5) CHARACTER SET utf8 NOT NULL,
   `photo` text CHARACTER SET utf8 NOT NULL,
   `birthday` date NOT NULL,
-  `home` char(29) CHARACTER SET utf8 NOT NULL,
   `pass` char(99) CHARACTER SET utf8 NOT NULL,
   `privilege` int(2) NOT NULL,
   `creation_date` datetime NOT NULL,

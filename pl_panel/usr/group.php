@@ -151,51 +151,79 @@
 		} elseif(@$_GET['action'] == "view") {
 			
 			$work_h = $_GET['h'];
+			$Work = $System->get_work_by_h($work_h, $con);
+			$attachment_json = $Work->attachment;
 
-			$query = $con->query("SELECT * FROM pl_works WHERE h='$work_h'")or die("Query error!");
-			$row = mysqli_fetch_array($query);
-
-			$work_name = $row['name'];
-			$work_desc = $row['description'];
-			$work_type = $row['type'];
-			$attachment_json = $row['attachment'];
+			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query error!");
+			$row_status = mysqli_fetch_array($query_status);
+			$status = $row_status['status'];
 
 			echo '
 				<div class="ui_full_width">
             		<div class="ui_head ui_head_width_actions">';
 
-			switch($work_type) {
+			switch($Work->type) {
 				case 1:
 					// Notes ~ Apuntes
-					echo '<h2><i class="fa fa-book"></i> '.$work_name.'</h2>';
+					echo '<h2><i class="fa fa-book"></i> '.$Work->name.'</h2>';
 					break;
 				case 2:
 					//Homework ~ Tarea
-					echo '<h2><i class="fa fa-pencil"></i> '.$work_name.'</h2>';
+					echo '<h2><i class="fa fa-pencil"></i> '.$Work->name.'</h2>';
 					break;
 				case 3:
 					//Exam ~ Examen
-					echo '<h2><i class="fa fa-pencil"></i> '.$work_name.'</h2>';
+					echo '<h2><i class="fa fa-pencil"></i> '.$Work->name.'</h2>';
 					break;
 				default:
 					//Invalid type
 					die("Invalid type. Contact to administrator.");
 
 			}
+
+			if ($status == "leader") {
+				echo '
+					<div class="ui_actions">
+                    	<a href="group.php?action=edit_work&h='.$Work->h.'"><button class="ui_action" class="ui_tooltip" title="Edit"><i class="fa fa-pencil"> '.$lang["edit"].'</i></button></a>
+            		</div>
+				';
+			}
+
+			echo '					
+				</div>
+
+				<div class="ui_sidebar left">
+                	<nav class="ui_vertical_nav">
+                    	<ul>
+                       		<li><a href="group.php?h='.$Work->group_h.'&page=index">'.$lang["works"].'</a></li>
+                       		<li><a href="group.php?h='.$Work->group_h.'&page=users">'.$lang["users"].'</a></li>';
+
+                       		if($status == "leader") {
+                       			echo '<li><a href="group.php?h='.$Work->group_h.'&page=requests">'.$lang["requests"].'</a></li>';
+                       		}
+                       		
+                       		echo '
+                    	</ul>
+                	</nav>
+            	</div>
+
+            	<div class="ui_sidebar right">
+			';
 			
 			$attachments = json_decode($attachment_json);
             
             echo '    	
             	</div>
-					'.$work_desc.'
-            	</div>
+					'.$Work->description.'
             
-            	<div>';
+            	<div>
+            	<br>';
             	foreach($attachments as $attachment){
-					echo'<a href="../../'.$attachment->{"path"}.'">'.$attachment->{"name"}.'</a><br>';
+					echo'<a class="ui_attachment" href="../../'.$attachment->{"path"}.'"><i class="fa fa-paperclip"></i> '.$attachment->{"name"}.'</a><br>';
 				}
 				echo'
             	</div>
+            </div>
 			';
 
 		} elseif(@$_GET['action'] == "add") {
@@ -350,7 +378,7 @@
 			
 			
 			if ($upload_error == 0) {
-				$query = $con->query("INSERT INTO pl_works(name,type,h,creation_date,description,unit_h,status,attachment) VALUES('$workname',$type,'$h','$date','$desc','$unit_h','$status','$attachment_json')")or die("Query error!");
+				$query = $con->query("INSERT INTO pl_works(name,type,h,creation_date,description,group_h,unit_h,status,attachment) VALUES('$workname',$type,'$h','$date','$desc','$gh','$unit_h','$status','$attachment_json')")or die("Query error!");
 				echo '<a href="group.php?h='.$gh.'&page=index">'.$lang["accept"].'</a>';
 			}else {
 				echo ''.$lang["upload_error"].' <a href="group.php?h='.$gh.'&page=index">'.$lang["return"].'</a>';
@@ -578,7 +606,7 @@
                         		<li class="active"><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].'</a></li>
                     		</ul>
                 		</nav>
-            		</div>            
+            		</div>
             		<div class="ui_width_sidebar right">
 			';
 

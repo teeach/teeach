@@ -168,10 +168,10 @@
 					$to_name = $row1['name'];
 					$to_surname = $row1['surname'];
 
-					echo'<div id="'.$h.'" class="'.$h.' message">'.$to_name.' '.$to_surname.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+					echo '<div id="'.$h.'" class="'.$h.' message">'.$to_name.' '.$to_surname.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 				}
                 
-                echo'
+                echo '
                     </div>
                 </div>
                 ';
@@ -180,16 +180,41 @@
 
 			$h = $_GET['h'];
 
-			$query = $con->query("SELECT * FROM pl_messages WHERE h='$h'")or die("Query error!");
-			$row = mysqli_fetch_array($query);
-
-			$subject = $row['subject'];
-			$body = $row['body'];
+			$Message = $System->get_message_by_h($h, $con);
 
 			echo '
-				<h1>'.$subject.'</h1>
-				<p>'.$body.'</p>
+				<div class="ui_full_width">
+					<div class="ui_head ui_head_width_actions">
+						<h2>'.$Message->subject.'</h2>
+
+						<div class="ui_actions">
+							<a href="messages.php?action=new&to='.$Message->to_h.'"><button class="ui_action" class="ui_tooltip" title="Reply"><i class="fa fa-reply"></i> '.$lang["reply"].'</button></a>
+							<a href="messages.php?action=delete&h='.$Message->h.'"><button class="ui_action" class="ui_tooltip" title="Delete"><i class="fa fa-trash"></i> '.$lang["delete"].'</button></a>
+						</div>
+					</div>
+
+					<div class="ui_sidebar left">
+                		<nav class="ui_vertical_nav">
+                    		<ul>
+                        		<li><a href="messages.php">'.$lang["received"].'</a></li>
+                        		<li><a href="messages.php?action=sent">'.$lang["sent"].'</a></li>
+                    		</ul>
+                		</nav>                            
+            		</div>
+
+            		<div class="ui_width_sidebar right">
+						'.$Message->body.'
+            		</div>
+											
 			';
+
+		} elseif(@$_GET['action'] == "delete") {
+
+			$message_h = $_GET['h'];
+
+			$query = $con->query("DELETE FROM pl_messages WHERE h='$message_h'")or die("Query error!");
+
+			echo "Message deleted. <a href='messages.php'>Aceptar</a>";
 
 		} else {
 			echo '
@@ -229,14 +254,12 @@
 
 					$h = $row['h'];
                     
-					echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+					echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer reply"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 				}
             echo '
                 </div>
             </div>
             ';
-
-
 		}
 	?>
 <script>

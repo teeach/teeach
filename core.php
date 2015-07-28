@@ -3,21 +3,19 @@
        
        	function set_head() {
 			echo "
-				<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
 				<link rel='stylesheet' href='../../src/css/main.css'>
-				<link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
-                <link rel='stylesheet' href='path/to/font-awesome/css/font-awesome.min.css'>
+
+                <!--jQuery-->
                 <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+
+                <!--jQuery UI-->
                 <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js'></script>
-                <link rel='stylesheet' href='../../src/css/jquery-ui.theme.min.css' />
+                <link rel='stylesheet' href='../../src/js/jquery/jquery-ui.theme.css' />
+
                 <script src='../../src/js/check-all.js'></script>
+                <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
+                <link rel='stylesheet' href='path/to/font-awesome/css/font-awesome.min.css'>
 			";
-			//~ $lang = "es_ES";
-			//~ putenv('LC_ALL='.$lang);
-			//~ setlocale(LC_ALL, $lang);
-			//~ bindtextdomain("app", "../../locale");
-			//~ textdomain("app");
-			date_default_timezone_set("Europe/Madrid");
 		}
 
         function get_date() {
@@ -42,7 +40,7 @@
                 </footer>";
 		}
 
-		function load_locale(){
+		function load_locale() {
 			
 			@session_start();
 						
@@ -54,12 +52,12 @@
 				$user_h = $_SESSION['h'];
 				$query = $con->query("SELECT * FROM pl_users WHERE h='$user_h'")or die("Query error!");
 				$row = mysqli_fetch_array($query);
-				if($row["lang"] == ""){
+				if ($row["lang"] == "") {
 					$lang = $row2["value"];
-				}else{
+				} else {
 					$lang = $row["lang"];
 				}
-			}else{
+			} else {
 				$lang = $row2["value"];
 			}
 			return $lang;
@@ -185,11 +183,25 @@
 
 		}
         
-        function get_user_by_id($h, $connection){
-            $query = $connection->query("SELECT * FROM pl_users WHERE h='$h'");
+        function get_user_by_id($h, $connection) {
+            $query = $connection->query("SELECT * FROM pl_users WHERE h='$h'")or die("Query error!");
             $result = mysqli_fetch_array($query);
-            $user = new User($result['id'],$result['username'],$result['name'],$result['surname'],$result['email'],$result['phone'],$result['level'],$result['h'],$result['photo'],$result['birthday'],$result['home'],$result['pass'],$result['privilege']);
+            $user = new User($result['id'],$result['username'],$result['name'],$result['surname'],$result['email'],$result['address'],$result['phone'],$result['level'],$result['h'],$result['lang'],$result['photo'],$result['birthday'],$result['pass'],$result['privilege'],$result['creation_date'],$result['last_time'],$result['status']);
             return $user;
+        }
+
+        function get_work_by_h($h, $con) {
+            $query = $con->query("SELECT * FROM pl_works WHERE h='$h'")or die("Query error!");
+            $row = mysqli_fetch_array($query);
+            $work = new Work($row['id'],$row['name'],$row['h'],$row['description'],$row['type'],$row['creation_date'],$row['group_h'],$row['unit_h'],$row['status'],$row['attachment']);
+            return $work;
+        }
+
+        function get_message_by_h($h, $con) {
+            $query = $con->query("SELECT * FROM pl_messages WHERE h='$h'")or die("Query error!");
+            $row = mysqli_fetch_array($query);
+            $message = new Message($row['id'],$row['from_h'],$row['to_h'],$row['subject'],$row['body'],$row['h'],$row['date']);
+            return $message;
         }
 
         function rand_string( $length ) {
@@ -244,20 +256,23 @@
     
     class User {
         
-        function __construct($id, $username, $name, $surname, $email, $phone, $level, $h, $photo, $birthday, $home, $pass, $privilege){
+        function __construct($id, $username, $name, $surname, $email, $address, $phone, $level, $h, $lang, $photo, $birthday, $pass, $privilege, $creation_date, $last_time, $status) {
             $this->id = $id;
             $this->username = $username;
             $this->name = $name;
             $this->surname = $surname;
             $this->email = $email;
+            $this->address = $address;
             $this->phone = $phone;
             $this->level = $level;
             $this->h = $h;
             $this->photo = $photo;
             $this->birthday = $birthday;
-            $this->home = $home;
             $this->pass = $pass;
             $this->privilege = $privilege;
+            $this->creation_date = $creation_date;
+            $this->last_time = $last_time;
+            $this->status = $status;
         }
     }
 
@@ -269,11 +284,26 @@
             $this->category_h = $category_h;
         }
     }
+
+    class Work {
+        function __construct($id, $name, $h, $description, $type, $creation_date, $group_h, $unit_h, $status, $attachment) {
+            $this->id = $id;
+            $this->name = $name;
+            $this->h = $h;
+            $this->description = $description;
+            $this->type = $type;
+            $this->creation_date = $creation_date;
+            $this->group_h = $group_h;
+            $this->unit_h = $unit_h;
+            $this->status = $status;
+            $this->attachment = $attachment;
+        }
+    }
     
     class Message {
         function __construct($id,$from_h,$to_h,$subject,$body,$h,$date){
             $this->id = $id;
-            $this->from_h = $from_H;
+            $this->from_h = $from_h;
             $this->to_h = $to_h;
             $this->subject = $subject;
             $this->body = $body;

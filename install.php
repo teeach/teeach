@@ -22,10 +22,6 @@
 	<link rel="stylesheet" href="src/css/main.css">
 	<?php $System->set_head(); ?>
 	<script>
-		function advertenciaDev() {
-			//alert("Project Learn is in a very early stage of development. Also, this software can produces damage irreparable. Project Learn doesn't accountable of any damage.");
-			location.href = "install.php?step=2";
-		}
 		function getUrl() {
 			var url = location.href;
 			var url_installation = url.replace("/install.php?step=3","");
@@ -41,16 +37,16 @@
 	<?php
 		$version =  phpversion();
 		$version = explode(".", $version);
-		if($version[0] < 5 and $version[1] < 4){
+		if ($version[0] < 5 and $version[1] < 4) {
 			echo $lang["php_version_incompatible"];
 			echo "<br>";
 			echo "Version: ";
 			echo phpversion();
-		}else{
+		} else {
 			date_default_timezone_set("Europe/Madrid");
-			if(isset($_GET['step'])){
+			if (isset($_GET['step'])) {
 				$step = $_GET['step'];
-			}else{
+			} else {
 				$step = 1;
 			}
 			
@@ -68,7 +64,7 @@
 							foreach ($json_langs->{"langs"} as $index => $row_langs) {
 								echo '<option value="'.$row_langs.'">'.$row_langs.'</option>';
 							}
-						echo'
+						echo '
 						</select><br>
 						<input type="submit" value="'.$lang["next"].'">
 				</form>';
@@ -118,51 +114,42 @@
 
 				//Crear tablas BD
 
-				//CÓDIGO EN PRUEBAS!!!!!
 
-
-
-
-				$sql = file_get_contents("tmp/db.sql"); // Leo el archivo
-				// Lo siguiente hace gran parte de la magia, nos devuelve todos los tokens no vacíos del archivo
+				$sql = file_get_contents("tmp/db.sql");
 				$tokens = preg_split("/(--.*\s+|\s+|\/\*.*\*\/)/", $sql, null, PREG_SPLIT_NO_EMPTY);
 				$length = count($tokens);
 		
 				$query = '';
 				$inSentence = false;
 				$curDelimiter = ";";
-				// Comienzo a recorrer el string
+
 				for($i = 0; $i < $length; $i++) {
 					$lower = strtolower($tokens[$i]);
-					$isStarter = in_array($lower, array( // Chequeo si el token actual es el comienzo de una consulta
+					$isStarter = in_array($lower, array(
 					'select', 'update', 'delete', 'insert',
 					'delimiter', 'create', 'alter', 'drop', 
 					'call', 'set', 'use'
 				));
 
-				if($inSentence) { // Si estoy parseando una sentencia me fijo si lo que viene es un delimitador para terminar la consulta
-					if($tokens[$i] == $curDelimiter || substr(trim($tokens[$i]), -1*(strlen($curDelimiter))) == $curDelimiter) { 
-						// Si terminamos el parseo ejecuto la consulta
-						$query .= str_replace($curDelimiter, '', $tokens[$i]); // Elimino el delimitador
+				if($inSentence) {
+					if($tokens[$i] == $curDelimiter || substr(trim($tokens[$i]), -1*(strlen($curDelimiter))) == $curDelimiter) {
+						$query .= str_replace($curDelimiter, '', $tokens[$i]);
 						$con = $System->conDB("config.json");
 						$con->query($query);
-						$query = ""; // Preparo la consulta para continuar con la siguiente sentencia
+						$query = "";
 						$tokens[$i] = '';
 						$inSentence = false;
 					}
 				}
-				else if($isStarter) { // Si hay que comenzar una consulta, verifico qué tipo de consulta es
-				// Si es delimitador, cambio el delimitador usado. No marco comienzo de secuencia porque el delimitador se encarga de eso en la próxima iteración
-					if($lower == 'delimiter' && isset($tokens[$i+1]))  
+				else if($isStarter) {
+					if ($lower == 'delimiter' && isset($tokens[$i+1]))  
 						$curDelimiter = $tokens[$i+1]; 
 					else
-						$inSentence = true; // Si no, comienzo una consulta 
+						$inSentence = true;
 						$query = "";
 					}
-					$query .= "{$tokens[$i]} "; // Voy acumulando los tokens en el string que contiene la consulta
+					$query .= "{$tokens[$i]} ";
 				}
-
-				//FIN DEL CÓDIGO EN PRUEBAS!!!!
 
 				echo '
 					<h1>'.$lang["initial_settings"].'</h1>

@@ -961,6 +961,12 @@ UI ELEMENTS
     background: #C96;      
 }
 
+.ui_attachment {
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #aaa;
+}
+
 /*
 ==================
 (c)2015 Teeach
