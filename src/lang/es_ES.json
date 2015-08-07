@@ -96,7 +96,7 @@
     "privacy": "Privacidad",
     "advanced": "Avanzado",
     "about": "Acerca de",
-    "show_groups_prf": "Mostrar grupos en el perfil de usuario.",
+    "show_groups_prf": "Mostrar sus grupos",
     "save": "Guardar",
     "join_group": "Unirse a un grupo",
     "select_group": "Seleccionar un grupo",
@@ -116,5 +116,18 @@
     "welcome_teeach_from":"Bienvenido al Teeach de",
     "register":"Registrarse",
     "username_password_incorrect":"Usuario o contraseña incorrectos.",
-    "reply":"Responder"
+    "reply":"Responder",
+    "finish_term":"Cerrar plazo",
+    "default_language":"Lenguaje por defecto",
+    "center_data":"Datos del centro",
+    "posts_per_page":"Entradas por página",
+    "allow_comments":"Permitir comentarios",
+    "show_author":"Mostrar autor",
+    "profile":"Perfil",
+    "show_last_time":"Mostrar últ. vez",
+    "everybody":"Todos",
+    "only_teachers":"Sólo profesores",
+    "only_administrators":"Sólo administradores",
+    "nobody":"Nadie",
+    "enable_profile_photo":"Habilitar foto de perfil"
 }

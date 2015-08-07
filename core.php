@@ -12,9 +12,10 @@
                 <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js'></script>
                 <link rel='stylesheet' href='../../src/js/jquery/jquery-ui.theme.css' />
 
+                <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'>
+
                 <script src='../../src/js/check-all.js'></script>
-                <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css'>
-                <link rel='stylesheet' href='path/to/font-awesome/css/font-awesome.min.css'>
+                
 			";
 		}
 

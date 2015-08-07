@@ -71,7 +71,7 @@
 		";
 	?>
 	<div class="ui_width_sidebar right">
-	<!--<section id="index_groups">
+	<section id="index_groups">
 		<div class="sectiontitle">
 			
 			<?php echo $lang["groups"]; ?>
@@ -103,7 +103,7 @@
 			<a href="group.php?action=join"><button>'.$lang["join"].'</button></a>
 		';
 		?>
-	</section>-->
+	</section>
 	</div>
 	</div>
 	<?php echo $System->set_footer(); ?>

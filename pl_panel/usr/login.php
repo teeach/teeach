@@ -1,8 +1,8 @@
 <?php
 	if (@$_GET['action']=="check") {
 		require '../../PasswordHash.php';
-		$usuario = $_POST['usuario'];
-		$pass = $_POST['pass'];
+		$usuario = $_POST['username'];
+		$pass = $_POST['password'];
 
 		$t_hasher = new PasswordHash(8, FALSE);
 
@@ -74,8 +74,8 @@
             <h1><?php echo $lang["log_in"]; ?></h1>
             
             <form class="login" method="POST" action="login.php?action=check" autocomplete="off">
-                <label class="username"><input type="text" id="usuario" name="usuario" placeholder="<?php echo $lang["username"];?>" required></label>
-                <label class="password"><input type="password" id="pass" name="pass" placeholder="<?php echo $lang["password"];?>"  /></label>
+                <label class="username"><input type="text" id="usuario" name="username" placeholder="<?php echo $lang["username"];?>" required></label>
+                <label class="password"><input type="password" id="pass" name="password" placeholder="<?php echo $lang["password"];?>"  /></label>
                 <input type="submit" value="<?php echo $lang["log_in"];?>" />
             </form>
             <a class="extra_link" href="register.php"><?php echo $lang["create_account"]."&raquo"; ?></a>

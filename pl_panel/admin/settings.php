@@ -138,22 +138,52 @@
                             <form class="ui_form">
                                 <div id="tab_01" class="ui_tab_content">
                                     <table>
+                                    	<tr><td><p style="font-family:RobotoBold">'.$lang["center_data"].'</p></td><td></td></tr>
                                         <tr><td><label for="centername">'.$lang["centername"].': </label></td><td><input type="text" name="centername" value="'.$centername.'"></td></tr>
                                         <tr><td><label for="logo">'.$lang["logo"].': </label></td><td><input type="text" name="logo" value="'.$logo.'"></td></tr>
                                         <tr><td></td><td><img src="'.$logo.'" alt="logo"></td></tr>
                                         <tr><td><label for="accesspass">'.$lang["accesspass"].': </label></td><td><input type="text" name="accesspass" value="'.$accesspass.'"></td></tr>
-                                    </table>    
+                                        <tr><td><label for="lang">'.$lang["default_language"].': </label></td><td>
+											<select name="lang">';
+												$fp_langs = fopen("../../src/lang/langs.json", "r");
+												$rfile_langs = fread($fp_langs, filesize("../../src/lang/langs.json"));
+												$json_langs = json_decode($rfile_langs);
+												foreach ($json_langs->{"langs"} as $index => $row_langs) {
+													echo '<option value="'.$row_langs.'"';if($lang_val == $row_langs) echo "selected";echo'>'.$row_langs.'</option>';
+												}
+												echo '
+											</select>
+                                        </td></tr>
+                                        <tr><td><p style="font-family:RobotoBold">'.$lang["posts"].'</p></td><td></td></tr>
+                                        <tr><td><label for="posts_per_page">'.$lang["posts_per_page"].':</label></td><td><input type="text" name="posts_per_page"></td></tr>
+                                        <tr><td><label for="allow_comments">'.$lang["allow_comments"].':</label></td><td><input type="checkbox" name="allow_comments"></td></tr>
+                                        <tr><td><label for="show_author">'.$lang["show_author"].':</label></td><td><input type="checkbox" name="show_author"></td></tr>
+                                    </table>
                                 </div>
                                 
-                                <div id="tab_02" class="ui_tab_content">';
+                                <div id="tab_02" class="ui_tab_content">
+                                	<table>
+                                		<tr><td><p style="font-family: RobotoBold">'.$lang["profile"].'</p></td><td></td></tr>
+                                		<tr><td><label for="last_time">'.$lang["show_last_time"].'</label></td><td>
+											<select name="last_time">
+												<option value="everybody">'.$lang["everybody"].'</option>
+												<option value="only_teachers">'.$lang["only_teachers"].'</option>
+												<option value="only_administrators">'.$lang["only_administrators"].'</option>
+												<option value="nobody">'.$lang["nobody"].'</option>
+											</select>
+                                		</td></tr>
+                                		<tr><td><label for="showgroups">'.$lang["show_groups_prf"].'</label></td>
+                                	';
                                     if ($sg == "true") {
-                                        echo '<input type="checkbox" name="showgroups" checked>';
+                                        echo '<td><input type="checkbox" name="showgroups" checked></td>';
                                     } else {
-                                        echo '<input type="checkbox" name="showgroups">';
+                                        echo '<td><input type="checkbox" name="showgroups"></td>';
                                     }
                                         echo '                          
-                                            <label for="showgroups">'.$lang["show_groups_prf"].'</label>
-                                        </div>
+                                    	</tr>
+                                    	<tr><td><label for="enable_photo">'.$lang["enable_profile_photo"].'</label></td><td><input type="checkbox" name="enable_photo"></td></tr>
+                                    </table>
+                                </div>
                                 <div id="tab_03" class="ui_tab_content">
                                     <label for="JP">'.$lang["join_group"].': </label>
                                     <select name="JP">';
@@ -190,15 +220,7 @@
                                         </select> 
 									<br>
 									<label for="lang">'.$lang["language"].': </label>
-									<select name="lang">';
-										$fp_langs = fopen("../../src/lang/langs.json", "r");
-										$rfile_langs = fread($fp_langs, filesize("../../src/lang/langs.json"));
-										$json_langs = json_decode($rfile_langs);
-										foreach ($json_langs->{"langs"} as $index => $row_langs) {
-											echo '<option value="'.$row_langs.'"';if($lang_val == $row_langs) echo "selected";echo'>'.$row_langs.'</option>';
-										}
-										echo'
-									</select>
+									
 									<br>
 									<label for="up_lang">'.$lang["upload_lang"].': </label>
 									<input type="file" name="up_lang">

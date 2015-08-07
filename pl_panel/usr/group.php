@@ -162,29 +162,38 @@
 				<div class="ui_full_width">
             		<div class="ui_head ui_head_width_actions">';
 
-			switch($Work->type) {
-				case 1:
-					// Notes ~ Apuntes
-					echo '<h2><i class="fa fa-book"></i> '.$Work->name.'</h2>';
-					break;
-				case 2:
-					//Homework ~ Tarea
-					echo '<h2><i class="fa fa-pencil"></i> '.$Work->name.'</h2>';
-					break;
-				case 3:
-					//Exam ~ Examen
-					echo '<h2><i class="fa fa-pencil"></i> '.$Work->name.'</h2>';
-					break;
-				default:
-					//Invalid type
-					die("Invalid type. Contact to administrator.");
-
-			}
+            if($Work->status == "invisible") {
+            	echo '<h2><i class="fa fa-eye-slash"></i> '.$Work->name.'</h2>';
+            } else {
+            	switch($Work->type) {
+					case 1:
+						// Notes ~ Apuntes
+						echo '<h2><i class="fa fa-book"></i> '.$Work->name.'</h2>';
+						break;
+					case 2:
+						//Homework ~ Tarea
+						echo '<h2><i class="fa fa-pencil"></i> '.$Work->name.'</h2>';
+						break;
+					case 3:
+						//Exam ~ Examen
+						echo '<h2><i class="fa fa-pencil"></i> '.$Work->name.'</h2>';
+						break;
+					default:
+						//Invalid type
+						die("Invalid type. Contact to administrator.");
+				}
+            }
 
 			if ($status == "leader") {
-				echo '
-					<div class="ui_actions">
-                    	<a href="group.php?action=edit_work&h='.$Work->h.'"><button class="ui_action" class="ui_tooltip" title="Edit"><i class="fa fa-pencil"> '.$lang["edit"].'</i></button></a>
+				echo '<div class="ui_actions">';
+				if($Work->type != 1) {
+					if($Work->status == "visible") {
+						echo '<a href="group.php?action=edit_work&h='.$Work->h.'"><button class="ui_action" class="ui_tooltip" title="Edit"><i class="fa fa-hourglass-end"></i> '.$lang["finish_term"].'</button></a>';
+					}
+				}
+				
+				echo '					
+                    	<a href="group.php?action=edit_work&h='.$Work->h.'"><button class="ui_action" class="ui_tooltip" title="Edit"><i class="fa fa-pencil"></i> '.$lang["edit"].'</i></button></a>
             		</div>
 				';
 			}
@@ -398,6 +407,120 @@
 				//~ }
 			//~ }
 
+		} elseif(@$_GET['action'] == "edit_work") {
+
+			$work_h = $_GET['h'];
+			$Work = $System->get_work_by_h($work_h, $con);
+
+			echo '
+				<div class="ui_full_width">
+					<div class="ui_head ui_head_width_actions">
+						<h2>'.$lang["edit"].' '.$Work->name.'</h2>
+					</div>
+					<form action="group.php?action=update_work&h='.$work_h.'&group='.$Work->group_h.'" method="POST" enctype="multipart/form-data">
+						<table>
+							<tr><td><label for="workname">'.$lang["workname"].'</label></td><td><input type="text" name="workname" value="'.$Work->name.'"></td></tr>
+							<tr><td><label for="type">'.$lang["type"].'</label></td><td>
+								<select name="type">';
+									switch($Work->type) {
+										case 1:
+											echo '
+												<option value="1" selected>'.$lang["notes"].'</option>
+												<option value="2">'.$lang["homework"].'</option>
+												<option value="3">'.$lang["exam"].'</option>
+											';
+											break;
+										case 2:
+											echo '
+												<option value="1">'.$lang["notes"].'</option>
+												<option value="2" selected>'.$lang["homework"].'</option>
+												<option value="3">'.$lang["exam"].'</option>
+											';
+											break;
+										case 3:
+											echo '
+												<option value="1">'.$lang["notes"].'</option>
+												<option value="2">'.$lang["homework"].'</option>
+												<option value="3" selected>'.$lang["exam"].'</option>
+											';
+											break;
+										default:
+											echo '
+												<option value="1">'.$lang["notes"].'</option>
+												<option value="2">'.$lang["homework"].'</option>
+												<option value="3">'.$lang["exam"].'</option>
+											';
+
+									}
+
+									echo '									
+								</select>
+							</td></tr>
+							<tr><td><label for="visible">'.$lang["visible"].'</label></td><td>';
+
+							switch ($Work->status) {
+								case 'visible':
+									echo '<input type="checkbox" name="visible" checked="true">';
+									break;
+								case 'invisible':
+									echo '<input type="checkbox" name="visible">';
+									break;
+								default:
+									echo '<input type="checkbox" name="visible">';
+							}
+
+							echo '
+							</td></tr>
+							<tr><td></td><td><textarea cols="80" id="editor1" name="desc" rows="10">'.$Work->description.'</textarea></td></tr>
+							<!--<tr><td>'.$lang["attachments_files"].'</td><td class="attachments"></td><td></td></tr>
+							<tr><td><div class="add_attachments">'.$lang["add_attachment"].'</div></td></tr>-->
+							<tr><td></td><td><input type="submit" value='.$lang["save"].'></td></tr>
+						</table>
+					</form>
+				</div>
+			
+			<script type="text/javascript">  
+                CKEDITOR.replace( "editor1", {
+                enterMode: CKEDITOR.ENTER_BR,
+                skin : "office2013",
+                toolbar : [
+                    { name: "document", groups: [ "mode", "document", "doctools" ], items: [ "Source", "-", "Save", "Preview", "-", "Templates" ] },
+                    { name: "clipboard", groups: ["undo"], items: ["Undo", "Redo" ] },
+                    { name: "editing", groups: [ "find", "selection"], items: ["Replace", "-", "SelectAll"] },
+                    "/",
+                    { name: "basicstyles", groups: [ "basicstyles", "cleanup" ], items: [ "Bold", "Italic", "Underline", "Strike", "Subscript", "Superscript", "-", "RemoveFormat" ] },
+                    { name: "paragraph", groups: [ "list", "indent", "blocks", "align"], items: [ "NumberedList", "BulletedList", "-", "Outdent", "Indent", "-", "Blockquote", "CreateDiv", "-", "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock" ] },
+                    "/",
+                    { name: "links", items: [ "Link", "Unlink" ] },
+                    { name: "insert", items: [ "Image", "Flash", "Table", "HorizontalRule", "Smiley", "SpecialChar", "Iframe" ] },
+                    "/",
+                    { name: "styles", items: [ "Styles", "Format", "Font", "FontSize" ] },
+                    { name: "colors", items: [ "TextColor", "BGColor" ] },
+                    { name: "tools", items: [ "Maximize"] }
+                ]
+                });      
+        </script>
+			';
+
+		} elseif(@$_GET['action'] == "update_work") {
+
+			$work_h = $_GET['h'];
+			$group_h = $_GET['group'];
+
+			$name = $_POST['workname'];
+			$description = $_POST['desc'];
+			$type = $_POST['type'];
+			$visible = $_POST['visible'];
+
+			if($visible == "on") {
+				$status = "visible";
+			} else {
+				$status = "invisible";
+			}
+
+			$query = $con->query("UPDATE pl_works SET name='$name',description='$description',type='$type',status='$status' WHERE h='$work_h'")or die("Query error!");
+			echo "<a href='group.php?h=".$group_h."&page=index'>".$lang['accept']."</a>";
+
 		} elseif(@$_GET['action'] == "save_unit") {
 
 			$unit = $_POST['unit'];
@@ -479,8 +602,19 @@
 					$work_name = $row2['name'];
 					$work_desc = $row2['description'];
 					$work_type = $row2['type'];
+					$work_status = $row2['status'];
 
-					echo '<a href="group.php?action=view&h='.$work_h.'"><li class="work">'.$work_name.'</li></a>';
+					if($status == "leader") {
+						if($work_status == "invisible") {
+							echo '<a style="opacity: 0.5" href="group.php?action=view&h='.$work_h.'"><li class="work"><i class="fa fa-eye-slash"></i>'.$work_name.'<a href="#" class="right"><i class="fa fa-trash"></i></a> <a href="group.php?action=edit_work&h='.$work_h.'" class="right"><i class="fa fa-pencil-square-o"></i></a></li></a>';
+						} else {
+							echo '<a href="group.php?action=view&h='.$work_h.'"><li class="work">'.$work_name.'<a href="#" class="right"><i class="fa fa-trash"></i></a> <a href="group.php?action=edit_work&h='.$work_h.'" class="right"><i class="fa fa-pencil-square-o"></i></a></li></a>';
+						}
+					} else {
+						if($work_status != "invisible") {
+							echo '<a href="group.php?action=view&h='.$work_h.'"><li class="work">'.$work_name.'</li></a>';
+						}
+					}					
 				}
 
 				if ($status == "leader") {

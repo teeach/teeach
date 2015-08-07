@@ -122,6 +122,10 @@ td {
 3.0 BASIC STYLES
 ===============================================================*/
 
+::selection {
+    background-color: #c96;
+}
+
 body {
     background: #EEE;    
     font-family: 'RobotoLight', sans-serif;
@@ -149,7 +153,6 @@ h1 {
 
 .fa {
     padding-right: 2px;
-    cursor: pointer;
 }
 
 .main {
