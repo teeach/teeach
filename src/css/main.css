@@ -970,6 +970,51 @@ UI ELEMENTS
     border: 1px solid #aaa;
 }
 
+/*====================================
+    Tips
+====================================*/
+
+.tip_button {
+    padding: 1px 7px;
+    background-color: #320;
+    color: #fff;
+    border-radius: 100%;
+    font-weight: bold;
+    margin: 3px;
+    cursor: help;
+    font-size: 12px;
+    border: 3px solid #c96;
+}
+
+.tip_button:hover {
+    background-color: #c96;
+}
+
+.tip_dialog {
+    display: none;
+    position: fixed;
+    background-color: #fff;
+    border: 4px solid #c96;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 0.9rem;
+    box-shadow: 1px 1px 5px #aaa;
+    opacity: 0.9;
+}
+
+.tip_close {
+    display: none;
+    padding: 1px 7px;
+    background-color: #c96;
+    color: #fff;
+    border-radius: 100%;
+    font-weight: bold;
+    margin: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    border: 3px solid #c96;
+}
+
 /*
 ==================
 (c)2015 Teeach

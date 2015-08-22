@@ -30,6 +30,19 @@
 		function open_popup() {
 			$("#dialog").dialog();
 		};
+
+		$(document).on("ready",function() {
+			$('#tip_visible.tip_button').on("click",function() {
+				$('#tip_visible.tip_close').css("display", "inline");
+				$('#tip_visible.tip_dialog').css("display","inline-block");
+				$('#tip_visible.tip_button').css("display", "none");
+			});
+			$('#tip_visible.tip_close').on("click",function() {
+				$('#tip_visible.tip_close').css('display','none');
+				$('#tip_visible.tip_dialog').css('display','none');
+				$('#tip_visible.tip_button').css('display','inline');
+			});
+		});
 	</script>
 </head>
 <body>
@@ -297,7 +310,8 @@
 							<option value="3">'.$lang["exam"].'</option>
 						</select>
 					</td></tr>
-					<tr><td><label for="visible">'.$lang["visible"].'</label></td><td><input type="checkbox" name="visible" checked="true"></td></tr>
+					<tr><td><label for="visible">'.$lang["visible"].'</label><span id="tip_visible" class="tip_button">?</span><span id="tip_visible" class="tip_close">X</span><div id="tip_visible" class="tip_dialog"><b style="font-weight:bold">Más información</b><br>asdfloremloremloremeajksdnfkasdnidksdfasdfas</div></td><td><input type="checkbox" name="visible" checked="true"></td></tr>
+
 					<tr><td></td><td><textarea cols="80" id="editor1" name="desc" rows="10"></textarea></td></tr>
 					<tr><td>'.$lang["attachments_files"].'</td><td class="attachments"></td><td></td></tr>
 					<tr><td><div class="add_attachments">'.$lang["add_attachment"].'</div></td></tr>
