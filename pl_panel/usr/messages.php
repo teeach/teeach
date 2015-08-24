@@ -11,8 +11,7 @@
 	$User = $System->get_user_by_id($_SESSION['h'], $con);
 
 	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
-	
-	$System->set_head();
+
 ?>
 
 <!DOCTYPE html>
@@ -22,11 +21,73 @@
 	<title><?php echo $lang["messages"];?> | Teeach </title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<script src="../../src/ckeditor/ckeditor.js"></script>
-
-
-<style>
-    
-</style>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<?
+		$System->set_head();
+	?>
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        <style>
+            .ui-autocomplete-loading {
+            background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
+            }
+        </style>
+        <script>
+            var elements = [];
+            $(function() {
+            function split( val ) {
+              return val.split( /,\s*/ );
+            }
+            function extractLast( term ) {
+              return split( term ).pop();
+            }
+            
+            $( "#birds" )
+              // don't navigate away from the field on tab when selecting an item
+              
+                .bind( "keydown", function( event ) {
+                    if ( event.keyCode === $.ui.keyCode.TAB &&
+                        $( this ).autocomplete( "instance" ).menu.active ) {
+                            event.preventDefault();
+                    }
+                })
+              
+              
+                .autocomplete({
+                    source: function( request, response ) {
+                        $.getJSON( "../../src/searchbox/search.php", {
+                            term: extractLast( request.term )
+                        }, response );
+                    },
+                    search: function() {
+                        // custom minLength
+                        var term = extractLast( this.value );
+                        if ( term.length < 2 ) {
+                            return false;
+                        }
+                    },
+                    focus: function() {
+                        // prevent value inserted on focus
+                        return false;
+                    },
+                    select: function( event, ui ) {
+                        var terms = split( this.value );
+                        // remove the current input
+                        terms.pop();
+                        // add the selected item
+                        terms.push( ui.item.value );
+                        // add placeholder to get the comma-and-space at the end
+                        //~ terms.push( "" );
+                        //~ this.value = terms.join( ", " );
+                        this.value = "";
+                        elements.push(ui.item.id);
+                        $( "#users" ).append( "<div class='"+ui.item.id+"' style='color: white; width:200px; border-radius:5px; background: #242424'><img style='border-radius:50px; width:64px' src='"+ui.item.icon+"'> " + ui.item.value +" <i id='"+ui.item.id+"' class='fa fa-times erase'></i> </div>" );
+                        return false;
+                    }
+                });
+            });
+        </script>
 
 </head>
 <body>
@@ -68,15 +129,51 @@
 					<div class="ui_head ui_head_width_actions">
 						<h2><i class="fa fa-envelope"></i> '.$lang["new_message"].'</h2>
 					</div>
+					<div class="ui-widget">
+					'.$lang["to"].':
+					  <input id="birds" size="50">
+					  <div id="users"></div>
+					</div>
 					<table>
-						<form action="messages.php?action=send" method="POST">
-							<tr><td><label for="to">'.$lang["to"].'</label></td><td><input type="text" name="to"></td></tr>
-							<tr><td><label for="subject">'.$lang["subject"].'</label></td><td><input type="text" name="subject"></td></tr>
-							<tr><td></td><td><textarea cols="80" id="editor1" name="body" rows="10"></textarea></td></tr>
+						<form action="sendmessage.php" id="addusers">
+							<tr><td><label for="subject">'.$lang["subject"].'</label></td><td><input type="text" id="subject" name="subject" value=""></td></tr>
+							<tr><td></td><td><textarea cols="80" id="editor1" name="editor1" rows="10"></textarea></td></tr>
 							<tr><td></td><td><input type="submit" value="Enviar"></td></tr>
 						</form>
 					</table>
 				</div>
+				<script>            
+					$("body").on(\'click\', ".erase" , function() {
+						var index = elements.indexOf($(this).attr("id"));
+						$("div."+$(this).attr("id")).slideUp();
+						if (index > -1) {
+							elements.splice(index, 1);
+						}
+						//~ alert(elements);
+					});
+				</script>
+				<script>
+					// Attach a submit handler to the form
+					$( "#addusers" ).submit(function( event ) {
+					  // Stop form from submitting normally
+					  event.preventDefault();
+					 
+					  // Get some values from elements on the page:
+					  var $form = $( this ),
+						term = elements,
+						url = $form.attr( "action" );
+					  var sender = '.json_encode($_SESSION['h']).' 
+					 
+					  // Send the data using post
+					  var posting = $.post( url, { users: term, subject: $("#subject").val(), content: CKEDITOR.instances[\'editor1\'].getData(), sender: sender});
+					  // Put the results in a div
+					  posting.done(function( data ) {
+						  alert(data);
+						var content = $( data ).find( "#content" );
+						$( "#result" ).empty().append( content );
+					  });
+					});
+				</script>
 				';
 			}
 				echo '
@@ -101,6 +198,7 @@
                 		]
                 	});      
         			</script>
+        			
 				';			
 
 		} elseif(@$_GET['action'] == "send") {
