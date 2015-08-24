@@ -41,6 +41,18 @@
 			} else {
 				$showgroups = "false";
 			}
+			
+			if(isset($_POST["allow_comments"])){
+				$post_comments = "true";
+			}else{
+				$post_comments = "false";
+			}
+
+			if(isset($_POST["show_author"])){
+				$post_author = "true";
+			}else{
+				$post_author = "false";
+			}
 
 			$query = $con->query("UPDATE pl_settings SET value='$centername' WHERE property='centername'")or die("Query error 1!");
 			$query = $con->query("UPDATE pl_settings SET value='$logo' WHERE property='logo'")or die("Query error 2!");
@@ -48,6 +60,9 @@
 			$query = $con->query("UPDATE pl_settings SET value='$showgroups' WHERE property='showgroups'")or die("Query error 4!");
             $query = $con->query("UPDATE pl_settings SET value=$JP WHERE property='JP'")or die("Query error 5!");
             $query = $con->query("UPDATE pl_settings SET value='$lang_val' WHERE property='lang'")or die("Query error 6!");
+            $query = $con->query("UPDATE pl_settings SET value='".$_POST["posts_per_page"]."' WHERE property='post_per_page'")or die("Query error 7!");
+            $query = $con->query("UPDATE pl_settings SET value='".$post_comments."' WHERE property='post_comments'")or die("Query error 8!");
+            $query = $con->query("UPDATE pl_settings SET value='".$post_author."' WHERE property='post_author'")or die("Query error 9!");
 		
 			if($_FILES["up_lang"]["size"] != 0){
 				$target_dir = "../../src/lang/";
@@ -95,6 +110,9 @@
 			$query_sg = $con->query("SELECT * FROM pl_settings WHERE property='showgroups'");
             $query_JP = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
             $query_lang = $con->query("SELECT * FROM pl_settings WHERE property='lang'");
+            $post_per_page = $con->query("SELECT * FROM pl_settings WHERE property='post_per_page'");
+            $post_comments = $con->query("SELECT * FROM pl_settings WHERE property='post_comments'");
+            $post_author = $con->query("SELECT * FROM pl_settings WHERE property='post_author'");
 
 			//Arrays
 			$row_centername = mysqli_fetch_array($query_centername);
@@ -103,6 +121,9 @@
 			$row_sg = mysqli_fetch_array($query_sg);
             $row_JP = mysqli_fetch_array($query_JP);
             $row_lang = mysqli_fetch_array($query_lang);
+            $row_post_per_page = mysqli_fetch_array($post_per_page);
+            $row_post_comments = mysqli_fetch_array($post_comments);
+            $row_post_author = mysqli_fetch_array($post_author);
 
 			//Values
 			$centername = $row_centername['value'];
@@ -155,9 +176,9 @@
 											</select>
                                         </td></tr>
                                         <tr><td><p style="font-family:RobotoBold">'.$lang["posts"].'</p></td><td></td></tr>
-                                        <tr><td><label for="posts_per_page">'.$lang["posts_per_page"].':</label></td><td><input type="text" name="posts_per_page"></td></tr>
-                                        <tr><td><label for="allow_comments">'.$lang["allow_comments"].':</label></td><td><input type="checkbox" name="allow_comments"></td></tr>
-                                        <tr><td><label for="show_author">'.$lang["show_author"].':</label></td><td><input type="checkbox" name="show_author"></td></tr>
+                                        <tr><td><label for="posts_per_page">'.$lang["posts_per_page"].':</label></td><td><input type="number" name="posts_per_page" min="1" value="'.$row_post_per_page["value"].'"></td></tr>
+                                        <tr><td><label for="allow_comments">'.$lang["allow_comments"].':</label></td><td><input type="checkbox" name="allow_comments" ';if($row_post_comments["value"]=="true"){echo "checked";} echo '></td></tr>
+                                        <tr><td><label for="show_author">'.$lang["show_author"].':</label></td><td><input type="checkbox" name="show_author" ';if($row_post_author["value"]=="true"){echo "checked";} echo '></td></tr>
                                     </table>
                                 </div>
                                 
