@@ -40,8 +40,14 @@
 			<section id='posts'>
 				<h1>".$lang['posts']."</h1><br><br>
 			";
-
-		$query = $con->query("SELECT * FROM pl_posts ORDER BY id DESC");
+				
+		$page = (int) (!isset($_GET["p"]) ? 1 : $_GET["p"]);
+		
+		$Pagination = new Pagination(5);
+		$Pagination->prepaginate($page);		
+		$query = $con->query("SELECT * FROM pl_posts ORDER BY id DESC LIMIT ".$Pagination->startpoint.", ".$Pagination->limit."");
+		
+		
 		while($row = mysqli_fetch_array($query)) {
 
 			$title = $row['title'];
@@ -57,7 +63,7 @@
 			echo "
 				<article>
 					<h2>".$title."</h2>
-					<h5>Writed by ".$author."</h5>
+					<h5>Written by ".$author."</h5>
 					".$body."
 				</article>
 				<br><br>
@@ -69,6 +75,10 @@
 			</section>
 			</div>
 		";
+		
+		$items = $con->query("SELECT * FROM pl_posts")->num_rows;
+		$Pagination->paginate($items);
+				
 	?>
 	<div class="ui_width_sidebar right">
 	<section id="index_groups">

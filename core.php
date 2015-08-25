@@ -312,4 +312,63 @@
             $this->date = $date;
         }
     }
+    
+    class Pagination{
+			
+		function __construct($limit){
+			$this->limit = $limit;
+			$this->startpoint = 0;
+			$this->page = 0;
+		}
+		
+		function prepaginate($page){
+			$this->page = $page;
+			$this->startpoint = ($page * $this->limit)-$this->limit;
+		}
+		
+		function paginate($items){
+			$pags = ceil($items/$this->limit);
+			$back = $this->page - 1;
+			$forward = $this->page +1;
+
+			$count = 0;
+
+			if($this->page == 1 or $this->page == 2){
+				$pagination = 1;
+			}else{
+				$pagination = $this->page-2;
+			}
+
+
+			if($pags > 1){
+			echo'<div style="margin-top: 4px;" class="pagination">';
+			echo'<span original-title="" class="pages">Páginas ('.$pags.'):</span>';
+			if($this->page > 1){
+			echo'
+			<a class="pagination_next" href="index.php?&p=1"><<</a>';
+			echo'
+			<a class="pagination_next" href="index.php?&p='.$back.'">< Anterior</a>';
+			}
+			while($count < 3){
+				$count=$count+1;
+				if($pagination<=$pags){
+					echo' <a class="pagination'; 
+					if($this->page == $pagination){
+						echo'_current';
+					}
+					echo'" href="index.php?&p='.$pagination.'">'.$pagination.'</a>';
+				}
+				$pagination = $pagination+1;
+			}
+			if($this->page < $pags){
+			echo'
+			<a class="pagination_next" href="index.php?&p='.$forward.'">Siguiente ></a>';
+			echo'
+			<a class="pagination_next" href="index.php?&p='.$pags.'">>></a>';
+			}
+			echo'</div>';
+					
+			}
+		}
+	}
 ?>
