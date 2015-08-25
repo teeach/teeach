@@ -28,13 +28,14 @@
 		$action = $_GET['action'];
 
 		if ($action == "save") {
-			
 			$centername = $_POST['centername'];
 			$logo = $_POST['logo'];
 			$accesspass = $_POST['accesspass'];
 			$lang_val = $_POST['lang'];
 			@$showgroups = $_POST['showgroups'];
             $JP = $_POST['JP'];
+ 
+			echo "ATENCION: ".$JP."";
 
 			if(isset($showgroups)) {
 				$showgroups = "true";
@@ -132,16 +133,45 @@
 			$sg = $row_sg['value'];
             $JP = $row_JP['value'];
             $lang_val = $row_lang['value'];
-
-
+			
 			echo '
+			
+			<script type="text/javascript">
+				function submitForm() {
+					//~ console.log("submit event");
+					var fd = new FormData(document.getElementById("settings"));
+					fd.append("centername", $("#centername").val());
+					fd.append("logo", $("#logo").val());
+					fd.append("accesspass", $("#accesspass").val());
+					fd.append("lang", $("#lang").val());
+					fd.append("showgroups", $("#showgroups").val());
+					fd.append("JP", $("#JP").val());
+					fd.append("posts_per_page", $("#posts_per_page").val());
+					fd.append("allow_comments", $("#allow_comments").val());
+					fd.append("show_author", $("#show_author").val());
+					$.ajax({
+					  url: "settings.php?action=save",
+					  type: "POST",
+					  data: fd,
+					  enctype: \'multipart/form-data\',
+					  processData: false,  // tell jQuery not to process the data
+					  contentType: false   // tell jQuery not to set contentType
+					}).done(function( data ) {
+						alert("'.$lang["saved_data"].'");
+						//~ console.log("PHP Output:");
+						//~ console.log( data );
+					});
+					return false;
+				}
+			</script>
+			
             <div class="admin_header">
                 <div class="admin_hmenu">
                     <a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="settings.php?action">'.$lang["settings"].'</a></h2>
 			    </div>
             </div>
             	<center>
-					<form action="settings.php?action=save" method="post" enctype="multipart/form-data">			
+					<form id="settings" method="post" enctype="multipart/form-data" onsubmit="return submitForm();">			
 						<div class="contenedor">
 
 
@@ -160,12 +190,12 @@
                                 <div id="tab_01" class="ui_tab_content">
                                     <table>
                                     	<tr><td><p style="font-family:RobotoBold">'.$lang["center_data"].'</p></td><td></td></tr>
-                                        <tr><td><label for="centername">'.$lang["centername"].': </label></td><td><input type="text" name="centername" value="'.$centername.'"></td></tr>
-                                        <tr><td><label for="logo">'.$lang["logo"].': </label></td><td><input type="text" name="logo" value="'.$logo.'"></td></tr>
+                                        <tr><td><label for="centername">'.$lang["centername"].': </label></td><td><input type="text" id="centername" name="centername" value="'.$centername.'"></td></tr>
+                                        <tr><td><label for="logo">'.$lang["logo"].': </label></td><td><input type="text" name="logo" id="logo" value="'.$logo.'"></td></tr>
                                         <tr><td></td><td><img src="'.$logo.'" alt="logo"></td></tr>
-                                        <tr><td><label for="accesspass">'.$lang["accesspass"].': </label></td><td><input type="text" name="accesspass" value="'.$accesspass.'"></td></tr>
+                                        <tr><td><label for="accesspass">'.$lang["accesspass"].': </label></td><td><input type="text" id="accesspass" name="accesspass" value="'.$accesspass.'"></td></tr>
                                         <tr><td><label for="lang">'.$lang["default_language"].': </label></td><td>
-											<select name="lang">';
+											<select id="lang" name="lang">';
 												$fp_langs = fopen("../../src/lang/langs.json", "r");
 												$rfile_langs = fread($fp_langs, filesize("../../src/lang/langs.json"));
 												$json_langs = json_decode($rfile_langs);
@@ -176,9 +206,9 @@
 											</select>
                                         </td></tr>
                                         <tr><td><p style="font-family:RobotoBold">'.$lang["posts"].'</p></td><td></td></tr>
-                                        <tr><td><label for="posts_per_page">'.$lang["posts_per_page"].':</label></td><td><input type="number" name="posts_per_page" min="1" value="'.$row_post_per_page["value"].'"></td></tr>
-                                        <tr><td><label for="allow_comments">'.$lang["allow_comments"].':</label></td><td><input type="checkbox" name="allow_comments" ';if($row_post_comments["value"]=="true"){echo "checked";} echo '></td></tr>
-                                        <tr><td><label for="show_author">'.$lang["show_author"].':</label></td><td><input type="checkbox" name="show_author" ';if($row_post_author["value"]=="true"){echo "checked";} echo '></td></tr>
+                                        <tr><td><label for="posts_per_page">'.$lang["posts_per_page"].':</label></td><td><input type="number" id="posts_per_page" name="posts_per_page" min="1" value="'.$row_post_per_page["value"].'"></td></tr>
+                                        <tr><td><label for="allow_comments">'.$lang["allow_comments"].':</label></td><td><input type="checkbox" id="allow_comments" name="allow_comments" ';if($row_post_comments["value"]=="true"){echo "checked";} echo '></td></tr>
+                                        <tr><td><label for="show_author">'.$lang["show_author"].':</label></td><td><input type="checkbox" id="show_author" name="show_author" ';if($row_post_author["value"]=="true"){echo "checked";} echo '></td></tr>
                                     </table>
                                 </div>
                                 
@@ -207,7 +237,7 @@
                                 </div>
                                 <div id="tab_03" class="ui_tab_content">
                                     <label for="JP">'.$lang["join_group"].': </label>
-                                    <select name="JP">';
+                                    <select id="JP" name="JP">';
                                     switch($JP) {
                                         case 1:
                                             echo '
