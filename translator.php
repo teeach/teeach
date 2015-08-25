@@ -6,21 +6,40 @@ if(!isset($_GET["action"])){
 }
 if($action == "save"){
 	if($_GET["from"] == "translate"){
-		header("Content-type: text/plain; charset=utf-8");
-		header("Content-Disposition: attachment; filename=".$_GET["lang2"].".json");
 		$lang = [];
 		foreach($_POST as $key=>$value){
 			$lang[$key] = $value;
 		}
-		print json_encode($lang,JSON_PRETTY_PRINT);
+		$encoded = json_encode($lang,JSON_PRETTY_PRINT);
+		if(isset($_POST["SYSupload"])){
+			$fp = fopen("src/lang/".$_GET["lang2"].".json", "w+");
+			fputs($fp, $encoded);
+			fclose($fp);
+		}
+		if(isset($_POST["SYSdownload"])){
+			header("Content-type: text/plain; charset=utf-8");
+			header("Content-Disposition: attachment; filename=".$_GET["lang2"].".json");
+			print $encoded;
+		}
+		
 	}elseif($_GET["from"] == "edit"){
-		header("Content-type: text/plain; charset=utf-8");
-		header("Content-Disposition: attachment; filename=".$_GET["lang1"].".json");
 		$lang = [];
 		foreach($_POST as $key=>$value){
-			$lang[$key] = $value;
+			if($key != "SYSupload" and $key != "SYSdownload"){
+				$lang[$key] = $value;
+			}
 		}
-		print json_encode($lang,JSON_PRETTY_PRINT);
+		$encoded = json_encode($lang,JSON_PRETTY_PRINT);
+		if(isset($_POST["SYSupload"])){
+			$fp = fopen("src/lang/".$_GET["lang1"].".json", "w+");
+			fputs($fp, $encoded);
+			fclose($fp);
+		}
+		if(isset($_POST["SYSdownload"])){
+			header("Content-type: text/plain; charset=utf-8");
+			header("Content-Disposition: attachment; filename=".$_GET["lang1"].".json");
+			print $encoded;
+		}
 	}
 }elseif($action == "translate"){
 	echo'
@@ -64,6 +83,10 @@ if($action == "save"){
 							}
 						}
 						echo'
+							<tr><td>
+								Upload to server <input type="checkbox" name="SYSupload" checked>
+								Download file <input type="checkbox" name="SYSdownload">
+							</td></tr>
 							<tr><td><input type="submit" value="Save"></td></tr>
 						</table>
 						</form>
@@ -128,7 +151,8 @@ if($action == "save"){
 						<table>
 						<tr><td><input type="text" class="new_val"></td><td><div style="padding:5px;border-radius:5px;width:35px;height:20px;background:gray;" class="add_val">Add</div></td></tr>
 						</table>
-						Subir a sevidor <input type="checkbox" name="upload" checked>
+						Upload to server <input type="checkbox" name="SYSupload" checked>
+						Download file <input type="checkbox" name="SYSdownload">
 						<br>
 						<input type="submit" value="Save">
 						</form>
