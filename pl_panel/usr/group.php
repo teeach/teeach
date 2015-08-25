@@ -244,7 +244,54 @@
 					echo'<a class="ui_attachment" href="../../'.$attachment->{"path"}.'"><i class="fa fa-paperclip"></i> '.$attachment->{"name"}.'</a><br>';
 				}
 				echo'
-            	</div>
+            	</div>';
+            	if($Work->status == "visible" and ($Work->type == 2 or $Work->type == 3)){
+					echo'
+					<div class="answer">
+					
+						<form method="post" action="group.php?action=answer" enctype="multipart/form-data">
+							<table>
+								<tr><td></td><td><textarea cols="80" id="editor1" name="desc" rows="10"></textarea></td></tr>
+								<tr><td>'.$lang["attachments_files"].'</td><td class="attachments"></td><td></td></tr>
+								<tr><td><div class="add_attachments">'.$lang["add_attachment"].'</div></td></tr>
+								<tr><td></td><td><input type="submit" value='.$lang["save"].'></td></tr>
+							</table>
+						</form>
+						
+						<script type="text/javascript">  
+							CKEDITOR.replace( "editor1", {
+							enterMode: CKEDITOR.ENTER_BR,
+							skin : "office2013",
+							toolbar : [
+								{ name: "document", groups: [ "mode", "document", "doctools" ], items: [ "Source", "-", "Save", "Preview", "-", "Templates" ] },
+								{ name: "clipboard", groups: ["undo"], items: ["Undo", "Redo" ] },
+								{ name: "editing", groups: [ "find", "selection"], items: ["Replace", "-", "SelectAll"] },
+								"/",
+								{ name: "basicstyles", groups: [ "basicstyles", "cleanup" ], items: [ "Bold", "Italic", "Underline", "Strike", "Subscript", "Superscript", "-", "RemoveFormat" ] },
+								{ name: "paragraph", groups: [ "list", "indent", "blocks", "align"], items: [ "NumberedList", "BulletedList", "-", "Outdent", "Indent", "-", "Blockquote", "CreateDiv", "-", "JustifyLeft", "JustifyCenter", "JustifyRight", "JustifyBlock" ] },
+								"/",
+								{ name: "links", items: [ "Link", "Unlink" ] },
+								{ name: "insert", items: [ "Image", "Flash", "Table", "HorizontalRule", "Smiley", "SpecialChar", "Iframe" ] },
+								"/",
+								{ name: "styles", items: [ "Styles", "Format", "Font", "FontSize" ] },
+								{ name: "colors", items: [ "TextColor", "BGColor" ] },
+								{ name: "tools", items: [ "Maximize"] }
+							]
+							});      
+						</script>
+						
+						<script>
+							var attachments = 0;
+							
+							$( ".add_attachments" ).click(function() {
+								$( ".attachments" ).append("<input type=\"file\" name=\""+attachments+"\"><br>" );
+								attachments += 1;
+							});
+						</script>
+					
+					</div>';
+				}
+            echo'	
             </div>
 			';
 
