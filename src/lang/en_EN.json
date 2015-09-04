@@ -128,5 +128,12 @@
     "everybody":"Everybody",
     "only_teachers":"Only teachers",
     "only_administrators":"Only administrators",
-    "nobody":"Nobody"
+    "nobody":"Nobody",
+    "saved_data":"Saved data",
+    "welcome_teeach":"Welcome to Teeach",
+    "help_you":"We are going to help you!",
+    "complete_profile":"Complete your profile",
+    "where_begin":"Where to begin",
+    "learn_more":"Learn more",
+    "close":"Close"
 }

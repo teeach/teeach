@@ -1,0 +1,392 @@
+@charset "utf-8";
+
+body {
+	background:#FFFFFF;
+	margin:0;
+	padding:0;
+	font-family:'robotolight','robotomedium','robotoregular';
+	min-height:100%;
+	min-width:100%;
+	height:100%;
+	width:100%;
+	font-weight:normal;
+}
+	
+/*===============================================================
+2.0 FONTS
+===============================================================*/
+
+/* RobotoBold */
+@font-face {
+    font-family: 'RobotoBold';
+    src: url('../fonts/roboto-bold/roboto-bold-webfont.eot');
+    src: url('../fonts/roboto-bold/roboto-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/roboto-bold/roboto-bold-webfont.woff') format('woff'),
+         url('../fonts/roboto-bold/roboto-bold-webfont.ttf') format('truetype'),
+         url('../fonts/roboto-bold/roboto-bold-webfont.svg#robotobold') format('svg');
+	font-weight: normal;
+    font-style: normal;
+}
+
+/* RobotoMedium */
+@font-face {
+    font-family: 'RobotoMedium';
+    src: url('../fonts/roboto-medium/roboto-medium-webfont.eot');
+    src: url('../fonts/roboto-medium/roboto-medium-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/roboto-medium/roboto-medium-webfont.woff') format('woff'),
+         url('../fonts/roboto-medium/roboto-medium-webfont.ttf') format('truetype'),
+         url('../fonts/roboto-medium/roboto-medium-webfont.svg#robotomedium') format('svg');
+	font-weight: normal;
+    font-style: normal;
+}
+
+/* RobotoRegular */
+@font-face {
+    font-family: 'RobotoRegular';
+    src: url('../fonts/roboto-regular/roboto-regular-webfont.eot');
+    src: url('../fonts/roboto-regular/roboto-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/roboto-regular/roboto-regular-webfont.woff') format('woff'),
+         url('../fonts/roboto-regular/roboto-regular-webfont.ttf') format('truetype'),
+         url('../fonts/roboto-regular/roboto-regular-webfont.svg#robotoregular') format('svg');
+	font-weight: normal;
+    font-style: normal;
+}
+
+/* RobotoLight */
+@font-face {
+    font-family: 'RobotoLight';
+    src: url('../fonts/roboto-light/roboto-light-webfont.eot');
+    src: url('../fonts/roboto-light/roboto-light-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/roboto-light/roboto-light-webfont.woff') format('woff'),
+         url('../fonts/roboto-light/roboto-light-webfont.ttf') format('truetype'),
+         url('../fonts/roboto-light/roboto-light-webfont.svg#robotolight') format('svg');
+	font-weight: normal;
+    font-style: normal;
+}
+
+/* RobotoThin */
+@font-face {
+    font-family: 'RobotoThin';
+    src: url('../fonts/roboto-thin/roboto-thin-webfont.eot');
+    src: url('../fonts/roboto-thin/roboto-thin-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/roboto-thin/roboto-thin-webfont.woff') format('woff'),
+         url('../fonts/roboto-thin/roboto-thin-webfont.ttf') format('truetype'),
+         url('../fonts/roboto-thin/roboto-thin-webfont.svg#robotothin') format('svg');
+	font-weight: normal;
+    font-style: normal;
+}
+
+
+.light {
+	 font-family:'robotolight';
+}
+
+.medium {
+	font-family:'robotomedium';
+}
+
+.regular {
+	font-family:'robotoregular';
+}
+
+html,body {
+	height:100%;
+	margin:0;
+}
+
+body ul {
+	list-style:none;
+}
+
+*::-moz-selection{
+   background:#cc9966;
+   color:#332200;
+}
+*::selection {
+   background:#cc9966; 
+   color:#332200;
+}
+
+a:link {color:#cc9966;}
+a:visited {color:#cc9966;}
+a:hover {color:#cc9966;}
+a:active {color:#cc9966;}
+
+html,a {
+	text-decoration:none !important;
+	outline:none !important;
+}
+
+.imagen {
+	max-width:100% !important;
+	height:auto !important;
+}
+
+p, h1, h2, span {
+	cursor:default;
+}
+
+/* --- ESTILOS --- */
+
+.body {
+	max-width:700px;
+	margin:0;
+	position:relative;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+.logotipo {
+	position:relative;
+	margin-top:80px;
+}
+
+.title {
+	position:relative;
+	margin-top:40px;
+	padding:0;
+	z-index:5;
+}
+
+.title h1 {
+	font-family:'robotoregular';
+	position:relative;
+	color:#332200;
+	font-size:36px;
+	margin:0;
+}
+
+.subtitulo {
+	position:relative;
+	margin-top:40px;
+	margin-bottom:-20px;
+	padding:0;
+	z-index:5;
+}
+
+.subtitulo p {
+	font-family:'robotoregular';
+	position:relative;
+	color:#332200;
+	font-size:26px;
+	margin:0;
+}
+
+.texto {
+	position:relative;
+	margin:0;
+	padding:0;
+	margin-top:40px;
+	z-index:8;
+}
+
+.texto p {
+	font-family:'robotolight';
+	position:relative;
+	color:#332200;
+	font-size:18px;
+	margin:0;
+}
+
+.txti {
+	text-align:left;
+}
+
+#boton {
+	display:block;
+	font-family:'robotolight';
+	margin-top:40px;
+	position:relative;
+	width:250px;
+	max-width:250px;
+	padding-left:10px;
+	padding-right:10px;
+	padding:10px 0px;
+	border:2px solid #332200;
+	background:#332200;
+	color:#FFFFFF;
+	font-size:18px;
+	text-align:center;
+	cursor:pointer;
+	border-radius:3px;
+	transition:0.3s;
+	-moz-transition:0.3s;
+	-ms-transition:0.3s;
+	-o-transition:0.3s;
+	-webkit-transition:0.3s;
+}
+
+#boton:hover {
+	background:none;
+	color:#332200;
+}
+
+.pasos {
+	position:relative;
+	margin:0;
+	padding:0;
+	margin-top:80px;
+	margin-bottom:40px;
+	z-index:8;
+}
+
+.pasos p {
+	font-family:'robotolight';
+	position:relative;
+	color:#332200;
+	font-size:18px;
+	margin:0;
+}
+
+/* --- FORMULARIO --- */
+
+*:focus,
+*:hover { 
+outline: none !important;
+}
+
+form {
+	max-width:700px;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline:none;
+	background:#f2f2f2;
+}
+
+input:hover,
+select:hover,
+textarea:hover{
+    outline:none;
+	background:#f2f2f2;
+}
+
+input,
+textarea,
+placeholder {
+	text-align:center;
+	padding-left:10px;
+	padding-top:13px;
+	padding-bottom:13px;
+	z-index:99;
+	font-family:'robotoregular';
+	font-size:16px !important;
+	margin-bottom:40px;
+}
+
+.inputform {
+	width:100%;
+	position:relative;
+	display:block;
+	margin-top:16px;
+	background:#fafafa;
+	color:#332200;
+	border:none;
+	transition:0.3s;
+	-moz-transition:0.3s;
+	-ms-transition:0.3s;
+	-o-transition:0.3s;
+	-webkit-transition:0.3s;
+	border-radius:3px;
+}
+
+.tagform {
+	margin-top:40px;
+	margin-bottom:0;
+	font-family:'robotomedium';
+	font-size:18px !important;
+	color:#332200;
+	padding:0;
+}
+
+/* --- DROPDOWN --- */
+
+.dropdown {
+	display: inline-block;
+	position: relative;
+	overflow: hidden;
+	height: 28px;
+	width: 200px;
+	margin-top:20px;
+	background: #332200;
+	border:1px solid #332200;
+	border-radius: 3px;
+}
+
+.dropdown:before, .dropdown:after {
+	content: '';
+	position: absolute;
+	z-index: 2;
+	top: 9px;
+	right: 10px;
+	width: 0;
+	height: 0;
+	border: 4px dashed;
+	border-color: #332200 rgba(0, 0, 0, 0);
+	pointer-events: none;
+}
+.dropdown:before {
+	border-bottom-style: solid;
+	border-top: none;
+}
+.dropdown:after {
+	margin-top: 7px;
+	border-top-style: solid;
+	border-bottom: none;
+}
+
+.dropdown-select {
+	position: relative;
+	width: 100%;
+	margin: 0;
+	padding: 6px 8px 6px 10px;
+	height: 28px;
+	line-height: 14px;
+	font-size: 12px;
+	color: #FFFFFF;
+	background: #332200;
+	border: 0;
+	border-radius: 0;
+	-webkit-appearance: none;
+    
+	transition:0.3s linear;
+	-moz-transition:0.3s linear;
+	-ms-transition:0.3s linear;
+	-o-transition:0.3s linear;
+	-webkit-transition:0.3s linear;
+}
+.dropdown-select:hover {
+	background: #FFFFFF;
+	color: #332200;
+}
+.dropdown-select:focus {
+	z-index: 3;
+	width: 100%;
+	outline-offset: -2px;
+	background: #FFFFFF;
+	color: #332200;
+}
+.dropdown-select > option {
+	margin: 3px;
+	padding: 6px;
+	text-shadow: none;
+	background: #FFFFFF;
+	color: #332200;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+@media only screen and (max-width :650px) {
+p, h1 {
+	margin-left:10px !important;
+	margin-right:10px !important;
+}
+.inputform {
+	width:85%;
+	margin-left:auto;
+    margin-right:auto;
+}
+}

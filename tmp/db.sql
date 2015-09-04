@@ -1,6 +1,17 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
+CREATE TABLE IF NOT EXISTS `pl_califications` (
+  `id` int(11) NOT NULL,
+  `work_h` varchar(99) NOT NULL,
+  `user_h` varchar(99) NOT NULL,
+  `h` varchar(99) NOT NULL,
+  `upload` text NOT NULL,
+  `date` datetime NOT NULL,
+  `calification` decimal(10,0) NOT NULL,
+  `observations` longtext NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `pl_categories` (
   `id` int(11) NOT NULL,
   `name` text NOT NULL,
@@ -70,7 +81,8 @@ CREATE TABLE IF NOT EXISTS `pl_users` (
   `privilege` int(2) NOT NULL,
   `creation_date` datetime NOT NULL,
   `last_time` datetime NOT NULL,
-  `status` varchar(25) CHARACTER SET utf8 NOT NULL
+  `status` varchar(25) CHARACTER SET utf8 NOT NULL,
+  `tour` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `pl_works` (
@@ -85,6 +97,9 @@ CREATE TABLE IF NOT EXISTS `pl_works` (
   `status` varchar(25) CHARACTER SET utf8 NOT NULL,
   'attachment' text CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `pl_califications`
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `pl_categories`
   ADD PRIMARY KEY (`id`);
@@ -112,6 +127,9 @@ ALTER TABLE `pl_users`
 
 ALTER TABLE `pl_works`
   ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `pl_califications`
+MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `pl_categories`
 MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;

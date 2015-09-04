@@ -1015,6 +1015,44 @@ UI ELEMENTS
     border: 3px solid #c96;
 }
 
+.horizontal_box {
+    top: 200px;
+    width: 100%;
+    position: fixed;
+    border-top: 1px solid #320;
+    border-bottom: 1px solid #320;
+    box-shadow: 0 0 5px #ccc;
+    z-index: 99;
+    background-color: #fff;
+    text-align: center;
+    padding: 50px;
+}
+
+.horizontal_box table {
+    display: inline-block;
+    border-collapse: separate;
+    margin: 20px;
+}
+
+.horizontal_box table td {
+    padding: 50px 100px;
+}
+
+.horizontal_box .fa {
+    padding: 30px;
+    border-radius: 0.8em;
+    width: 1.6em; 
+    text-align: center;
+    font-size: 5rem;
+    background-color: #c96;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.horizontal_box b {
+    font-weight: bold;
+    color: #320;
+}
 /*
 ==================
 (c)2015 Teeach

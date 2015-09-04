@@ -10,6 +10,11 @@
 	$User = $System->get_user_by_id($_SESSION['h'], $con);
 	
 	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+
+	if(@$_GET['action'] == "close") {
+		$query = $con->query("UPDATE pl_users SET tour=1 WHERE h='$User->h'")or die("Query error!");
+		header('Location: index.php');
+	}
     
 ?>
 
@@ -80,7 +85,6 @@
 		$Pagination->paginate($items);
 				
 	?>
-	<div class="ui_width_sidebar right">
 	<section id="index_groups">
 		<div class="sectiontitle">
 			
@@ -114,8 +118,42 @@
 		';
 		?>
 	</section>
-	</div>
-	</div>
 	<?php echo $System->set_footer(); ?>
+	<?php
+		$query = $con->query("SELECT * FROM pl_users WHERE h='$User->h'")or die("Query error!");
+		$row = mysqli_fetch_array($query);
+		if($row['tour'] == 0) {
+			echo '
+			<div class="horizontal_box">
+				<h1>'.$lang["welcome_teeach"].'</h1>
+				<h3>'.$lang["help_you"].'</h3>
+				<table>
+					<tr>
+						<td>
+							<a href="editprofile.php" target="_blank">
+								<i class="fa fa-user" style="background-color: #FF4646"></i><br>
+								<b>'.$lang["complete_profile"].'</b>
+							</a>
+						</td>
+						<td>
+							<a href="#" target="_blank">
+								<i class="fa fa-lightbulb-o" style="background-color: #4687FF"></i><br>
+								<b>'.$lang["where_begin"].'</b>
+							</a>
+						</td>
+						<td>
+							<a href="#" target="_blank">
+								<i class="fa fa-book" style="background-color: #5BD361"></i><br>
+								<b>'.$lang["learn_more"].'</b>
+							</a>
+						</td>
+					</tr>
+				</table>
+				<br>
+				<a href="index.php?action=close">'.$lang["close"].'</a>
+			</div>
+			';
+		}		
+	?>
 </body>
 </html>

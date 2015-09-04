@@ -114,7 +114,6 @@
 
 				//Crear tablas BD
 
-
 				$sql = file_get_contents("tmp/db.sql");
 				$tokens = preg_split("/(--.*\s+|\s+|\/\*.*\*\/)/", $sql, null, PREG_SPLIT_NO_EMPTY);
 				$length = count($tokens);
@@ -176,6 +175,7 @@
 				$email = $_POST['email'];
 				$pass = $_POST['pass'];
 				$rpass = $_POST['rpass'];
+				$date = date("Y-m-d H:i:s");
 
 				$h = substr( md5(microtime()), 1, 18);
 				$pass_md5 = md5($pass);
@@ -188,7 +188,7 @@
 				$pass_hash = $t_hasher->HashPassword($pass);
 
 				$con = $System->conDB("config.json");
-				$query = $con->query("INSERT INTO pl_users(username,email,pass,privilege,h) VALUES('$username','$email','$pass_hash',4,'$h')")or die(mysql_error());
+				$query = $con->query("INSERT INTO pl_users(username,email,pass,privilege,h,creation_date,tour) VALUES('$username','$email','$pass_hash',4,'$h','$date',1)")or die(mysql_error());
 
 				//Datos del centro
 				$centername = $_POST['centername'];
@@ -196,12 +196,7 @@
 				$accesspass = $_POST['accesspass'];
 				$lang_val = $_SESSION["lang"];
 
-				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('centername','$centername')")or die("Query error!");
-				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('logo','$logo')")or die("Query error!");
-				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('accesspass','$accesspass')")or die("Query error!");
-				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('JP','2')")or die("Query error!");
-				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('showgroups','true')")or die("Query error!");
-				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES('lang','$lang_val')")or die("Query error!");
+				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES ('centername','$centername'),('logo','$logo'),('accesspass','$accesspass'),('JP','2'),('showgroups','true'),('lang','$lang_val'),('post_per_page','5'),('post_comments','true'),('post_author','true')")or die("Query error!");
 
 				echo '
 					<h1>'.$lang["the_end"].'</h1>

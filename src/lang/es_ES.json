@@ -129,5 +129,12 @@
     "only_teachers":"Sólo profesores",
     "only_administrators":"Sólo administradores",
     "nobody":"Nadie",
-    "enable_profile_photo":"Habilitar foto de perfil"
+    "enable_profile_photo":"Habilitar foto de perfil",
+    "saved_data":"Ajustes guardados",
+    "welcome_teeach":"Bienvenido a Teeach",
+    "help_you":"¡Vamos a ayudarte!",
+    "complete_profile":"Completa tu perfil",
+    "where_begin":"Por dónde empezar",
+    "learn_more":"Aprende más",
+    "close":"Cerrar"
 }

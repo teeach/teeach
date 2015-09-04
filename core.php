@@ -37,7 +37,7 @@
 			echo "
                 <footer>
                     ©2015 Teeach<br>
-                    Pre-Alpha
+                    Early Development Version
                 </footer>";
 		}
 
