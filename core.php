@@ -15,6 +15,7 @@
                 <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'>
 
                 <script src='../../src/js/check-all.js'></script>
+                <script src='../../src/js/main.js'></script>
                 
 			";
 		}
@@ -28,7 +29,7 @@
 			echo '
 				<header id="header">
     				<div class="main_title">
-        				<h1>'.$centername.'</h1>
+        				<a href="index.php"><h1>'.$centername.'</h1></a>
     				</div>
 			';
 		}
@@ -36,7 +37,7 @@
 		function set_footer() {
 			echo "
                 <footer>
-                    ©2015 Teeach<br>
+                    ©2016 Teeach<br>
                     Early Development Version
                 </footer>";
 		}
@@ -113,7 +114,7 @@
                         <li>
                             <a href="#">'.$lang["groups"].'</a>
                             <ul>';
-                                $query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$h'")or die("Query error!");
+                                $query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$h' AND status!='waiting'")or die("Query error!");
                                 while($row1 = mysqli_fetch_array($query)) {
                                     $group_h = $row1['group_h'];
                                     $query2 = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query error!");

@@ -21,6 +21,10 @@
     <script src="../../src/js/tabs.js"></script>
     <!-- Check All JS -->
     <script src="../../src/js/check-all.js"></script>
+
+    <script type="text/javascript">
+    	$('.tip').before( "Ayuda" );
+    </script>
 </head>
 <body onload="javascript:cambiarPestanna(pestanas,pestana1);">
 
@@ -45,15 +49,21 @@
 			
 			if(isset($_POST["allow_comments"])){
 				$post_comments = "true";
-			}else{
+			} else {
 				$post_comments = "false";
 			}
 
 			if(isset($_POST["show_author"])){
 				$post_author = "true";
-			}else{
+			} else {
 				$post_author = "false";
 			}
+
+            if($_POST['allow_create_categories'] == "on") {
+                $allow_create_categories = "true";
+            } else {
+                $allow_create_categories = "false";
+            }
 
 			$query = $con->query("UPDATE pl_settings SET value='$centername' WHERE property='centername'")or die("Query error 1!");
 			$query = $con->query("UPDATE pl_settings SET value='$logo' WHERE property='logo'")or die("Query error 2!");
@@ -64,6 +74,7 @@
             $query = $con->query("UPDATE pl_settings SET value='".$_POST["posts_per_page"]."' WHERE property='post_per_page'")or die("Query error 7!");
             $query = $con->query("UPDATE pl_settings SET value='".$post_comments."' WHERE property='post_comments'")or die("Query error 8!");
             $query = $con->query("UPDATE pl_settings SET value='".$post_author."' WHERE property='post_author'")or die("Query error 9!");
+            $query = $con->query("UPDATE pl_settings SET value='".$allow_create_categories."' WHERE property='allow_create_categories'")or die("Query error 10!");
 		
 			if($_FILES["up_lang"]["size"] != 0){
 				$target_dir = "../../src/lang/";
@@ -114,6 +125,7 @@
             $post_per_page = $con->query("SELECT * FROM pl_settings WHERE property='post_per_page'");
             $post_comments = $con->query("SELECT * FROM pl_settings WHERE property='post_comments'");
             $post_author = $con->query("SELECT * FROM pl_settings WHERE property='post_author'");
+            $query_allow_create_categories = $con->query("SELECT * FROM pl_settings WHERE property='allow_create_categories'");
 
 			//Arrays
 			$row_centername = mysqli_fetch_array($query_centername);
@@ -125,6 +137,7 @@
             $row_post_per_page = mysqli_fetch_array($post_per_page);
             $row_post_comments = mysqli_fetch_array($post_comments);
             $row_post_author = mysqli_fetch_array($post_author);
+            $row_allow_create_categories = mysqli_fetch_array($query_allow_create_categories);
 
 			//Values
 			$centername = $row_centername['value'];
@@ -133,6 +146,7 @@
 			$sg = $row_sg['value'];
             $JP = $row_JP['value'];
             $lang_val = $row_lang['value'];
+            $allow_create_categories = $row_allow_create_categories['value'];
 			
 			echo '
 			
@@ -189,41 +203,89 @@
                             <form class="ui_form">
                                 <div id="tab_01" class="ui_tab_content">
                                     <table>
-                                    	<tr><td><p style="font-family:RobotoBold">'.$lang["center_data"].'</p></td><td></td></tr>
-                                        <tr><td><label for="centername">'.$lang["centername"].': </label></td><td><input type="text" id="centername" name="centername" value="'.$centername.'"></td></tr>
-                                        <tr><td><label for="logo">'.$lang["logo"].': </label></td><td><input type="text" name="logo" id="logo" value="'.$logo.'"></td></tr>
-                                        <tr><td></td><td><img src="'.$logo.'" alt="logo"></td></tr>
-                                        <tr><td><label for="accesspass">'.$lang["accesspass"].': </label></td><td><input type="text" id="accesspass" name="accesspass" value="'.$accesspass.'"></td></tr>
-                                        <tr><td><label for="lang">'.$lang["default_language"].': </label></td><td>
-											<select id="lang" name="lang">';
-												$fp_langs = fopen("../../src/lang/langs.json", "r");
-												$rfile_langs = fread($fp_langs, filesize("../../src/lang/langs.json"));
-												$json_langs = json_decode($rfile_langs);
-												foreach ($json_langs->{"langs"} as $index => $row_langs) {
-													echo '<option value="'.$row_langs.'"';if($lang_val == $row_langs) echo "selected";echo'>'.$row_langs.'</option>';
-												}
-												echo '
-											</select>
-                                        </td></tr>
-                                        <tr><td><p style="font-family:RobotoBold">'.$lang["posts"].'</p></td><td></td></tr>
-                                        <tr><td><label for="posts_per_page">'.$lang["posts_per_page"].':</label></td><td><input type="number" id="posts_per_page" name="posts_per_page" min="1" value="'.$row_post_per_page["value"].'"></td></tr>
-                                        <tr><td><label for="allow_comments">'.$lang["allow_comments"].':</label></td><td><input type="checkbox" id="allow_comments" name="allow_comments" ';if($row_post_comments["value"]=="true"){echo "checked";} echo '></td></tr>
-                                        <tr><td><label for="show_author">'.$lang["show_author"].':</label></td><td><input type="checkbox" id="show_author" name="show_author" ';if($row_post_author["value"]=="true"){echo "checked";} echo '></td></tr>
+                                    	<tr>
+                                    		<td><p style="font-family:RobotoBold">'.$lang["center_data"].'</p></td>
+                                    		<td></td>
+                                    	</tr>
+
+                                        <tr>
+                                        	<td><label for="centername">'.$lang["centername"].': </label></td>
+                                        	<td><input type="text" id="centername" name="centername" value="'.$centername.'"></td>
+                                        </tr>
+
+                                        <tr>
+                                        	<td><label for="logo">'.$lang["logo"].': </label><div class="tip">'.$lang["tip_logo"].'<a target="_blank" href="http://teeach.org/go?link=b1l14nqQ&lang=es_ES">'.$lang["more_information"].'</a></div></td>
+                                        	<td><input type="text" name="logo" id="logo" value="'.$logo.'"></td>
+                                        </tr>
+
+                                        <tr>
+                                        	<td></td>
+                                        	<td><img src="'.$logo.'" alt="logo" style="width: 128px;height: 128px"></td>
+                                        </tr>
+
+                                        <tr>
+                                        	<td><label for="accesspass">'.$lang["accesspass"].': </label><div class="tip">'.$lang["tip_accesspass"].'<a target="_blank" href="http://teeach.org/go?link=--------&lang=es_ES">'.$lang["more_information"].'</a></div></td>
+                                        	<td><input type="text" id="accesspass" name="accesspass" value="'.$accesspass.'"></td>
+                                        </tr>
+                                        
+                                        <tr>
+                                        	<td><label for="lang">'.$lang["default_language"].': </label></td>
+                                        	<td>
+												<select id="lang" name="lang">';
+													$fp_langs = fopen("../../src/lang/langs.json", "r");
+													$rfile_langs = fread($fp_langs, filesize("../../src/lang/langs.json"));
+													$json_langs = json_decode($rfile_langs);
+													foreach ($json_langs->{"langs"} as $index => $row_langs) {
+														echo '<option value="'.$row_langs.'"';if($lang_val == $row_langs) echo "selected";echo'>'.$row_langs.'</option>';
+													}
+													echo '
+												</select>
+                                        	</td>
+                                        </tr>
+
+                                        <tr>
+                                        	<td><p style="font-family:RobotoBold">'.$lang["posts"].'</p></td>
+                                        	<td></td>
+                                        </tr>
+                                        
+                                        <tr>
+                                        	<td><label for="posts_per_page">'.$lang["posts_per_page"].':</label></td>
+                                        	<td><input type="number" id="posts_per_page" name="posts_per_page" min="1" value="'.$row_post_per_page["value"].'"></td>
+                                        </tr>
+
+                                        <tr>
+                                        	<td><label for="allow_comments">'.$lang["allow_comments"].':</label></td>
+                                        	<td><input type="checkbox" id="allow_comments" name="allow_comments" ';if($row_post_comments["value"]=="true"){echo "checked";} echo '></td>
+                                        </tr>
+
+                                        <tr>
+                                        	<td><label for="show_author">'.$lang["show_author"].':</label></td>
+                                        	<td><input type="checkbox" id="show_author" name="show_author" ';if($row_post_author["value"]=="true"){echo "checked";} echo '></td>
+                                        </tr>
                                     </table>
                                 </div>
                                 
                                 <div id="tab_02" class="ui_tab_content">
                                 	<table>
-                                		<tr><td><p style="font-family: RobotoBold">'.$lang["profile"].'</p></td><td></td></tr>
-                                		<tr><td><label for="last_time">'.$lang["show_last_time"].'</label></td><td>
-											<select name="last_time">
-												<option value="everybody">'.$lang["everybody"].'</option>
-												<option value="only_teachers">'.$lang["only_teachers"].'</option>
-												<option value="only_administrators">'.$lang["only_administrators"].'</option>
-												<option value="nobody">'.$lang["nobody"].'</option>
-											</select>
-                                		</td></tr>
-                                		<tr><td><label for="showgroups">'.$lang["show_groups_prf"].'</label></td>
+                                		<tr>
+                                			<td><p style="font-family: RobotoBold">'.$lang["profile"].'</p></td>
+                                			<td></td>
+                                		</tr>
+
+                                		<tr>
+                                			<td><label for="last_time">'.$lang["show_last_time"].'</label></td>
+                                			<td>
+												<select name="last_time">
+													<option value="everybody">'.$lang["everybody"].'</option>
+													<option value="only_teachers">'.$lang["only_teachers"].'</option>
+													<option value="only_administrators">'.$lang["only_administrators"].'</option>
+													<option value="nobody">'.$lang["nobody"].'</option>
+												</select>
+                                			</td>
+                                		</tr>
+
+                                		<tr>
+                                			<td><label for="showgroups">'.$lang["show_groups_prf"].'</label></td>
                                 	';
                                     if ($sg == "true") {
                                         echo '<td><input type="checkbox" name="showgroups" checked></td>';
@@ -236,40 +298,56 @@
                                     </table>
                                 </div>
                                 <div id="tab_03" class="ui_tab_content">
-                                    <label for="JP">'.$lang["join_group"].': </label>
-                                    <select id="JP" name="JP">';
-                                    switch($JP) {
-                                        case 1:
-                                            echo '
-                                                <option value="1" selected>'._("Direct").'</option>
-                                                <option value="2">'._("Request").'</option>
-                                                <option value="3">'._("Disabled").'</option>
-                                            ';
-                                            break;
-                                        case 2:
-                                            echo '
-                                                <option value="1">'._("Direct").'</option>
-                                                <option value="2" selected>'._("Request").'</option>
-                                                <option value="3">'._("Disabled").'</option>
-                                            ';
-                                            break;
-                                        case 3:
-                                            echo '
-                                                <option value="1">'._("Direct").'</option>
-                                                <option value="2">'._("Request").'</option>
-                                                <option value="3" selected>'._("Disabled").'</option>
-                                            ';
-                                            break;
-                                        default:
-                                            echo '
-                                                <option value="1" selected>'._("Direct").'</option>
-                                                <option value="2">'._("Request").'</option>
-                                                <option value="3">'._("Disabled").'</option>
-                                            ';
-                                    }
-                                    echo '
-                                        </select> 
-									<br>
+                                	<table>
+                                		<tr>
+                                        	<td><p style="font-family:RobotoBold">'.$lang["categories_and_groups"].'</p></td>
+                                        	<td></td>
+                                        </tr>
+
+                                        <tr>
+                                        	<td><label for="JP">'.$lang["join_group"].': </label></td>
+                                        	<td>
+                                        		<select id="JP" name="JP">';
+                                    				switch($JP) {
+                                        			case 1:
+                                           			 echo '
+                                                			<option value="1" selected>'.$lang["direct"].'</option>
+                                                			<option value="2">'.$lang["request"].'</option>
+                                                			<option value="3">'.$lang["disabled"].'</option>
+                                            			';
+                                            			break;
+                                       				case 2:
+                                            			echo '
+                                                			<option value="1">'.$lang["direct"].'</option>
+                                                			<option value="2" selected>'.$lang["request"].'</option>
+                                                			<option value="3">'.$lang["disabled"].'</option>
+                                            			';
+                                            			break;
+                                        			case 3:
+                                            			echo '
+                                               			<option value="1">'.$lang["direct"].'</option>
+                                                			<option value="2">'.$lang["request"].'</option>
+                                                			<option value="3" selected>'.$lang["disabled"].'</option>
+                                            			';
+                                           		 		break;
+                                       				default:
+                                            			echo '
+                                               				<option value="1" selected>'.$lang["direct"].'</option>
+                                                			<option value="2">'.$lang["request"].'</option>
+                                                			<option value="3">'.$lang["disabled"].'</option>
+                                            			';
+                                    				}
+                                    			echo '
+                                        		</select> 
+                                        	</td>
+                                        </tr>
+
+                                        <tr>
+                                        	<td><label for="allow_create_categories">'.$lang["allow_create_categories"].'</label></td>
+                                        	<td><input type="checkbox" name="allow_create_categories" ';if($allow_create_categories == "true"){echo 'checked';} echo '></td>
+                                        </tr>
+                                    </table>
+                                    
 									<label for="lang">'.$lang["language"].': </label>
 									
 									<br>
@@ -281,7 +359,7 @@
                                 <div id="tab_04" class="ui_tab_content">
                                 <span style="font-weight: bold">Teeach</span><br>
                                 <p>Version 0.1 Pre-Alpha</p><br>
-                                '._("Server time: ").' '.date("d-m-Y H:i:s").'            				
+                                '._("Server time: ").' '.date("d-m-Y H:i:s").'
             				</div>
    						</div>
 

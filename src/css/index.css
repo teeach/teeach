@@ -1,6 +1,60 @@
-#index_groups {
+/*=======================================
+	Index page
+  =======================================*/
+
+.index_page {
+	padding: 30px;
+	padding-right: 75px;
+}
+
+.index_posts {
 	display: inline-block;
+	width: 75%;
+}
+
+.index_right {
+	width: 20%;
+	display: inline-block;
+	float: right;
+}
+
+@media screen and (max-width: 768px) {
+	.index_posts, .index_right {
+		width: 100%;
+	}
+}
+
+.post {
+	width: 100%;
+	display: inline-block;
+	background-color: #fff;
+	box-shadow: 0 0 3px #ccc;
+	border: 1px solid #ccc;
+	transition: all 0.2s ease;
+	padding: 15px;
+	margin: 10px 0;
+}
+
+.post:hover {
 	border: 1px solid #c96;
+}
+
+.post h2 {
+	font-size: 2.2rem;
+	padding-bottom: 5px;
+}
+
+.post h5 {
+	font-size: 0.85rem;
+	padding-bottom: 20px;
+}
+
+.post h5 a {
+	color: #000;
+}
+
+.post b, .post strong {
+	font-weight: bold;
 }
 
 .sectiontitle {

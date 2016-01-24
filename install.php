@@ -12,6 +12,11 @@
 	}else{
 		$lang = $System->parse_lang("src/lang/en_EN.json");
 	}
+
+	if(@$_GET['step'] == "checklanguage") {
+		$_SESSION["lang"] = $_POST["lang"];
+		header('Location: install.php?step=1');
+	}
 	
 ?>
 <!DOCTYPE html>
@@ -21,20 +26,20 @@
 	<title><?php echo _("Install");?> | Teeach</title>
 	<link rel="stylesheet" href="src/css/main.css">
 	<?php $System->set_head(); ?>
-	<script>
-		function getUrl() {
-			var url = location.href;
-			var url_installation = url.replace("/install.php?step=3","");
-			document.getElementById("url").value = url_installation;
-		}
-
-		function goStep3() {
-			location.href = "install.php?step=3";
-		}
-	</script>
+	<script src='src/js/main.js'></script>
+	<script src='src/js/install.js'></script>
 </head>
 <body>
 	<?php
+
+		echo '
+			<div class="installation">
+				<div class="installation_header">
+					<h1>te<span style="color:#c96">e</span>ach</h1>
+					<h3>Installation</h3>
+				</div>
+		';
+
 		$version =  phpversion();
 		$version = explode(".", $version);
 		if ($version[0] < 5 and $version[1] < 4) {
@@ -52,51 +57,118 @@
 			
 			if ($step == "1") {
 				
-				echo '<center><h1>'.$lang["hello"].'</h1><p>'.$lang["thanks_teeach"].'</p><p>'.$lang["now_install"].'</p>
-				<br>
-				'.$lang["first_select_language"].':<br>
-				<form method="post" action="install.php?step=2">
-					<label for="lang"></label>
-						<select name="lang">';
-							$fp_langs = fopen("src/lang/langs.json", "r");
-							$rfile_langs = fread($fp_langs, filesize("src/lang/langs.json"));
-							$json_langs = json_decode($rfile_langs);
-							foreach ($json_langs->{"langs"} as $index => $row_langs) {
-								echo '<option value="'.$row_langs.'">'.$row_langs.'</option>';
-							}
-						echo '
-						</select><br>
-						<input type="submit" value="'.$lang["next"].'">
-				</form>';
-			} elseif($step == "2") {
-				$_SESSION["lang"] = $_POST["lang"];
 				echo '
 					<center>
-					<h1>'.$lang["terms"].'</h1>
+						<div class="installation_box">
+							<h1>'.$lang["hello"].'</h1>
+							<p>'.$lang["thanks_teeach"].'</p>
+							<p>'.$lang["now_install"].'</p>
+							
+							<br>
+
+							'.$lang["first_select_language"].':<br>
+							<form method="post" action="install.php?step=checklanguage" id="lang_form">
+								<label for="lang"></label>
+									<select name="lang" id="lang_selector">';
+
+										echo '<option value="'.$_SESSION['lang'].'">--Selecciona--</option>';
+
+										$fp_langs = fopen("src/lang/langs.json", "r");
+										$rfile_langs = fread($fp_langs, filesize("src/lang/langs.json"));
+										$json_langs = json_decode($rfile_langs);
+										foreach ($json_langs->{"langs"} as $index => $row_langs) {
+
+											switch($row_langs) {
+												case 'es_ES':
+													echo '<option value="'.$row_langs.'">Español (España)</option>';
+													break;
+												case 'en_EN':
+													echo '<option value="'.$row_langs.'">English (England)</option>';
+													break;
+												case 'ca_ES':
+													echo '<option value="'.$row_langs.'">Català (España)</option>';
+													break;
+												case 'de_DE':
+													echo '<option value="'.$row_langs.'">Deutsch (Deutschland)</option>';
+													break;
+												case 'fr_FR':
+													echo '<option value="'.$row_langs.'">Français (France)</option>';
+													break;
+												default:
+													echo '<option value="'.$row_langs.'">'.$row_langs.'</option>';
+											}
+
+											
+										}
+									echo '
+									</select>								
+							</form>
+
+							<br>
+
+							<a href="install.php?step=2"><button>'.$lang["next"].'</button></a>
+						</div>
+					</center>
+				';
+			} elseif($step == "2") {
+				echo '
+					<center>
+						<div class="installation_box">
+							<h1>'.$lang["terms"].'</h1>
 					
-						'.$lang["term1"].'<br>
-						'.$lang["term2"].'<br>
-						'.$lang["term3"].'<br>
-						'.$lang["term4"].'<br>
-						'.$lang["term5"].'<br>
-						'.$lang["term6"].'<br>
+								'.$lang["term1"].'<br>
+								'.$lang["term2"].'<br>
+								'.$lang["term3"].'<br>
+								'.$lang["term4"].'<br>
+								'.$lang["term5"].'<br>
+								'.$lang["term6"].'<br>
 					
-					<button onclick="goStep3();">'.$lang["accept_and_next"].'</button>
+							<button onclick="goStep3();">'.$lang["accept_and_next"].'</button>
+						</div>
 					</center>
 				';
 			} elseif($step == "3") {
 				echo '
-					<h1>'.$lang["database"].'</h1>				
-					<p>'.$lang["database_info"].':</p>
-					<form name="form_db" action="install.php?step=4" method="POST">
-						<label for="type_db">'.$lang["database_type"].': </label><select name="type_db"><option value="1">MySQL</option></select><br>
-						<label for="server_db">'.$lang["database_server"].': </label><input type="text" name="server_db" required><br>
-						<label for="name_db">'.$lang["database_name"].': </label><input type="text" name="name_db" required><br>
-						<label for="user_db">'.$lang["database_user"].': </label><input type="text" name="user_db" required><br>
-						<label for="pass_db">'.$lang["password"].': </label><input type="password" name="pass_db"><br>
-						<input type="hidden" name="url" id="url" value="">
-						<input type="submit" value="'.$lang['next'].'">
-					</form>
+					<div class="installation_box">
+						<h1>'.$lang["database"].'</h1>				
+						<p>'.$lang["database_info"].':</p>
+						<br>
+						<table>
+							<form name="form_db" action="install.php?step=4" method="POST">
+
+								<tr>									
+									<td><label for="type_db">'.$lang["database_type"].': </label></td>
+									<td><select name="type_db"><option value="1">MySQL</option></select></td>
+								</tr>
+
+								<tr>
+									<td><label for="server_db">'.$lang["database_server"].': </label></td>
+									<td><input type="text" name="server_db" id="server_db" required></td>
+								</tr>
+
+								<tr>
+									<td><label for="name_db">'.$lang["database_name"].': </label></td>
+									<td><input type="text" name="name_db" required></td>
+								</tr>
+							
+								<tr>
+									<td><label for="user_db">'.$lang["database_user"].': </label></td>
+									<td><input type="text" name="user_db" required></td>
+								</tr>
+							
+								<tr>
+									<td><label for="pass_db">'.$lang["password"].': </label></td>
+									<td><input type="password" name="pass_db"></td>
+								</tr>
+							
+								<tr>
+									<td><input type="hidden" name="url" id="url" value=""></td>
+									<td><input type="submit" value="'.$lang['next'].'"></td>
+								</tr>							
+							</form>
+						</table>
+					</div>
+
 					<script>getUrl();</script>
 				';
 			} elseif($step == "4") {
@@ -151,23 +223,27 @@
 				}
 
 				echo '
-					<h1>'.$lang["initial_settings"].'</h1>
-					<form action="install.php?step=5" method="POST">
-						<h3>'.$lang["your_center"].'</h3>
-						<table>
-							<tr><td><label for="centername">'.$lang["centername"].': </label></td><td><input type="text" name="centername"></td></tr>
-							<tr><td><label for="logo">'.$lang["logo"].': </label></td><td><input type="text" name="logo"></td></tr>
-							<tr><td><label for="logo">'.$lang["accesspass"].': </label></td><td><input type="text" name="accesspass"></td></tr>
-						</table>
-						<h3>'.$lang["your_account"].'</h3>
-						<table>
-							<tr><td><label for="username">'.$lang["username"].': </label></td><td><input type="text" name="username"></td></tr>
-							<tr><td><label for="email">'.$lang["email"].': </label></td><td><input type="text" name="email"></td></tr>
-							<tr><td><label for="pass">'.$lang["password"].': </label></td><td><input type="password" name="pass"></td></tr>
-							<tr><td><label for="rpass">'.$lang["repeat_password"].': </label></td><td><input type="password" name="rpass"></td></tr>
-						</table>
-						<input type="submit" value="'.$lang["create"].'">
-					</form>
+					<div class="installation_box">
+						<h1>'.$lang["initial_settings"].'</h1><br/>
+						<form name="initial_settings" id="initial_settings" action="install.php?step=5" method="POST">
+							<table>
+								<tr><td><h3><b style="font-weight:bold">'.$lang["your_center"].'</b></h3></td><td></td></tr>							
+								<tr><td><label for="centername">'.$lang["centername"].': </label></td><td><input type="text" name="centername"></td></tr>
+								<tr><td><label for="logo">'.$lang["logo"].': </label></td><td><input type="text" name="logo"></td></tr>
+								<tr><td><label for="logo">'.$lang["accesspass"].': </label><div class="tip">'.$lang["tip_accesspass"].'</div></td><td><input type="text" name="accesspass"></td></tr>
+								<tr><td><h3><b style="font-weight:bold">'.$lang["your_account"].'</b></h3></td><td></td></tr>
+								<tr><td><label for="username">'.$lang["username"].': </label></td><td><input type="text" name="username"></td></tr>
+								<tr><td><label for="email">'.$lang["email"].': </label></td><td><input type="text" name="email"></td></tr>
+								<tr><td><label for="pass">'.$lang["password"].': </label></td><td><input type="password" name="pass"></td></tr>
+								<tr><td><label for="rpass">'.$lang["repeat_password"].': </label></td><td><input type="password" name="rpass"></td></tr>
+								<tr><td></td><td><input type="button" value="'.$lang["create"].'" id="initial_settings_button"></td></tr>
+							</table>
+							<div id="initial_settings_advice" style="background: #CC8181;padding:20px;display:none">
+								'.$lang["password_advice"].'
+								<button id="skip_advice">'.$lang["continue_anyway"].'</button>
+							</div>
+						</form>
+					</div>
 				';
 			} elseif($step == "5") {
 				//Datos del admin
@@ -188,7 +264,15 @@
 				$pass_hash = $t_hasher->HashPassword($pass);
 
 				$con = $System->conDB("config.json");
-				$query = $con->query("INSERT INTO pl_users(username,email,pass,privilege,h,creation_date,tour) VALUES('$username','$email','$pass_hash',4,'$h','$date',1)")or die(mysql_error());
+				$query = $con->query("INSERT INTO pl_users(username,email,pass,privilege,h,creation_date,tour) VALUES('$username','$email','$pass_hash',4,'$h','$date',0)")or die(mysql_error());
+
+				//Post de prueba
+
+				$testpost_title = $lang["testpost_title"];
+				$testpost_body = $lang["testpost_body"];
+				$testpost_h = substr( md5(microtime()), 1, 18);
+
+				$query = $con->query("INSERT INTO pl_posts(title,body,h,author) VALUES('$testpost_title','$testpost_body','$testpost_h','$h')")or die("Query error!");
 
 				//Datos del centro
 				$centername = $_POST['centername'];
@@ -196,15 +280,26 @@
 				$accesspass = $_POST['accesspass'];
 				$lang_val = $_SESSION["lang"];
 
-				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES ('centername','$centername'),('logo','$logo'),('accesspass','$accesspass'),('JP','2'),('showgroups','true'),('lang','$lang_val'),('post_per_page','5'),('post_comments','true'),('post_author','true')")or die("Query error!");
+				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES ('centername','$centername'),('logo','$logo'),('accesspass','$accesspass'),('JP','2'),('showgroups','true'),('lang','$lang_val'),('post_per_page','5'),('post_comments','true'),('post_author','true'),('allow_create_categories','true')")or die("Query error!");
 
 				echo '
-					<h1>'.$lang["the_end"].'</h1>
-					<p>'.$lang["thanks_teeach"].'</p>
-					<a href="pl_panel/usr/login.php">'.$lang["finish"].'</a>
+					<center>
+						<div class="installation_box">
+							<h1>'.$lang["the_end"].'</h1><br/>
+							<p>'.$lang["thanks_teeach"].'</p><br/>
+							<a href="pl_panel/usr/login.php"><button>'.$lang["finish"].'</button></a>
+						</div>
+					</center>
 				';
 			}
 		}
+
+		echo '
+				<div class="installation_footer">
+					<p>©2016 Teeach. A open-source project</p>
+				</div>
+			</div>
+		';
 	?>
 </body>
 </html>

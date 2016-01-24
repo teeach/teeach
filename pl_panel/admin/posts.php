@@ -64,7 +64,7 @@
 
     		$con = $System->conDB("../../config.json");
     		$query = $con->query("INSERT INTO pl_posts(title,body,h,author) VALUES('$title','$body','$h','$author')")or die("Query Error!");
-    		echo "<p>¡Perfecto!</p><a href='posts.php?action'>".$lang['accept']."</a>";
+    		echo "<script>location.href='posts.php?action'</script>";
 
     	} elseif($action == "edit") {
 
@@ -119,7 +119,7 @@
     		$System->conDB("../../config.json");
     		$query = $con->query("UPDATE pl_posts SET title='$title',body='$body' WHERE h='$h'")or die("Query error!");
 
-    		echo "Actualizado. <a href='posts.php?action'>Aceptar</a>";
+    		echo "<script>location.href='posts.php?action'</script>";
 
     	} elseif($action == "delete") {
 
@@ -128,7 +128,7 @@
     		$con = $System->conDB("../../config.json");
     		$query = $con->query("DELETE FROM pl_posts WHERE h='$h'")or die("Query error!");
 
-    		echo "Eliminado. <a href='posts.php?action'>Aceptar</a>";
+    		echo "<script>location.href='posts.php?action'</script>";
 
 		} else {
 

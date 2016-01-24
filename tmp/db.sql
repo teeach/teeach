@@ -6,9 +6,10 @@ CREATE TABLE IF NOT EXISTS `pl_califications` (
   `work_h` varchar(99) NOT NULL,
   `user_h` varchar(99) NOT NULL,
   `h` varchar(99) NOT NULL,
+  `description` text NOT NULL,
   `upload` text NOT NULL,
-  `date` datetime NOT NULL,
-  `calification` decimal(10,0) NOT NULL,
+  `delivery_date` datetime NOT NULL,
+  `mark` int(20) NOT NULL,
   `observations` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -95,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `pl_works` (
   `group_h` varchar(99) CHARACTER SET utf8 NOT NULL,
   `unit_h` varchar(99) CHARACTER SET utf8 NOT NULL,
   `status` varchar(25) CHARACTER SET utf8 NOT NULL,
-  'attachment' text CHARACTER SET utf8 NOT NULL
+  `attachment` text CHARACTER SET utf8 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `pl_califications`

@@ -42,8 +42,9 @@
 	$System->set_usr_menu($User->h,$User->privilege,$lang);
 
 		echo "
-			<section id='posts'>
-				<h1>".$lang['posts']."</h1><br><br>
+			<div class='index_page'>
+				<div class='index_posts'>
+					<h1>".$lang['posts']."</h1>
 			";
 				
 		$page = (int) (!isset($_GET["p"]) ? 1 : $_GET["p"]);
@@ -66,59 +67,63 @@
 			$author = $row2['name']." ".$row2['surname'];
 
 			echo "
-				<article>
+				<div class='post'>
 					<h2>".$title."</h2>
-					<h5>Written by ".$author."</h5>
+					<h5>".$lang['writed_by']." <a href='profile.php?h=".$author_h."'>".$author."</a></h5>
 					".$body."
-				</article>
-				<br><br>
+				</div>
 			";
 
-		}
-
-		echo "
-			</section>
-			</div>
-		";
+		}		
 		
 		$items = $con->query("SELECT * FROM pl_posts")->num_rows;
 		$Pagination->paginate($items);
+
+		echo "
+			</div>
+		";
 				
 	?>
-	<section id="index_groups">
-		<div class="sectiontitle">
-			
-			<?php echo $lang["groups"]; ?>
-		</div>
-		<ul>
-			<?php
-				$userid = $User->id;
-				$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query 1 Error!");
-				while ($row = mysqli_fetch_array($query)) {
-					$group_h = $row['group_h'];
-					$status = $row['status'];					
-					if($status != "waiting") {
-						$query2 = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query 2 Error!");
-						$row2 = mysqli_fetch_array($query2);
-						$groupname = $row2['name'];
-						//~ $grouph = $row2['h'];
-						echo '<li><a href="group.php?h='.$group_h.'&page=index">'.$groupname.'</a></li>';
-					}					
-				}
-			?>
-		</ul>
+	<div class="index_right">
+		<section class="index_groups">
+			<div class="sectiontitle">			
+				<?php echo $lang["groups"]; ?>
+			</div>
+			<ul>
+				<?php
+					$userid = $User->id;
+					$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query 1 Error!");
+					while ($row = mysqli_fetch_array($query)) {
+						$group_h = $row['group_h'];
+						$status = $row['status'];					
+						if($status != "waiting") {
+							$query2 = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query 2 Error!");
+							$row2 = mysqli_fetch_array($query2);
+							$groupname = $row2['name'];
+							//~ $grouph = $row2['h'];
+							echo '<li><a href="group.php?h='.$group_h.'&page=index">'.$groupname.'</a></li>';
+						}					
+					}
+				?>
+			</ul>
 
-		<?php
-			if($User->privilege >= 3) {
-				echo '<a href="group.php?action=create"><button>'.$lang["create"].'</button></a>';
-			}
-		
-		echo '
-			<a href="group.php?action=join"><button>'.$lang["join"].'</button></a>
-		';
-		?>
-	</section>
-	<?php echo $System->set_footer(); ?>
+			<?php
+				if($User->privilege >= 3) {
+					echo '<a href="group.php?action=create"><button>'.$lang["create"].'</button></a>';
+				}
+
+				$query = $con->query("SELECT * FROM pl_settings WHERE property='JP'")or die("Query error!");
+				$row = mysqli_fetch_array($query);
+				$JP = $row['value'];
+
+				if($JP != "3") {
+					echo '<a href="group.php?action=join"><button>'.$lang["join"].'</button></a>';
+				}		
+			
+			?>
+		</section>
+	</div>
+	<!--<?php echo $System->set_footer(); ?>-->
 	<?php
 		$query = $con->query("SELECT * FROM pl_users WHERE h='$User->h'")or die("Query error!");
 		$row = mysqli_fetch_array($query);
