@@ -198,7 +198,6 @@
                 		]
                 	});      
         			</script>
-        			
 				';			
 
 		} elseif(@$_GET['action'] == "send") {
@@ -221,7 +220,7 @@
 
 			$date = date("Y-m-d H:i:s");
 
-			$query2 = $con->query("INSERT INTO pl_messages(from_h,to_h,subject,body,h,date) VALUES('$from','$to','$subject','$body','$h','$date')")or die("Query error!");
+			$query2 = $con->query("INSERT INTO pl_messages(from_h,to_h,subject,body,unread,h,date) VALUES('$from','$to','$subject','$body',1,'$h','$date')")or die("Query error!");
 
 			echo '<a href="messages.php">'.$lang["accept"].'</a>';
 
@@ -280,6 +279,8 @@
 
 			$Message = $System->get_message_by_h($h, $con);
 
+			$query = $con->query("UPDATE pl_messages SET unread=0")or die("Query error!");
+
 			echo '
 				<div class="ui_full_width">
 					<div class="ui_head ui_head_width_actions">
@@ -297,7 +298,7 @@
                         		<li><a href="messages.php">'.$lang["received"].'</a></li>
                         		<li><a href="messages.php?action=sent">'.$lang["sent"].'</a></li>
                     		</ul>
-                		</nav>                            
+                		</nav>
             		</div>
 
             		<div class="ui_width_sidebar right">
@@ -347,12 +348,17 @@
 					$from_h = $row_from_h['h'];
 					$subject = $row['subject'];
 					$date = $row['date'];
+					$unread = $row['unread'];
 
 					$from = $System->get_user_by_id($from_h, $con);
 
 					$h = $row['h'];
-                    
-					echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer reply"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+
+					if($unread == 1) {
+						echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div style="width:250px; display:inline-block; padding-left:10px; font-family:RobotoBold"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer reply"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+					} else {
+						echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer reply"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+					}
 				}
             echo '
                 </div>

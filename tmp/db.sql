@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS `pl_califications` (
   `user_h` varchar(99) NOT NULL,
   `h` varchar(99) NOT NULL,
   `description` text NOT NULL,
-  `upload` text NOT NULL,
+  `attachments` text NOT NULL,
   `delivery_date` datetime NOT NULL,
   `mark` int(20) NOT NULL,
   `observations` longtext NOT NULL
@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS `pl_messages` (
   `to_h` varchar(99) CHARACTER SET utf8 NOT NULL,
   `subject` varchar(99) CHARACTER SET utf8 NOT NULL,
   `body` longtext CHARACTER SET utf8 NOT NULL,
+  `unread` int(1) NOT NULL,
   `h` varchar(99) CHARACTER SET utf8 NOT NULL,
   `date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

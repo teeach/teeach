@@ -47,13 +47,13 @@
 				$showgroups = "false";
 			}
 			
-			if(isset($_POST["allow_comments"])){
+			if($_POST["allow_comments"] == "on") {
 				$post_comments = "true";
 			} else {
 				$post_comments = "false";
 			}
 
-			if(isset($_POST["show_author"])){
+			if($_POST["show_author"] == "on") {
 				$post_author = "true";
 			} else {
 				$post_author = "false";
@@ -76,7 +76,7 @@
             $query = $con->query("UPDATE pl_settings SET value='".$post_author."' WHERE property='post_author'")or die("Query error 9!");
             $query = $con->query("UPDATE pl_settings SET value='".$allow_create_categories."' WHERE property='allow_create_categories'")or die("Query error 10!");
 		
-			if($_FILES["up_lang"]["size"] != 0){
+			if($_FILES["up_lang"]["size"] != 0) {
 				$target_dir = "../../src/lang/";
 				$target_file = $target_dir . basename($_FILES["up_lang"]["name"]);
 				$uploadOk = 1;
@@ -224,7 +224,7 @@
                                         </tr>
 
                                         <tr>
-                                        	<td><label for="accesspass">'.$lang["accesspass"].': </label><div class="tip">'.$lang["tip_accesspass"].'<a target="_blank" href="http://teeach.org/go?link=--------&lang=es_ES">'.$lang["more_information"].'</a></div></td>
+                                        	<td><label for="accesspass">'.$lang["accesspass"].': </label><div class="tip">'.$lang["tip_accesspass"].'<a target="_blank" href="http://teeach.org/go?link=23aaa535&lang=es_ES">'.$lang["more_information"].'</a></div></td>
                                         	<td><input type="text" id="accesspass" name="accesspass" value="'.$accesspass.'"></td>
                                         </tr>
                                         
@@ -253,10 +253,10 @@
                                         	<td><input type="number" id="posts_per_page" name="posts_per_page" min="1" value="'.$row_post_per_page["value"].'"></td>
                                         </tr>
 
-                                        <tr>
+                                        <!--<tr>
                                         	<td><label for="allow_comments">'.$lang["allow_comments"].':</label></td>
                                         	<td><input type="checkbox" id="allow_comments" name="allow_comments" ';if($row_post_comments["value"]=="true"){echo "checked";} echo '></td>
-                                        </tr>
+                                        </tr>-->
 
                                         <tr>
                                         	<td><label for="show_author">'.$lang["show_author"].':</label></td>

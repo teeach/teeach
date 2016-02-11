@@ -12,14 +12,14 @@
 	$user_h = $_SESSION['h'];
 
 	@$h = $_GET['h'];
-
+	/*
 	if(isset($_GET['h'])) {		
 		$query = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$h' AND user_h='$user_h' AND status!='waiting'")or die("Query error!");
 		if(!$row = mysqli_fetch_array($query)) {
 			die($lang["not_permission"]);
 		}
 	}
-
+	*/
 	$query = $con->query("SELECT * FROM pl_groups WHERE h='$h'")or die(_("This group doesn't exist."));
 	$row = mysqli_fetch_array($query);
 
@@ -34,7 +34,11 @@
 	<?php $System->set_head(); ?>
 	<title><?php echo $lang["groups"]; ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css">
+	<script src="../../src/js/groups.js"></script>
 	<script src="../../src/ckeditor/ckeditor.js"></script>
+
+	<script></script>
+
 	<script>
 		//Popups
 		function open_popup() {
@@ -225,7 +229,9 @@
 				echo '<div class="ui_actions">';
 				if($Work->type != 1) {
 					if($Work->status == "visible") {
-						echo '<a href="group.php?action=edit_work&h='.$Work->h.'"><button class="ui_action" class="ui_tooltip" title="Edit"><i class="fa fa-hourglass-end"></i> '.$lang["finish_term"].'</button></a>';
+						echo '<a href="group.php?action=finish_term&h='.$Work->h.'"><button class="ui_action" class="ui_tooltip" title="Finish term"><i class="fa fa-hourglass-end"></i> '.$lang["finish_term"].'</button></a>';
+					} elseif($Work->status == "closed") {
+						echo '<a href="group.php?action=open_term&h='.$Work->h.'"><button class="ui_action" class="ui_tooltip" title="Open term"><i class="fa fa-hourglass-start"></i> '.$lang["open_term"].'</button></a>';
 					}
 				}
 				
@@ -268,75 +274,96 @@
 					echo'<a class="ui_attachment" href="../../'.$attachment->{"path"}.'"><i class="fa fa-paperclip"></i> '.$attachment->{"name"}.'</a><br>';
 				}
 				echo'
-            	</div>';
+            	</div><br><br>';
             	if($Work->status == "visible" and ($Work->type == 2 or $Work->type == 3)){
 
             		//Check if you have sent the reply before
             		$user_h = $_SESSION['h'];
-            		$query = $con->query("SELECT * FROM pl_califications WHERE user_h='$user_h'")or die("Query error!");
+            		$query = $con->query("SELECT * FROM pl_califications WHERE user_h='$user_h' AND work_h='$Work->h'")or die("Query error!");
             		if($row = mysqli_fetch_array($query)) {
             			$description = $row['description'];
+            			$attachment_json_answer = $row['attachments'];
+            			$attachments_answer = json_decode($attachment_json_answer);
             			echo '
             				<div class="answer">
-            					'.$description.'
+            					<p>'.$description.'</p>
+            					<br>
+							';
+
+							foreach($attachments_answer as $attachment){
+								echo'<a class="ui_attachment" href="../../'.$attachment->{"path"}.'"><i class="fa fa-paperclip"></i> '.$attachment->{"name"}.'</a><br>';
+							}
+
+							echo '
             				</div>
             			';
             		} else {
-            			echo '
-							<div class="answer">					
-								<form method="post" action="group.php?h='.$_GET["h"].'&action=answer" enctype="multipart/form-data">
-									<table>
-										<tr>
-											<td>
-												<div class="add_attachments"><i class="fa fa-paperclip"></i></div>
-											</td>
+            			if($status != "leader") {
+            				echo '
+								<div class="answer">					
+									<form method="post" action="group.php?h='.$_GET["h"].'&action=answer" enctype="multipart/form-data">
+										<table>
+											<tr>
+												<td>
+													<div class="add_attachments"><i class="fa fa-paperclip"></i></div>
+												</td>
 
-											<td>
-												<textarea id="editor1" name="description"></textarea>
-											</td>
+												<td>
+													<textarea id="editor1" name="description"></textarea>
+												</td>
 
-											<td>
-												<input type="submit" value='.$lang["send"].'>
-											</td>
-										</tr>
+												<td>
+													<input type="submit" value='.$lang["send"].'>
+												</td>
+											</tr>
 
-										<tr>
-											<td></td>
-											<td class="attachments"></td>
-											<td></td>
-										</tr>
-								</table>
-							</form>
-						</div>
+											<tr>
+												<td></td>
+												<td class="attachments"></td>
+												<td></td>
+											</tr>
+										</table>
+									</form>
+								</div>
 						
-						<script type="text/javascript">  
-							CKEDITOR.replace( "editor1", {
-							enterMode: CKEDITOR.ENTER_BR,
-							skin : "office2013",
-							height: "75px",
-							width: "500px",
-							toolbar : [
-								{ name: "basicstyles", groups: [ "basicstyles", "cleanup" ], items: [ "Bold", "Italic", "Underline", "Strike", "TextColor", "BGColor", "Subscript", "Superscript" ] },
-								{ name: "paragraph", groups: [ "list", "indent", "blocks", "align"], items: [ "-", "NumberedList", "BulletedList", "-", "Link", "Unlink", "Image", "Table", "Smiley", "Maximize" ] }
-							]
-							});      
-						</script>
+								<script type="text/javascript">  
+									CKEDITOR.replace( "editor1", {
+									enterMode: CKEDITOR.ENTER_BR,
+									skin : "office2013",
+									height: "75px",
+									width: "500px",
+									toolbar : [
+										{ name: "basicstyles", groups: [ "basicstyles", "cleanup" ], items: [ "Bold", "Italic", "Underline", "Strike", "TextColor", "BGColor", "Subscript", "Superscript" ] },
+										{ name: "paragraph", groups: [ "list", "indent", "blocks", "align"], items: [ "-", "NumberedList", "BulletedList", "-", "Link", "Unlink", "Image", "Table", "Smiley", "Maximize" ] }
+									]
+									});
+								</script>
 						
-						<script>
-							var attachments = 0;
+								<script>
+									var attachments = 0;
 							
-							$( ".add_attachments" ).click(function() {
-								$( ".attachments" ).append("<input type=\"file\" name=\""+attachments+"\"><br>" );
-								attachments += 1;
-							});
-						</script>
+									$( ".add_attachments" ).click(function() {
+										$( ".attachments" ).append("<input type=\"file\" name=\""+attachments+"\"><br>" );
+										attachments += 1;
+									});
+								</script>
 					
-						</div>';
+								</div>';
+            			}
+
             		}
 
-					
 				}
-            echo'	
+
+				if($status == "leader") {
+            		echo '
+            				<input id="work_h" type="hidden" value="'.$Work->h.'">
+							<button id="view_cal">'.$lang["view_califications"].'</button>
+							<div id="cal"></div>
+            			';
+            	}
+
+            echo '
             </div>
 			';
 
@@ -348,7 +375,53 @@
 			$h = substr( md5(microtime()), 1, 18);
 			$delivery_date = date("Y-m-d H:i:s");
 
-			$query = $con->query("INSERT INTO pl_califications(work_h,user_h,h,description,delivery_date) VALUES('$work_h','$user_h','$h','$description','$delivery_date')")or die("Query error!");
+			$upload_error = 0;
+
+			$attachments = [];
+
+			foreach($_FILES as $key=>$file){
+				$target_dir = "uploads/";
+				$info = new SplFileInfo($file["name"]);
+				$extension = $info->getExtension();
+				$target_file = $target_dir . $System->rand_string(10).'.'.$extension;
+				
+				if (move_uploaded_file($file["tmp_name"], '../../'.$target_file)) {
+					$file_data = [];
+					$file_data["path"] = $target_file;
+					$file_data["name"] = $file["name"];
+					$attachments[] = $file_data;
+				} else {
+					$upload_error = +1;
+				}
+			}
+			
+			$attachment_json = json_encode($attachments);
+			
+			//~ echo $attachment_json;
+			
+			
+			if ($upload_error == 0) {
+				$query = $con->query("INSERT INTO pl_califications(work_h,user_h,h,description,attachments,delivery_date) VALUES('$work_h','$user_h','$h','$description','$attachment_json','$delivery_date')")or die("Query error!");
+				echo '<script>location.href="group.php?action=view&h='.$work_h.'"</script>';
+			} else {
+				echo ''.$lang["upload_error"].' <a href="group.php?action=view&h='.$work_h.'">'.$lang["return"].'</a>';
+			}	
+
+			//~ if($_FILES["attachment"]["size"] != 0){
+				//~ $target_dir = "uploads/";
+				//~ $info = new SplFileInfo($_FILES["attachment"]["name"]);
+				//~ $extension = $info->getExtension();
+				//~ $target_file = $target_dir . $System->rand_string(10).'.'.$extension;
+				//~ 
+				//~ if (move_uploaded_file($_FILES["attachment"]["tmp_name"], '../../'.$target_file)) {
+					//~ $query = $con->query("INSERT INTO pl_works(name,type,h,creation_date,description,unit_h,status,attachment) VALUES('$workname',$type,'$h','$date','$desc','$unit_h','$status','$target_file')")or die("Query error!");
+					//~ echo '<a href="group.php?h='.$gh.'&page=index">'.$lang["accept"].'</a>';
+				//~ } else {
+					//~ echo ''.$lang["upload_error"].' <a href="group.php?h='.$gh.'&page=index">'.$lang["return"].'</a>';
+				//~ }
+			//~ }
+
+			$query = $con->query("INSERT INTO pl_califications(work_h,user_h,h,description,attachments,delivery_date) VALUES('$work_h','$user_h','$h','$description','$delivery_date')")or die("Query error!");
 
 			echo '<script>location.href="group.php?action=view&h='.$work_h.'"</script>';
 
@@ -568,7 +641,6 @@
 												<option value="2">'.$lang["homework"].'</option>
 												<option value="3">'.$lang["exam"].'</option>
 											';
-
 									}
 
 									echo '									
@@ -637,7 +709,7 @@
 			}
 
 			$query = $con->query("UPDATE pl_works SET name='$name',description='$description',type='$type',status='$status' WHERE h='$work_h'")or die("Query error!");
-			echo "<a href='group.php?h=".$group_h."&page=index'>".$lang['accept']."</a>";
+			echo "<script>location.href='group.php?action=view&h=".$work_h."'</script>";
 
 		} elseif(@$_GET['action'] == "del_work") {
 
@@ -679,6 +751,22 @@
 			$query = $con->query("UPDATE pl_groupuser SET status='active' WHERE id=$request_id")or die("Query error!");
 
 			echo "<a href='index.php'>Accept</a>";
+
+		} elseif(@$_GET['action'] == "open_term") {
+
+			$h = $_GET['h'];
+
+			$query = $con->query("UPDATE pl_works SET status='visible' WHERE h='$h'")or die("Query error!");
+
+			echo "<script>location.href='group.php?action=view&h=".$h."'</script>";
+
+		} elseif(@$_GET['action'] == "finish_term") {
+
+			$h = $_GET['h'];
+
+			$query = $con->query("UPDATE pl_works SET status='closed' WHERE h='$h'")or die("Query error!");
+
+			echo "<script>location.href='group.php?action=view&h=".$h."'</script>";
 
 		} elseif(@$_GET['page'] == "index") {
 
