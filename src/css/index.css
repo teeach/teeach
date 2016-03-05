@@ -12,6 +12,11 @@
 	width: 75%;
 }
 
+.index_groups {
+	border: 5px solid #ccc;
+	box-shadow: 0 0 5px #ddd;
+}
+
 .index_right {
 	width: 20%;
 	display: inline-block;
@@ -58,8 +63,16 @@
 }
 
 .sectiontitle {
-	background-color: #c96;
+	background-color: #ccc;
 	padding: 10px;
 	font-weight: bold;
-	color: #fff;
+	color: #320;
+}
+
+.sectionbody {
+	padding: 15px;
+}
+
+.sectionbody li {
+	padding: 3px 0;
 }

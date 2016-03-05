@@ -254,6 +254,85 @@
 
         }
 
+        function how_many_days($datetime, $lang) {
+            $actual_time = date("Y-m-d H:i:s");
+
+            $seconds = abs(strtotime($datetime)-strtotime($actual_time));
+
+            if ($seconds/60 >= 1 && $seconds/60 < 60) {
+
+                $minutes = round($seconds/60, 0);
+
+                if($minutes == 1) {
+                    return $lang["ago_"].$minutes." ".$lang["minute"].$lang["_ago"];
+                } else {
+                    return $lang["ago_"].$minutes." ".$lang["minutes"].$lang["_ago"];
+                }
+
+            } elseif ($seconds/3600 >= 1 && $seconds/3600 < 24) {
+
+                $hours = round($seconds/3600, 0);
+
+                if($hours == 1) {
+                    return $lang["ago_"].$hours." ".$lang["hour"].$lang["_ago"];
+                } else {
+                    return $lang["ago_"].$hours." ".$lang["hours"].$lang["_ago"];
+                }
+
+            } elseif ($seconds/86400 >= 1 && $seconds/86400 < 7) {
+
+                $days = round($seconds/86400, 0);
+
+                if($days == 1) {
+                    return $lang["ago_"].$days." ".$lang["day"].$lang["_ago"];
+                } else {
+                    return $lang["ago_"].$days." ".$lang["days"].$lang["_ago"];
+                }
+
+            } elseif ($seconds/604800 >= 1) {
+
+                $weeks = round($seconds/604800, 0);
+
+                if($weeks == 1) {
+                    return $lang["ago_"].$weeks." ".$lang["week"].$lang["_ago"];
+                } else {
+                    return $lang["ago_"].$weeks." ".$lang["weeks"].$lang["_ago"];
+                }
+
+            } else {
+
+                if($seconds == 1) {
+                    return $lang["ago_"].$seconds." ".$lang["second"].$lang["_ago"];
+                } else {
+                    return $lang["ago_"].$seconds." ".$lang["seconds"].$lang["_ago"];
+                }
+
+            }
+
+        }
+
+        function read_language($lang) {
+            switch($lang) {
+                case 'es_ES':
+                    return $lang = "Español (España)";
+                    break;
+                case 'en_EN':
+                    return $lang = "English (England)";
+                    break;
+                case 'ca_ES':
+                    return $lang = "Català (España)";
+                    break;
+                case 'de_DE':
+                    return $lang = "Deutsch (Deutschland)";
+                    break;
+                case 'fr_FR':
+                    return $lang = "Français (France)";
+                    break;
+                default:
+                    //Default
+            }
+        }
+
     }
     
     class User {

@@ -27,7 +27,7 @@
 				<form name="cg" method="post" action="categories.php?action=success" autocomplete="off">
 					<tr><td><label for="name">'.$lang["name"].': </label></td><td><input type="text" name="name" required onfocus="display_txt1()" onblur="hide_txt1()"/></td></tr>
 					<tr><td/><td><h6 style="display:none" id="txt_user">'._("El nombre de grupo de 6 a 29 carácteres").'</h6></td></tr>
-					<tr><td><input type="submit" value="Enviar"/></td></tr>
+					<tr><td><input type="submit" value="'.$lang["create"].'"/></td></tr>
 				</form>
 				</table>
 			';
@@ -39,7 +39,7 @@
 
 			$con = $System->conDB("../../config.json");
     		$query = $con->query("INSERT INTO pl_categories(name,h) VALUES ('$name','$h')")or die("Error");
-    		echo "<p>¡Perfecto!</p><a href='categories.php?action'>Accept</a>";
+    		echo "<script>location.href='categories.php?action'</script>";
     	} elseif($action == "edit") {
 
     		$h = $_GET['h'];
@@ -52,8 +52,8 @@
 
 			echo '
 			<form method="post" action="categories.php?action=update&h='.$h.'">
-				<label for="name">Nombre: </label><input type="text" name="name" value="'.$cat_name.'"><br>
-				<input type="submit" value="Enviar">
+				<label for="name">'.$lang["name"].': </label><input type="text" name="name" value="'.$cat_name.'"><br>
+				<input type="submit" value="'.$lang["save"].'">
 			</form>
 			';
 		} elseif($action == "update") {
@@ -66,7 +66,7 @@
 
 			$query = $con->query("UPDATE pl_categories SET name='$cat_name' WHERE h='$h'")or die("Query error!");
 
-			echo "<a href='categories.php?action'>Aceptar</a>";
+			echo "<script>location.href='categories.php?action'</script>";
 
 		} elseif($action == "delete") {
 
@@ -76,7 +76,7 @@
 
 			$query = $con->query("DELETE FROM pl_categories WHERE h='$h'")or die("Query error!");
 
-			echo "Eliminado! <a href='categories.php?action'>Aceptar</a>";
+			echo "<script>location.href='categories.php?action'</script>";
 
 		} else {
 

@@ -122,8 +122,14 @@ td {
 3.0 BASIC STYLES
 ===============================================================*/
 
-::selection {
+*::-moz-selection{
+   background:#c96;
+   color:#320;
+}
+
+*::selection {
     background-color: #c96;
+    color:#320;
 }
 
 body {
@@ -158,6 +164,10 @@ h1 {
 .main {
     margin: 50px auto;
     width: 392px;
+}
+
+#content {
+    padding: 15px;
 }
 
 /*===============================================================
@@ -865,6 +875,10 @@ TRANSITIONS
     background-color: #ccc;
 }
 
+.grouplist li {
+    padding: 5px;
+}
+
 .add_attachments {
     cursor: pointer;
     padding: 10px 30px;
@@ -876,6 +890,16 @@ TRANSITIONS
 
 .add_attachments:hover {
     background-color: #eee;
+}
+
+.del_attachment {
+    padding: 8px;
+    color: #320;
+    cursor: pointer;
+}
+
+.del_attachment:hover {
+    background-color: #ccc;
 }
 
 .answer {

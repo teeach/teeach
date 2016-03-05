@@ -32,49 +32,100 @@
 		$action = $_GET['action'];
 
 		if ($action == "save") {
+
+            //--Basic
 			$centername = $_POST['centername'];
 			$logo = $_POST['logo'];
 			$accesspass = $_POST['accesspass'];
 			$lang_val = $_POST['lang'];
-			@$showgroups = $_POST['showgroups'];
+            $post_per_page = $_POST['post_per_page'];
+            @$show_post_author = $_POST['show_post_author'];
+
+            //--Privacy
+			$show_last_time = $_POST['show_last_time'];
+            $show_address = $_POST['show_address'];
+            $show_phone = $_POST['show_phone'];
+            $show_groups = $_POST['show_groups'];
+            @$enable_profile_photo = $_POST['enable_profile_photo'];
+
+            //--Advanced
             $JP = $_POST['JP'];
- 
-			echo "ATENCION: ".$JP."";
+            @$allow_create_categories = $_POST['allow_create_categories'];
 
-			if(isset($showgroups)) {
-				$showgroups = "true";
+			if(@$show_post_author == "on") {
+				$show_post_author = "true";
 			} else {
-				$showgroups = "false";
-			}
-			
-			if($_POST["allow_comments"] == "on") {
-				$post_comments = "true";
-			} else {
-				$post_comments = "false";
+				$show_post_author = "false";
 			}
 
-			if($_POST["show_author"] == "on") {
-				$post_author = "true";
-			} else {
-				$post_author = "false";
-			}
+            if(@$enable_profile_photo == "on") {
+                $enable_profile_photo = "true";
+            } else {
+                $enable_profile_photo = "false";
+            }
 
-            if($_POST['allow_create_categories'] == "on") {
+            if(@$allow_create_categories == "on") {
                 $allow_create_categories = "true";
             } else {
                 $allow_create_categories = "false";
             }
 
-			$query = $con->query("UPDATE pl_settings SET value='$centername' WHERE property='centername'")or die("Query error 1!");
-			$query = $con->query("UPDATE pl_settings SET value='$logo' WHERE property='logo'")or die("Query error 2!");
-			$query = $con->query("UPDATE pl_settings SET value='$accesspass' WHERE property='accesspass'")or die("Query error 3!");
-			$query = $con->query("UPDATE pl_settings SET value='$showgroups' WHERE property='showgroups'")or die("Query error 4!");
-            $query = $con->query("UPDATE pl_settings SET value=$JP WHERE property='JP'")or die("Query error 5!");
-            $query = $con->query("UPDATE pl_settings SET value='$lang_val' WHERE property='lang'")or die("Query error 6!");
-            $query = $con->query("UPDATE pl_settings SET value='".$_POST["posts_per_page"]."' WHERE property='post_per_page'")or die("Query error 7!");
-            $query = $con->query("UPDATE pl_settings SET value='".$post_comments."' WHERE property='post_comments'")or die("Query error 8!");
-            $query = $con->query("UPDATE pl_settings SET value='".$post_author."' WHERE property='post_author'")or die("Query error 9!");
-            $query = $con->query("UPDATE pl_settings SET value='".$allow_create_categories."' WHERE property='allow_create_categories'")or die("Query error 10!");
+            //SET Centername (string) ~ The name of the center
+			$query = $con->query("UPDATE pl_settings SET value='$centername' WHERE property='centername'")or die("Query error!");
+
+            //SET Logo (string) ~ The image that represents the center
+			$query = $con->query("UPDATE pl_settings SET value='$logo' WHERE property='logo'")or die("Query error!");
+
+            //SET Accesspass (string) ~ The access password
+			$query = $con->query("UPDATE pl_settings SET value='$accesspass' WHERE property='accesspass'")or die("Query error!");
+
+            //SET Language (string) ~ The default language
+            $query = $con->query("UPDATE pl_settings SET value='$lang_val' WHERE property='lang'")or die("Query error!");
+
+            //SET Post per page (integer) ~ The number of pages that fit on one page
+            $query = $con->query("UPDATE pl_settings SET value='$post_per_page' WHERE property='post_per_page'")or die("Query error!");
+
+            //SET Allow post comments (boolean) ~ Allow post comments (\===IN DEVELOPMENT===/)
+            //$query = $con->query("UPDATE pl_settings SET value='$allow_post_comments' WHERE property='allow_post_comments'")or die("Query error!");
+
+            //SET Show post author (boolean) ~ Show post author
+            $query = $con->query("UPDATE pl_settings SET value='$show_post_author' WHERE property='show_post_author'")or die("Query error!");
+
+            //SET Show last time (integer) ~ Show last time
+            //       1 => All
+            //       2 => Only teachers
+            //       3 => Only administrators
+            //       4 => Nobody
+            $query = $con->query("UPDATE pl_settings SET value='$show_last_time' WHERE property='show_last_time'")or die("Query error!");
+
+            //SET Show address (integer) ~ Show address
+            //       1 => All
+            //       2 => Only teachers
+            //       3 => Only administrators
+            //       4 => Nobody
+            $query = $con->query("UPDATE pl_settings SET value='$show_address' WHERE property='show_address'")or die("Query error!");
+
+            //SET Show phone (integer) ~ Show phone
+            //       1 => All
+            //       2 => Only teachers
+            //       3 => Only administrators
+            //       4 => Nobody
+            $query = $con->query("UPDATE pl_settings SET value='$show_phone' WHERE property='show_phone'")or die("Query error!");
+
+            //SET Show Groups (boolean) ~ If it's activated, anyone can view the users groups in his profile
+			$query = $con->query("UPDATE pl_settings SET value='$show_groups' WHERE property='show_groups'")or die("Query error!");
+
+            //SET Enable profile photo (boolean)
+            $query = $con->query("UPDATE pl_settings SET value='$enable_profile_photo' WHERE property='enable_profile_photo'")or die("Query error!");
+
+            //SET Join a Group method (integer) ~ The method for joining a group.
+            //       1 => Direct  ~ Confirmation of a moderator is not required.
+            //       2 => Request ~ Confirmation of a moderatior is required.
+            //       3 => Null    ~ Access to groups are closed.
+            $query = $con->query("UPDATE pl_settings SET value=$JP WHERE property='JP'")or die("Query error!");
+
+            //SET Allow create categories (boolean) ~ Anyone can create new categories
+            $query = $con->query("UPDATE pl_settings SET value='$allow_create_categories' WHERE property='allow_create_categories'")or die("Query error!");
 		
 			if($_FILES["up_lang"]["size"] != 0) {
 				$target_dir = "../../src/lang/";
@@ -111,44 +162,57 @@
 				}
 			}
 			
-			echo '<a href="settings.php?action">Accept</a>';
+			echo '<script>location.href="settings.php?action";</script>';
 
 		} else {
 			
-			//Queries
+			//---Queries
 			$query_centername = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
 			$query_logo = $con->query("SELECT * FROM pl_settings WHERE property='logo'");
 			$query_accesspass = $con->query("SELECT * FROM pl_settings WHERE property='accesspass'");
-			$query_sg = $con->query("SELECT * FROM pl_settings WHERE property='showgroups'");
-            $query_JP = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
             $query_lang = $con->query("SELECT * FROM pl_settings WHERE property='lang'");
-            $post_per_page = $con->query("SELECT * FROM pl_settings WHERE property='post_per_page'");
-            $post_comments = $con->query("SELECT * FROM pl_settings WHERE property='post_comments'");
-            $post_author = $con->query("SELECT * FROM pl_settings WHERE property='post_author'");
+            $query_post_per_page = $con->query("SELECT * FROM pl_settings WHERE property='post_per_page'");
+            $query_show_post_author = $con->query("SELECT * FROM pl_settings WHERE property='show_post_author'");
+            $query_show_last_time = $con->query("SELECT * FROM pl_settings WHERE property='show_last_time'");
+            $query_show_address = $con->query("SELECT * FROM pl_settings WHERE property='show_address'");
+            $query_show_phone = $con->query("SELECT * FROM pl_settings WHERE property='show_phone'");
+			$query_show_groups = $con->query("SELECT * FROM pl_settings WHERE property='show_groups'");
+            $query_enable_profile_photo = $con->query("SELECT * FROM pl_settings WHERE property='enable_profile_photo'");
+            $query_JP = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
             $query_allow_create_categories = $con->query("SELECT * FROM pl_settings WHERE property='allow_create_categories'");
 
-			//Arrays
+			//---Arrays
 			$row_centername = mysqli_fetch_array($query_centername);
 			$row_logo = mysqli_fetch_array($query_logo);
 			$row_accesspass = mysqli_fetch_array($query_accesspass);
-			$row_sg = mysqli_fetch_array($query_sg);
-            $row_JP = mysqli_fetch_array($query_JP);
             $row_lang = mysqli_fetch_array($query_lang);
-            $row_post_per_page = mysqli_fetch_array($post_per_page);
-            $row_post_comments = mysqli_fetch_array($post_comments);
-            $row_post_author = mysqli_fetch_array($post_author);
+            $row_post_per_page = mysqli_fetch_array($query_post_per_page);
+            $row_show_post_author = mysqli_fetch_array($query_show_post_author);
+            $row_show_last_time = mysqli_fetch_array($query_show_last_time);
+            $row_show_address = mysqli_fetch_array($query_show_address);
+            $row_show_phone = mysqli_fetch_array($query_show_phone);
+            $row_show_groups = mysqli_fetch_array($query_show_groups);
+            $row_enable_profile_photo = mysqli_fetch_array($query_enable_profile_photo);
+            $row_JP = mysqli_fetch_array($query_JP);
             $row_allow_create_categories = mysqli_fetch_array($query_allow_create_categories);
 
-			//Values
+			//---Values
 			$centername = $row_centername['value'];
 			$logo = $row_logo['value'];
 			$accesspass = $row_accesspass['value'];
-			$sg = $row_sg['value'];
-            $JP = $row_JP['value'];
             $lang_val = $row_lang['value'];
+            $post_per_page = $row_post_per_page['value'];
+            $show_post_author = $row_show_post_author['value'];
+            $show_last_time = $row_show_last_time['value'];
+            $show_address = $row_show_address['value'];
+            $show_phone = $row_show_phone['value'];
+			$show_groups = $row_show_groups['value'];
+            $enable_profile_photo = $row_enable_profile_photo['value'];
+            $JP = $row_JP['value'];
             $allow_create_categories = $row_allow_create_categories['value'];
+
 			
-			echo '
+			/*echo '
 			
 			<script type="text/javascript">
 				function submitForm() {
@@ -177,7 +241,9 @@
 					});
 					return false;
 				}
-			</script>
+			</script>';*/
+
+            echo '
 			
             <div class="admin_header">
                 <div class="admin_hmenu">
@@ -185,7 +251,7 @@
 			    </div>
             </div>
             	<center>
-					<form id="settings" method="post" enctype="multipart/form-data" onsubmit="return submitForm();">			
+					<form id="settings" method="post" enctype="multipart/form-data" action="settings.php?action=save">
 						<div class="contenedor">
 
 
@@ -236,7 +302,10 @@
 													$rfile_langs = fread($fp_langs, filesize("../../src/lang/langs.json"));
 													$json_langs = json_decode($rfile_langs);
 													foreach ($json_langs->{"langs"} as $index => $row_langs) {
-														echo '<option value="'.$row_langs.'"';if($lang_val == $row_langs) echo "selected";echo'>'.$row_langs.'</option>';
+
+                                                        $text_lang = $System->read_language($row_langs);
+
+														echo '<option value="'.$row_langs.'"';if($lang_val == $row_langs) echo "selected";echo'>'.$text_lang.'</option>';
 													}
 													echo '
 												</select>
@@ -249,23 +318,26 @@
                                         </tr>
                                         
                                         <tr>
-                                        	<td><label for="posts_per_page">'.$lang["posts_per_page"].':</label></td>
-                                        	<td><input type="number" id="posts_per_page" name="posts_per_page" min="1" value="'.$row_post_per_page["value"].'"></td>
+                                        	<td><label for="post_per_page">'.$lang["posts_per_page"].':</label></td>
+                                        	<td><input type="number" id="posts_per_page" name="post_per_page" min="1" value="'.$row_post_per_page["value"].'"></td>
                                         </tr>
 
                                         <!--<tr>
                                         	<td><label for="allow_comments">'.$lang["allow_comments"].':</label></td>
-                                        	<td><input type="checkbox" id="allow_comments" name="allow_comments" ';if($row_post_comments["value"]=="true"){echo "checked";} echo '></td>
+                                        	<td><input type="checkbox" id="allow_comments" name="allow_comments" ';if($post_comments=="true"){echo "checked";} echo '></td>
                                         </tr>-->
 
                                         <tr>
-                                        	<td><label for="show_author">'.$lang["show_author"].':</label></td>
-                                        	<td><input type="checkbox" id="show_author" name="show_author" ';if($row_post_author["value"]=="true"){echo "checked";} echo '></td>
+                                        	<td><label for="show_post_author">'.$lang["show_author"].':</label></td>
+                                        	<td><input type="checkbox" id="show_author" name="show_post_author" ';if($show_post_author=="true"){echo "checked";} echo '></td>
                                         </tr>
                                     </table>
                                 </div>
                                 
                                 <div id="tab_02" class="ui_tab_content">
+                                
+                                <!--Privacy Settings-->
+
                                 	<table>
                                 		<tr>
                                 			<td><p style="font-family: RobotoBold">'.$lang["profile"].'</p></td>
@@ -275,26 +347,51 @@
                                 		<tr>
                                 			<td><label for="last_time">'.$lang["show_last_time"].'</label></td>
                                 			<td>
-												<select name="last_time">
-													<option value="everybody">'.$lang["everybody"].'</option>
-													<option value="only_teachers">'.$lang["only_teachers"].'</option>
-													<option value="only_administrators">'.$lang["only_administrators"].'</option>
-													<option value="nobody">'.$lang["nobody"].'</option>
+												<select name="show_last_time">
+													<option value="1" '; if($show_last_time == 1){echo'selected';}echo'>'.$lang["everybody"].'</option>
+													<option value="2" '; if($show_last_time == 2){echo'selected';}echo'>'.$lang["only_teachers"].'</option>
+													<option value="3" '; if($show_last_time == 3){echo'selected';}echo'>'.$lang["only_administrators"].'</option>
+													<option value="4" '; if($show_last_time == 4){echo'selected';}echo'>'.$lang["nobody"].'</option>
 												</select>
                                 			</td>
                                 		</tr>
 
+                                        <tr>
+                                            <td><label for="show_address">'.$lang["show_address"].'</label></td>
+                                            <td>
+                                                <select name="show_address">
+                                                    <option value="1" '; if($show_address == 1){echo'selected';}echo'>'.$lang["everybody"].'</option>
+                                                    <option value="2" '; if($show_address == 2){echo'selected';}echo'>'.$lang["only_teachers"].'</option>
+                                                    <option value="3" '; if($show_address == 3){echo'selected';}echo'>'.$lang["only_administrators"].'</option>
+                                                    <option value="4" '; if($show_address == 4){echo'selected';}echo'>'.$lang["nobody"].'</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="">'.$lang["show_phone"].'</label></td>
+                                            <td>
+                                                <select name="show_phone">
+                                                    <option value="1" '; if($show_phone == 1){echo'selected';}echo'>'.$lang["everybody"].'</option>
+                                                    <option value="2" '; if($show_phone == 2){echo'selected';}echo'>'.$lang["only_teachers"].'</option>
+                                                    <option value="3" '; if($show_phone == 3){echo'selected';}echo'>'.$lang["only_administrators"].'</option>
+                                                    <option value="4" '; if($show_phone == 4){echo'selected';}echo'>'.$lang["nobody"].'</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+
                                 		<tr>
                                 			<td><label for="showgroups">'.$lang["show_groups_prf"].'</label></td>
-                                	';
-                                    if ($sg == "true") {
-                                        echo '<td><input type="checkbox" name="showgroups" checked></td>';
-                                    } else {
-                                        echo '<td><input type="checkbox" name="showgroups"></td>';
-                                    }
-                                        echo '                          
+                                            <td>
+                                                <select name="show_groups">
+                                                    <option value="1" '; if($show_groups == 1){echo'selected';}echo'>'.$lang["everybody"].'</option>
+                                                    <option value="2" '; if($show_groups == 2){echo'selected';}echo'>'.$lang["only_teachers"].'</option>
+                                                    <option value="3" '; if($show_groups == 3){echo'selected';}echo'>'.$lang["only_administrators"].'</option>
+                                                    <option value="4" '; if($show_groups == 4){echo'selected';}echo'>'.$lang["nobody"].'</option>
+                                                </select>
+                                            </td>                        
                                     	</tr>
-                                    	<tr><td><label for="enable_photo">'.$lang["enable_profile_photo"].'</label></td><td><input type="checkbox" name="enable_photo"></td></tr>
+                                    	<tr><td><label for="enable_profile_photo">'.$lang["enable_profile_photo"].'</label></td><td><input type="checkbox" name="enable_profile_photo" ';if($enable_profile_photo == "true"){echo'checked';}echo'></td></tr>
                                     </table>
                                 </div>
                                 <div id="tab_03" class="ui_tab_content">
@@ -307,38 +404,11 @@
                                         <tr>
                                         	<td><label for="JP">'.$lang["join_group"].': </label></td>
                                         	<td>
-                                        		<select id="JP" name="JP">';
-                                    				switch($JP) {
-                                        			case 1:
-                                           			 echo '
-                                                			<option value="1" selected>'.$lang["direct"].'</option>
-                                                			<option value="2">'.$lang["request"].'</option>
-                                                			<option value="3">'.$lang["disabled"].'</option>
-                                            			';
-                                            			break;
-                                       				case 2:
-                                            			echo '
-                                                			<option value="1">'.$lang["direct"].'</option>
-                                                			<option value="2" selected>'.$lang["request"].'</option>
-                                                			<option value="3">'.$lang["disabled"].'</option>
-                                            			';
-                                            			break;
-                                        			case 3:
-                                            			echo '
-                                               			<option value="1">'.$lang["direct"].'</option>
-                                                			<option value="2">'.$lang["request"].'</option>
-                                                			<option value="3" selected>'.$lang["disabled"].'</option>
-                                            			';
-                                           		 		break;
-                                       				default:
-                                            			echo '
-                                               				<option value="1" selected>'.$lang["direct"].'</option>
-                                                			<option value="2">'.$lang["request"].'</option>
-                                                			<option value="3">'.$lang["disabled"].'</option>
-                                            			';
-                                    				}
-                                    			echo '
-                                        		</select> 
+                                        		<select id="JP" name="JP">
+                                                    <option value="1" ';if($JP == 1){echo'selected';}echo'>'.$lang["direct"].'</option>
+                                                    <option value="2" ';if($JP == 2){echo'selected';}echo'>'.$lang["request"].'</option>
+                                                    <option value="3" ';if($JP == 3){echo'selected';}echo'>'.$lang["disabled"].'</option>
+                                                </select>                                        		
                                         	</td>
                                         </tr>
 

@@ -65,17 +65,18 @@
 	<?php
 		$query = $con->query("SELECT * FROM pl_settings WHERE property='showgroups'")or die("Query error 2!");
 		$row = mysqli_fetch_array($query);
-		$showgroups = $row['value'];
-		if ($showgroups == "true") {
-			echo '
-				<table>
-					<thead>
-						<th>'.$lang["your_groups"].'</th>
-					</thead>
-					<tbody>
-			';
+		$show_groups = $row['value'];
+		if ($show_groups <= 2) {
+			if($show_groups == 1 OR $User->privilege >= 2) {
+				echo '
+					<table>
+						<thead>
+							<th>'.$lang["your_groups"].'</th>
+						</thead>
+						<tbody>
+				';
 
-			$userid = $User->id;
+				$userid = $User->id;
 				$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$get_usr'")or die("Query Error 3!");
 				while ($row = mysqli_fetch_array($query)) {
 					$group_h = $row['group_h'];
@@ -85,8 +86,10 @@
 
 					echo '<tr><td><a href="group.php?h='.$group_h.'">'.$groupname.'</a></td></tr>';
 				}
-
+				
 				echo '</tbody></table>';
+			}
+			
 		}
 	?>
 </body>

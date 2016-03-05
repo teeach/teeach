@@ -30,7 +30,8 @@ CREATE TABLE IF NOT EXISTS `pl_groupuser` (
   `id` int(11) NOT NULL,
   `group_h` text NOT NULL,
   `user_h` text NOT NULL,
-  `status` varchar(25) NOT NULL
+  `status` varchar(25) NOT NULL,
+  `last_time` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `pl_messages` (

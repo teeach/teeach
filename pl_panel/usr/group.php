@@ -64,6 +64,8 @@
 						<input type="submit" value="'.$lang["save"].'">
 					</form>
 				</div>
+
+
 			';
 
 		$query = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
@@ -132,27 +134,31 @@
 
 		} elseif (@$_GET['action'] == "join") {
 			echo '
-				<h1>'.$lang["join_group"].'</h1>
-				<p>'.$lang["select_group"].' </p>
-					';
+				<div id="content">
+					<h1>'.$lang["join_group"].'</h1>
+					<p>'.$lang["select_group"].' </p>
+						';
 
-				$query1 = $con->query("SELECT * FROM pl_categories")or die("Query error!");
-				while ($row1 = mysqli_fetch_array($query1)) {
-					$category_name = $row1['name'];
-					$category_h = $row1['h'];
-					echo '
-						<h3>'.$category_name.'</h3>
-						<ul class="grouplist">
-					';
+					$query1 = $con->query("SELECT * FROM pl_categories")or die("Query error!");
+					while ($row1 = mysqli_fetch_array($query1)) {
+						$category_name = $row1['name'];
+						$category_h = $row1['h'];
+						echo '
+							<h3>'.$category_name.'</h3>
+							<ul class="grouplist">
+						';
 
-					$query2 = $con->query("SELECT * FROM pl_groups WHERE category_h='$category_h'")or die("Query error!");
-					while ($row2 = mysqli_fetch_array($query2)) {
-						$groupname = $row2['name'];
-						$gh = $row2['h'];
-						echo '<a href="group.php?action=send_request&group='.$gh.'"><li>'.$groupname.'</li></a>';
+						$query2 = $con->query("SELECT * FROM pl_groups WHERE category_h='$category_h'")or die("Query error!");
+						while ($row2 = mysqli_fetch_array($query2)) {
+							$groupname = $row2['name'];
+							$gh = $row2['h'];
+							echo '<a href="group.php?action=send_request&group='.$gh.'"><li>'.$groupname.'</li></a>';
+						}
+						echo '
+							</ul>
+						';
 					}
-					echo '</ul>';
-				}
+				echo '</div>';
 
 		} elseif (@$_GET['action'] == "send_request") {
 
@@ -162,7 +168,7 @@
 			$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$user_h'")or die("Query error!");
 			while ($row = mysqli_fetch_array($query)) {
 				if($gh == $row['group_h']) {
-					die($lang["already_group"]." <a href='index.php'><button>".$lang["accept"]."</button></a>");
+					die("<div id='content'>".$lang["already_group"]." <a href='index.php'><button>".$lang["accept"]."</button></a></div>");
 				}
 			}
 
@@ -300,7 +306,7 @@
             		} else {
             			if($status != "leader") {
             				echo '
-								<div class="answer">					
+								<div class="answer">
 									<form method="post" action="group.php?h='.$_GET["h"].'&action=answer" enctype="multipart/form-data">
 										<table>
 											<tr>
@@ -325,7 +331,7 @@
 										</table>
 									</form>
 								</div>
-						
+
 								<script type="text/javascript">  
 									CKEDITOR.replace( "editor1", {
 									enterMode: CKEDITOR.ENTER_BR,
@@ -522,9 +528,14 @@
         <script>
 		var attachments = 0;
 		
-		$( ".add_attachments" ).click(function() {
-			$( ".attachments" ).append("<input type=\"file\" name=\""+attachments+"\"><br>" );
+		$( ".add_attachments" ).on("click", function() {
+			$( ".attachments" ).append("<div class=\"attachment\"><i class=\"fa fa-times del_attachment\"></i><input type=\"file\" name=\""+attachments+"\"></div>" );
 			attachments += 1;
+		});
+
+		$( ".attachments" ).on("click", ".del_attachment", function() {
+			console.log("Por el buen camino");
+			$(this).prev().detach();
 		});
         
         
@@ -780,6 +791,10 @@
 			$row_status = mysqli_fetch_array($query_status);
 			$status = $row_status['status'];
 
+			//Update last_time
+			$last_time = date("Y-m-d H:i:s");
+			$query = $con->query("UPDATE pl_groupuser SET last_time='$last_time' WHERE group_h='$gh' AND user_h='$User->h'")or die("Query error!");
+
 				echo '				
 					<div class="ui_full_width">
             			<div class="ui_head ui_head_width_actions">
@@ -792,13 +807,14 @@
                         			<li><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>';
 
                         			if ($status == "leader") {
-                        				echo '<li><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].'</a></li>';
+                        				echo '<li><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].' <span id="num_requests"></span></a></li>';
                         			}
 
                 			echo '
                     			</ul>
                 			</nav>                            
             			</div>
+            			<input type="hidden" id="group_h" value="'.$gh.'">
             
             <div class="ui_width_sidebar right">
 			';
@@ -862,6 +878,11 @@
 			$row1 = mysqli_fetch_array($query1);
 			$groupname = $row1['name'];
 
+			$query_address = $con->query("SELECT * FROM pl_settings WHERE property='show_address'")or die("Query error!");
+			$query_phone = $con->query("SELECT * FROM pl_settings WHERE property='show_phone'")or die("Query error!");
+			$row_address = mysqli_fetch_array($query_address);
+			$row_phone = mysqli_fetch_array($query_phone);
+
 			echo '
 
 			<div class="ui_full_width">
@@ -878,12 +899,14 @@
                         <li><a href="group.php?h='.$gh.'&page=index">'.$lang["works"].'</a></li>
                         <li class="active"><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>';
                         if ($status == "leader") {
-                        	echo '<li><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].'</a></li>';
+                        	echo '<li><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].' <span id="num_requests"></span></a></li>';
                         }
                     echo '
                     </ul>
                 </nav>
             </div>
+
+            <input type="hidden" id="group_h" value="'.$gh.'">
             
             <div class="ui_width_sidebar right">
                 
@@ -891,9 +914,23 @@
                 <thead>
                     <th class="select"><input class="select_all" type="checkbox" /></th>
                     <th>'.$lang["name_and_surname"].'</th>
-                    <th>'.$lang["email"].'</th>
-                    <th>'.$lang["address"].'</th>
-                    <th>'.$lang["phone"].'</th>
+                    <th>'.$lang["email"].'</th>';
+
+                    if($row_address['value'] <= 2) {
+                    	if($User->privilege >= 2 OR $row_address['value'] == 1) {
+                    		echo '<th>'.$lang["address"].'</th>';
+                    	}
+                    }
+
+                    if($row_phone['value'] <= 2) {
+                    	if($User->privilege >= 2 OR $row_phone['value'] == 1) {
+                    		echo '<th>'.$lang["phone"].'</th>';
+                    	}
+                    }
+
+                    echo '
+                    
+                    <th>'.$lang["last_time"].'</th>
                     <th class="actions">'.$lang["actions"].'</th>
                 </thead>
                 <tbody>';
@@ -908,6 +945,8 @@
 					$email = $row2['email'];
 					$address = $row2['address'];
 					$phone = $row2['phone'];
+					$last_time = $row['last_time'];
+					$days = $System->how_many_days($last_time, $lang);
 
 					echo '<tr><td><input type="checkbox"></td>';
 
@@ -917,7 +956,21 @@
 						echo '<td><a href="profile.php?h='.$user_h.'">'.$name." ".$surname.'</a></td>';
 					}
 
-					echo '<td>'.$email.'</td><td>'.$address.'</td><td>'.$phone.'</td><td><a href="messages.php?action=new&to='.$user_h.'"><i class="fa fa-envelope"></i></a>';
+					echo '<td>'.$email.'</td>';
+
+					if($row_address['value'] <= 2) {
+                    	if($User->privilege >= 2 OR $row_address['value'] == 1) {
+                    		echo '<td>'.$address.'</td>';
+                    	}
+                    }
+
+                    if($row_phone['value'] <= 2) {
+                    	if($User->privilege >= 2 OR $row_phone['value'] == 1) {
+                    		echo '<td>'.$phone.'</td>';
+                    	}
+                    }
+
+					echo '<td>'.$last_time.' ('.$days.')</td><td><a href="messages.php?action=new&to='.$user_h.'"><i class="fa fa-envelope"></i></a>';
 
 					if ($status == "leader") {
 						echo ' <a href="group.php?action=quit&group='.$gh.'&user='.$user_h.'"><i class="fa fa-eraser"></i></a>';
@@ -956,14 +1009,17 @@
                     		<ul>
                         		<li><a href="group.php?h='.$gh.'&page=index">'.$lang["works"].'</a></li>
                         		<li><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>
-                        		<li class="active"><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].'</a></li>
+                        		<li class="active"><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].' <span id="num_requests"></span></a></li>
                     		</ul>
                 		</nav>
             		</div>
+
+            		<input type="hidden" id="group_h" value="'.$gh.'">
+
             		<div class="ui_width_sidebar right">
 			';
 
-			$query = $con->query("SELECT * FROM pl_groupuser WHERE status='waiting'")or die("Query error!");
+			$query = $con->query("SELECT * FROM pl_groupuser WHERE status='waiting' AND group_h='$gh'")or die("Query error!");
 			while ($row = mysqli_fetch_array($query)) {
 
 				$group_h = $row['group_h'];

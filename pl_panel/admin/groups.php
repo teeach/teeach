@@ -83,7 +83,7 @@
 
 			$query = $con->query("UPDATE pl_groups SET name='$groupname' WHERE h='$h'")or die("Query error!");
 
-			echo "<a href='groups.php?action'>Aceptar</a>";
+			echo "<script>location.href='groups.php?action'</script>";
 
 		} elseif($action == "delete") {
 
@@ -93,7 +93,7 @@
 
 			$query = $con->query("DELETE FROM pl_groups WHERE h='$h'")or die("Query error!");
 
-			echo "¡Eliminado! <a href='groups.php?action'>Aceptar</a>";
+			echo "<script>location.href='groups.php?action'</script>";
 
 		} elseif($action == "requests") {
 			
@@ -128,7 +128,7 @@
 
 			$query = $con->query("UPDATE pl_groupuser SET status='active' WHERE id=$request_id")or die("Query error!");
 
-			echo "<a href='groups.php?action=requests'>Accept</a>";
+			echo "<script>location.href='groups.php?action=requests'</script>";
 
 		} else {
 

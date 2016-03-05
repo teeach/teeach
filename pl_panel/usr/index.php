@@ -54,25 +54,35 @@
 		$query = $con->query("SELECT * FROM pl_posts ORDER BY id DESC LIMIT ".$Pagination->startpoint.", ".$Pagination->limit."");
 		
 		
-		while($row = mysqli_fetch_array($query)) {
+		while ($row = mysqli_fetch_array($query)) {
 
 			$title = $row['title'];
 			$body = $row['body'];
 			$h = $row['h'];
 			$author_h = $row['author'];
 
-			$query2 = $con->query("SELECT * FROM pl_users WHERE h='$author_h'")or die("Query error!");
-			$row2 = mysqli_fetch_array($query2);
+			$query_setting_show_author = $con->query("SELECT * FROM pl_settings WHERE property='show_post_author'")or die("Query error!");
+			$row_setting_show_author = mysqli_fetch_array($query_setting_show_author);
 
-			$author = $row2['name']." ".$row2['surname'];
+			echo '
+				<div class="post">
+					<h2>'.$title.'</h2>';
 
-			echo "
-				<div class='post'>
-					<h2>".$title."</h2>
-					<h5>".$lang['writed_by']." <a href='profile.php?h=".$author_h."'>".$author."</a></h5>
-					".$body."
-				</div>
-			";
+			if ($row_setting_show_author['value'] == "true") {
+				
+				if($author_h == "teeach") {
+					echo '<h5>'.$lang["writed_by"].' <a target="_blank" href="http://teeach.org">Teeach</a></h5>';
+				} else {
+					$query2 = $con->query("SELECT * FROM pl_users WHERE h='$author_h'")or die("Query error!");
+					$row2 = mysqli_fetch_array($query2);
+
+					$author = $row2['name']." ".$row2['surname'];
+
+					echo '<h5>'.$lang["writed_by"].' <a target="_blank" href="profile.php?h='.$author_h.'">'.$author.'</a></h5>';
+				}				
+			}
+
+			echo $body.'</div>';
 
 		}		
 		
@@ -86,26 +96,29 @@
 	?>
 	<div class="index_right">
 		<section class="index_groups">
-			<div class="sectiontitle">			
+			<div class="sectiontitle">
+				<i class="fa fa-users"></i>
 				<?php echo $lang["groups"]; ?>
 			</div>
-			<ul>
-				<?php
-					$userid = $User->id;
-					$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query 1 Error!");
-					while ($row = mysqli_fetch_array($query)) {
-						$group_h = $row['group_h'];
-						$status = $row['status'];					
-						if($status != "waiting") {
-							$query2 = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query 2 Error!");
-							$row2 = mysqli_fetch_array($query2);
-							$groupname = $row2['name'];
-							//~ $grouph = $row2['h'];
-							echo '<li><a href="group.php?h='.$group_h.'&page=index">'.$groupname.'</a></li>';
-						}					
-					}
-				?>
-			</ul>
+			<div class="sectionbody">
+				<ul>
+					<?php
+						$userid = $User->id;
+						$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query 1 Error!");
+						while ($row = mysqli_fetch_array($query)) {
+							$group_h = $row['group_h'];
+							$status = $row['status'];					
+							if($status != "waiting") {
+								$query2 = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query 2 Error!");
+								$row2 = mysqli_fetch_array($query2);
+								$groupname = $row2['name'];
+								//~ $grouph = $row2['h'];
+								echo '<li><a href="group.php?h='.$group_h.'&page=index">'.$groupname.'</a></li>';
+							}					
+						}
+					?>
+				</ul>
+			</div>
 
 			<?php
 				if($User->privilege >= 3) {

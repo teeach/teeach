@@ -24,9 +24,7 @@
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-	<?
-		$System->set_head();
-	?>
+	<script src="../../src/js/messages.js"></script>
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
         <style>
             .ui-autocomplete-loading {
@@ -97,6 +95,8 @@
 		$centername = $row['value'];
 		$System->set_header($centername);
 		$System->set_usr_menu($User->h,$User->privilege,$lang);
+
+		echo "<input type='hidden' value='".$User->h."' id='user_h'>";
 
 		if (@$_GET['action'] == "new") {
 
@@ -222,7 +222,7 @@
 
 			$query2 = $con->query("INSERT INTO pl_messages(from_h,to_h,subject,body,unread,h,date) VALUES('$from','$to','$subject','$body',1,'$h','$date')")or die("Query error!");
 
-			echo '<a href="messages.php">'.$lang["accept"].'</a>';
+			echo '<script>location.href="messages.php"</script>';
 
 		} elseif(@$_GET['action'] == "sent") {
 
@@ -240,7 +240,7 @@
 
                 <nav class="ui_vertical_nav">
                     <ul>
-                        <li><a href="messages.php">'.$lang["received"].'</a></li>
+                        <li><a href="messages.php">'.$lang["received"].' <span id="num_messages_unread"></span></a></li>
                         <li class="active"><a href="messages.php?action=sent">'.$lang["sent"].'</a></li>
                     </ul>
                 </nav>                            
@@ -295,7 +295,7 @@
 					<div class="ui_sidebar left">
                 		<nav class="ui_vertical_nav">
                     		<ul>
-                        		<li><a href="messages.php">'.$lang["received"].'</a></li>
+                        		<li><a href="messages.php">'.$lang["received"].' <span id="num_messages_unread"></span></a></li>
                         		<li><a href="messages.php?action=sent">'.$lang["sent"].'</a></li>
                     		</ul>
                 		</nav>
@@ -316,6 +316,7 @@
 			echo "Message deleted. <a href='messages.php'>Aceptar</a>";
 
 		} else {
+
 			echo '
 				<div class="ui_full_width">
 					<div class="ui_head ui_head_width_actions">
@@ -330,7 +331,7 @@
 
                 	<nav class="ui_vertical_nav">
                     	<ul>
-                        	<li class="active"><a href="messages.php">'.$lang["received"].'</a></li>
+                        	<li class="active"><a href="messages.php">'.$lang["received"].' <span id="num_messages_unread"></span></a></li>
                         	<li><a href="messages.php?action=sent">'.$lang["sent"].'</a></li>
                     	</ul>
                 	</nav>                            

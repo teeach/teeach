@@ -58,7 +58,7 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo $lang['edit_profile']." | Project Learn"; ?></title>
+	<title><?php echo $lang['edit_profile']." | Teeach"; ?></title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<?php
 		$System = new System();
@@ -85,7 +85,10 @@
 						$rfile_langs = fread($fp_langs, filesize("../../src/lang/langs.json"));
 						$json_langs = json_decode($rfile_langs);
 						foreach ($json_langs->{"langs"} as $index => $row_langs) {
-							echo '<option value="'.$row_langs.'"';if($System->load_locale() == $row_langs) echo "selected";echo' >'.$row_langs.'</option>';
+
+							$text_lang = $System->read_language($row_langs);
+
+							echo '<option value="'.$row_langs.'"';if($System->load_locale() == $row_langs) echo "selected";echo' >'.$text_lang.'</option>';
 						}
 					echo'
 					</select>

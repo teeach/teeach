@@ -1,5 +1,17 @@
 $(document).on("ready", function() {
 
+	var group_h = $("#group_h").attr("value");
+
+	//Load group requests
+	$.ajax({
+		url: "../../src/ajax/load_grouprequests.php",
+		type: "POST",
+		data: {group_h:group_h},
+		success: function(num_requests) {
+			$("#num_requests").html("("+num_requests+")");
+		}
+	});
+
 	$("#view_cal").on("click", function() {
 
 		var work_h = $("#work_h").attr("value");

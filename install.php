@@ -5,11 +5,14 @@
 	$System = new System();
 	
 	if(isset($_POST['lang'])){
+		$lang_val = $_POST['lang'];
 		$lang = $System->parse_lang("src/lang/".$_POST['lang'].".json");
 	}
 	elseif(isset($_SESSION['lang'])){
+		$lang_val = $_SESSION['lang'];
 		$lang = $System->parse_lang("src/lang/".$_SESSION['lang'].".json");
 	}else{
+		$lang_val = 'en_EN';
 		$lang = $System->parse_lang("src/lang/en_EN.json");
 	}
 
@@ -71,37 +74,18 @@
 								<label for="lang"></label>
 									<select name="lang" id="lang_selector">';
 
-										echo '<option value="'.$_SESSION['lang'].'">--Selecciona--</option>';
-
 										$fp_langs = fopen("src/lang/langs.json", "r");
 										$rfile_langs = fread($fp_langs, filesize("src/lang/langs.json"));
 										$json_langs = json_decode($rfile_langs);
 										foreach ($json_langs->{"langs"} as $index => $row_langs) {
 
-											switch($row_langs) {
-												case 'es_ES':
-													echo '<option value="'.$row_langs.'">Español (España)</option>';
-													break;
-												case 'en_EN':
-													echo '<option value="'.$row_langs.'">English (England)</option>';
-													break;
-												case 'ca_ES':
-													echo '<option value="'.$row_langs.'">Català (España)</option>';
-													break;
-												case 'de_DE':
-													echo '<option value="'.$row_langs.'">Deutsch (Deutschland)</option>';
-													break;
-												case 'fr_FR':
-													echo '<option value="'.$row_langs.'">Français (France)</option>';
-													break;
-												default:
-													echo '<option value="'.$row_langs.'">'.$row_langs.'</option>';
-											}
+											$text_lang = $System->read_language($row_langs);
 
-											
+											echo '<option value="'.$row_langs.'"';if($lang_val == $row_langs) echo "selected";echo'>'.$text_lang.'</option>';
+
 										}
 									echo '
-									</select>								
+									</select>
 							</form>
 
 							<br>
@@ -229,8 +213,8 @@
 							<table>
 								<tr><td><h3><b style="font-weight:bold">'.$lang["your_center"].'</b></h3></td><td></td></tr>							
 								<tr><td><label for="centername">'.$lang["centername"].': </label></td><td><input type="text" name="centername"></td></tr>
-								<tr><td><label for="logo">'.$lang["logo"].': </label></td><td><input type="text" name="logo"></td></tr>
-								<tr><td><label for="logo">'.$lang["accesspass"].': </label><div class="tip">'.$lang["tip_accesspass"].'</div></td><td><input type="text" name="accesspass"></td></tr>
+								<tr><td><label for="logo">'.$lang["logo"].': </label><div class="tip">'.$lang["tip_logo"].'<a target="_blank" href="http://teeach.org/go?link=b1l14nqQ&lang=es_ES">'.$lang["more_information"].'</a></div></td><td><input type="text" name="logo"></td></tr>
+								<tr><td><label for="accesspass">'.$lang["accesspass"].': </label><div class="tip">'.$lang["tip_accesspass"].'<a target="_blank" href="http://teeach.org/go?link=23aaa535&lang=es_ES">'.$lang["more_information"].'</a></div></td><td><input type="text" name="accesspass"></td></tr>
 								<tr><td><h3><b style="font-weight:bold">'.$lang["your_account"].'</b></h3></td><td></td></tr>
 								<tr><td><label for="username">'.$lang["username"].': </label></td><td><input type="text" name="username"></td></tr>
 								<tr><td><label for="email">'.$lang["email"].': </label></td><td><input type="text" name="email"></td></tr>
@@ -272,7 +256,7 @@
 				$testpost_body = $lang["testpost_body"];
 				$testpost_h = substr( md5(microtime()), 1, 18);
 
-				$query = $con->query("INSERT INTO pl_posts(title,body,h,author) VALUES('$testpost_title','$testpost_body','$testpost_h','$h')")or die("Query error!");
+				$query = $con->query("INSERT INTO pl_posts(title,body,h,author) VALUES('$testpost_title','$testpost_body','$testpost_h','teeach')")or die("Query error!");
 
 				//Datos del centro
 				$centername = $_POST['centername'];
@@ -280,7 +264,8 @@
 				$accesspass = $_POST['accesspass'];
 				$lang_val = $_SESSION["lang"];
 
-				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES ('centername','$centername'),('logo','$logo'),('accesspass','$accesspass'),('JP','2'),('showgroups','true'),('lang','$lang_val'),('post_per_page','5'),('post_comments','true'),('post_author','true'),('allow_create_categories','true')")or die("Query error!");
+				//SET Settings Table
+				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES ('centername','$centername'),('logo','$logo'),('accesspass','$accesspass'),('lang','$lang_val'),('post_per_page','5'),('show_post_author','true'),('show_last_time','1'),('show_address','2'),('show_phone','2'),('show_groups','1'),('enable_profile_photo','true'),('JP','2'),('allow_create_categories','true')")or die("Query error!");
 
 				echo '
 					<center>
