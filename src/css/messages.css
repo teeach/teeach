@@ -1,0 +1,36 @@
+/* Messages
+   =========================================================== */
+
+.message {
+    padding: 15px;
+    background-color: #fff;
+    color: #320;
+    border: 2px solid #ccc;
+    margin: 5px;
+}
+
+.msg_subject {
+	width: 250px;
+	display: inline-block;
+	padding-left: 10px;
+}
+
+.msg_actions {
+	margin-top: -10px;
+	float: right;
+	opacity: 0;
+	color: #320;
+}
+
+.msg_actions a {
+	color: #320;
+}
+
+.msg_actions i {
+	padding: 10px;
+	cursor: pointer;
+}
+
+.msg_actions i:hover {
+	background-color: #ddd;
+}

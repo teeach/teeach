@@ -402,7 +402,7 @@
                                         </tr>
 
                                         <tr>
-                                        	<td><label for="JP">'.$lang["join_group"].': </label></td>
+                                        	<td><label for="JP">'.$lang["join_group"].': </label><div class="tip">'.$lang["tip_join_group_method"].'<a target="_blank" href="http://teeach.org/go?link=5444a4b0&lang=es_ES">'.$lang["more_information"].'</a></div></td>
                                         	<td>
                                         		<select id="JP" name="JP">
                                                     <option value="1" ';if($JP == 1){echo'selected';}echo'>'.$lang["direct"].'</option>

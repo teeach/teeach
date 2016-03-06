@@ -174,5 +174,7 @@
     "continue_anyway":"Continue anyway",
     "password_advice":"Your password isn't secure. It should have more than 8 characters.",
     "more_information":"More information",
-    "tip_logo":"A logo is a image that identifies your center.<br>Type the image URL of logotipe to add.<br>"
+    "tip_logo":"A logo is a image that identifies your center.<br>Type the image URL of logotipe to add.<br>",
+    "tip_accesspass":"La contraseña de acceso es una clave creada por el administrador que regula el acceso de nuevos alumnos a tu centro.<br> Es decir, cuando un nuevo alumno quiera registrarse a tu centro, necesitará esta contraseña para entrar.<br>Si dejas el campo vacío, cualquier usuario podrá registrarse en tu centro.<br>",
+    "tip_join_group_method":"Este parámetro cambia el método por el que un usuario se une a un grupo. Puedes seleccionar: <br><ul><li><b>Directo:</b> El usuario se une a un grupo directamente, sin necesitar confirmación.</li><li><b>Petición:</b> Es necesario la confirmación de un moderador del grupo para poder unirse.</li><li><b>Desactivado:</b> El usuario no puede unirse a ningún grupo, sólo los moderadores pueden añadir usuarios manualmente.</li></ul>"
 }

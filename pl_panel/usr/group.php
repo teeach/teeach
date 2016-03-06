@@ -144,7 +144,7 @@
 						$category_name = $row1['name'];
 						$category_h = $row1['h'];
 						echo '
-							<h3>'.$category_name.'</h3>
+							<span class="category_name">'.$category_name.'</span>
 							<ul class="grouplist">
 						';
 
@@ -454,11 +454,40 @@
 		} elseif(@$_GET['action'] == "quit") {
 
 			$group_h = $_GET['group'];
+
+			//USER STATUS
+			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$group_h' AND user_h='$User->h'")or die("Query error!");
+			$row_status = mysqli_fetch_array($query_status);
+			$status = $row_status['status'];
+
+			if($status != "leader") {
+				die("Error!");
+			}
+
+			$group_h = $_GET['group'];
 			$user_h = $_GET['user'];
 
 			$query = $con->query("DELETE FROM pl_groupuser WHERE group_h='$group_h' AND user_h='$user_h'")or die("Query error!");
 			
-			echo '<a href="group.php?h='.$group_h.'&page=users">Accept</a>';
+			echo '<script>location.href="group.php?h='.$group_h.'&page=users"</script>';
+
+		} elseif(@$_GET['action'] == "convert_mod") {
+
+			$group_h = $_GET['group'];
+			$user_h = $_GET['user'];
+
+			//USER STATUS
+			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$group_h' AND user_h='$User->h'")or die("Query error!");
+			$row_status = mysqli_fetch_array($query_status);
+			$status = $row_status['status'];
+
+			if($status != "leader") {
+				die("Error!");
+			}
+
+			$query = $con->query("UPDATE pl_groupuser SET status='leader' WHERE user_h='$user_h' AND group_h='$group_h'")or die("Query error!");
+
+			echo "<script>location.href='group.php?h=".$group_h."&page=users'</script>";
 
 		} elseif(@$_GET['action'] == "new_work") {
 
@@ -761,7 +790,7 @@
 
 			$query = $con->query("UPDATE pl_groupuser SET status='active' WHERE id=$request_id")or die("Query error!");
 
-			echo "<a href='index.php'>Accept</a>";
+			echo "<script>location.href='index.php'</script>";
 
 		} elseif(@$_GET['action'] == "open_term") {
 
@@ -931,7 +960,7 @@
                     echo '
                     
                     <th>'.$lang["last_time"].'</th>
-                    <th class="actions">'.$lang["actions"].'</th>
+                    <th class="actions"></th>
                 </thead>
                 <tbody>';
                 $query = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$gh' AND status!='waiting'");
@@ -970,13 +999,16 @@
                     	}
                     }
 
-					echo '<td>'.$last_time.' ('.$days.')</td><td><a href="messages.php?action=new&to='.$user_h.'"><i class="fa fa-envelope"></i></a>';
+					echo '<td>'.$last_time.' ('.$days.')</td><td><div class="user_actions"><a href="messages.php?action=new&to='.$user_h.'"><i class="fa fa-envelope"></i></a>';
 
 					if ($status == "leader") {
-						echo ' <a href="group.php?action=quit&group='.$gh.'&user='.$user_h.'"><i class="fa fa-eraser"></i></a>';
+						if($row['status'] != "leader") {
+							echo '<a href="group.php?action=convert_mod&group='.$gh.'&user='.$user_h.'"><i class="fa fa-user-md"></i></a>';
+						}
+						echo '<a href="group.php?action=quit&group='.$gh.'&user='.$user_h.'"><i class="fa fa-eraser"></i></a>';
 					}
 					
-					echo '</td></tr>';
+					echo '</div></td></tr>';
 				}
 
 			echo '

@@ -33,15 +33,14 @@
 	width: 100%;
 	display: inline-block;
 	background-color: #fff;
-	box-shadow: 0 0 3px #ccc;
-	border: 1px solid #ccc;
+	border: 2px solid #ccc;
 	transition: all 0.2s ease;
 	padding: 15px;
 	margin: 10px 0;
 }
 
 .post:hover {
-	border: 1px solid #c96;
+	box-shadow: 0 0 20px #ccc;
 }
 
 .post h2 {

@@ -84,7 +84,7 @@
 					$row2 = mysqli_fetch_array($query2);
 					$groupname = $row2['name'];
 
-					echo '<tr><td><a href="group.php?h='.$group_h.'">'.$groupname.'</a></td></tr>';
+					echo '<tr><td><a href="group.php?h='.$group_h.'&page=index">'.$groupname.'</a></td></tr>';
 				}
 				
 				echo '</tbody></table>';

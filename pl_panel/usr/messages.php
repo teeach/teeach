@@ -20,6 +20,7 @@
 	<meta charset="UTF-8">
 	<title><?php echo $lang["messages"];?> | Teeach </title>
 	<link rel="stylesheet" href="../../src/css/main.css">
+	<link rel="stylesheet" href="../../src/css/messages.css">
 	<script src="../../src/ckeditor/ckeditor.js"></script>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
@@ -32,59 +33,7 @@
             }
         </style>
         <script>
-            var elements = [];
-            $(function() {
-            function split( val ) {
-              return val.split( /,\s*/ );
-            }
-            function extractLast( term ) {
-              return split( term ).pop();
-            }
             
-            $( "#birds" )
-              // don't navigate away from the field on tab when selecting an item
-              
-                .bind( "keydown", function( event ) {
-                    if ( event.keyCode === $.ui.keyCode.TAB &&
-                        $( this ).autocomplete( "instance" ).menu.active ) {
-                            event.preventDefault();
-                    }
-                })
-              
-              
-                .autocomplete({
-                    source: function( request, response ) {
-                        $.getJSON( "../../src/searchbox/search.php", {
-                            term: extractLast( request.term )
-                        }, response );
-                    },
-                    search: function() {
-                        // custom minLength
-                        var term = extractLast( this.value );
-                        if ( term.length < 2 ) {
-                            return false;
-                        }
-                    },
-                    focus: function() {
-                        // prevent value inserted on focus
-                        return false;
-                    },
-                    select: function( event, ui ) {
-                        var terms = split( this.value );
-                        // remove the current input
-                        terms.pop();
-                        // add the selected item
-                        terms.push( ui.item.value );
-                        // add placeholder to get the comma-and-space at the end
-                        //~ terms.push( "" );
-                        //~ this.value = terms.join( ", " );
-                        this.value = "";
-                        elements.push(ui.item.id);
-                        $( "#users" ).append( "<div class='"+ui.item.id+"' style='color: white; width:200px; border-radius:5px; background: #242424'><img style='border-radius:50px; width:64px' src='"+ui.item.icon+"'> " + ui.item.value +" <i id='"+ui.item.id+"' class='fa fa-times erase'></i> </div>" );
-                        return false;
-                    }
-                });
-            });
         </script>
 
 </head>
@@ -122,6 +71,7 @@
 					</table>
 				</div>
 				';
+
 			} else {
 
 				echo '
@@ -135,45 +85,13 @@
 					  <div id="users"></div>
 					</div>
 					<table>
-						<form action="sendmessage.php" id="addusers">
-							<tr><td><label for="subject">'.$lang["subject"].'</label></td><td><input type="text" id="subject" name="subject" value=""></td></tr>
+						<form action="messages.php?action=multisend" method="POST" id="addusers">
+							<tr><td><label for="subject">'.$lang["subject"].'</label></td><td><input type="text" id="subject" name="subject" value="" size="40"></td></tr>
 							<tr><td></td><td><textarea cols="80" id="editor1" name="editor1" rows="10"></textarea></td></tr>
 							<tr><td></td><td><input type="submit" value="Enviar"></td></tr>
 						</form>
 					</table>
 				</div>
-				<script>            
-					$("body").on(\'click\', ".erase" , function() {
-						var index = elements.indexOf($(this).attr("id"));
-						$("div."+$(this).attr("id")).slideUp();
-						if (index > -1) {
-							elements.splice(index, 1);
-						}
-						//~ alert(elements);
-					});
-				</script>
-				<script>
-					// Attach a submit handler to the form
-					$( "#addusers" ).submit(function( event ) {
-					  // Stop form from submitting normally
-					  event.preventDefault();
-					 
-					  // Get some values from elements on the page:
-					  var $form = $( this ),
-						term = elements,
-						url = $form.attr( "action" );
-					  var sender = '.json_encode($_SESSION['h']).' 
-					 
-					  // Send the data using post
-					  var posting = $.post( url, { users: term, subject: $("#subject").val(), content: CKEDITOR.instances[\'editor1\'].getData(), sender: sender});
-					  // Put the results in a div
-					  posting.done(function( data ) {
-						  alert(data);
-						var content = $( data ).find( "#content" );
-						$( "#result" ).empty().append( content );
-					  });
-					});
-				</script>
 				';
 			}
 				echo '
@@ -224,6 +142,24 @@
 
 			echo '<script>location.href="messages.php"</script>';
 
+		} elseif(@$_GET['action'] == "multisend") {
+
+			$sender = $_SESSION['h'];
+    		$users = $_POST["users"];
+    		$subject = $_POST["subject"];
+    		$body = $_POST["body"];
+    		$data = ["users"=>$users, "subject"=>$subject, "body"=>$body];
+    		$h = substr( md5(microtime()), 1, 18);
+    		$date = date("Y-m-d H:i:s");
+    		json_encode($data);
+
+    		//~ $sender = $System->get_user_by_id($sender, $con);
+    		foreach ($users as $user) {
+        		$query = $con->query("INSERT INTO pl_messages(from_h,to_h,subject,body,h,date) VALUES ('$sender', '$user', '$subject', '$content', '$h', '$date')")or die("Query error!");
+    		}
+
+    		echo "ale";
+
 		} elseif(@$_GET['action'] == "sent") {
 
 			echo '
@@ -265,7 +201,7 @@
 					$to_name = $row1['name'];
 					$to_surname = $row1['surname'];
 
-					echo '<div id="'.$h.'" class="'.$h.' message">'.$to_name.' '.$to_surname.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+					echo '<div id="'.$h.'" class="'.$h.' message">'.$to_name.' '.$to_surname.' <div class="msg_subject"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="msg_actions"><i id="'.$h.'" class="fa fa-share-square-o action msg_answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 				}
                 
                 echo '
@@ -344,9 +280,11 @@
 
 				while ($row = mysqli_fetch_array($query)) {
 					$from_h = $row['from_h'];
-					$query_from_h = $con->query("SELECT * FROM pl_users WHERE id='$from_h'")or die("Query error!");
-					$row_from_h = mysqli_fetch_array($query_from_h);
-					$from_h = $row_from_h['h'];
+					$query_from = $con->query("SELECT * FROM pl_users WHERE h='$from_h'")or die("Query error!");
+					$row_from = mysqli_fetch_array($query_from);
+					$from_h = $row_from['h'];
+					$from_name = $row_from['name'];
+					$from_surname = $row_from['surname'];
 					$subject = $row['subject'];
 					$date = $row['date'];
 					$unread = $row['unread'];
@@ -356,9 +294,9 @@
 					$h = $row['h'];
 
 					if($unread == 1) {
-						echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div style="width:250px; display:inline-block; padding-left:10px; font-family:RobotoBold"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer reply"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+						echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div class="msg_subject" style="font-family:RobotoBold"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="msg_actions"><a href="messages.php?action=new&to='.$from_h.'"><i id="'.$h.'" class="fa fa-share-square-o action msg_answer msg_reply"></i></a> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 					} else {
-						echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div style="width:250px; display:inline-block; padding-left:10px"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="actions" style="float:right"><i id="'.$h.'" class="fa fa-share-square-o action answer reply"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+						echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div class="msg_subject"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="msg_actions"><a href="messages.php?action=new&to='.$from_h.'"><i id="'.$h.'" class="fa fa-share-square-o action msg_answer msg_reply"></i></a> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 					}
 				}
             echo '
@@ -367,19 +305,5 @@
             ';
 		}
 	?>
-<script>
-    $(".delete").click(function() {
-        var $msg = $(this);
-        var posting = $.post( "delmsg.php", {h:$(this).attr("id")});
-          // Put the results in a div
-          posting.done(function( data ) {
-            //~ alert($("."+$(this).attr("id")).text());
-            $("div."+$msg.attr("id")).toggle("slide");
-            //~ var content = $( data ).find( "#content" );
-            //~ $( "#result" ).empty().append( content );
-          });
-    });
-
-</script>
 </body>
 </html>

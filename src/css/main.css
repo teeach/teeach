@@ -565,11 +565,11 @@ color: #000;
 
 .ui_table .fa {
     color: #320;
-    transition: all 0.2s ease;
+    padding: 10px;
 }
 
 .ui_table .fa:hover {
-    color: #c96;
+    background-color: #ccc;
 }
 
 /* Ui Form
@@ -813,17 +813,6 @@ TRANSITIONS
     width: 358px;
 }
 
-/* Messages
-   =========================================================== */
-
-.message {
-    padding: 10px;
-    background-color: #fff;
-    color: #320;
-    border: 1px solid #320;
-    margin: 5px;
-}
-
 /* Units & Works
    =========================================================== */
 
@@ -930,6 +919,14 @@ TRANSITIONS
 .answer input[type=submit] {
     width: 100px;
     height: 80px;
+}
+
+.user_actions {
+    opacity: 0;
+}
+
+.category_name {
+    font-size: 2.2rem;
 }
 
 
@@ -1070,16 +1067,6 @@ UI ELEMENTS
     Tips
 ====================================*/
 
-.tip_button {
-    cursor: pointer;
-    color: #320;
-    transition: all 0.2s ease;
-}
-
-.tip_button:hover {
-    color: #c96;
-}
-
 .tip {
     max-width: 450px;
     display: none;
@@ -1091,6 +1078,26 @@ UI ELEMENTS
     font-size: 0.9rem;
     box-shadow: 1px 1px 5px #aaa;
     opacity: 0.9;
+    line-height: 120%;
+}
+
+.tip b {
+    font-family: 'RobotoMedium';
+}
+
+.tip ul {
+    list-style: circle;
+    padding-left: 20px;
+}
+
+.tip_button {
+    cursor: pointer;
+    color: #320;
+    transition: all 0.2s ease;
+}
+
+.tip_button:hover {
+    color: #c96;
 }
 
 .tip_close {
@@ -1142,6 +1149,35 @@ UI ELEMENTS
 .horizontal_box b {
     font-weight: bold;
     color: #320;
+}
+
+/*====================================
+======================================
+=====================================*/
+
+.searchbox_usr {
+    padding: 5px 10px;
+    display: inline-block;
+    font-family: 'RobotoRegular';
+    font-size: 0.9rem;
+    color: #320;
+    background: #fff;
+    border: 2px solid #ccc;
+    margin: 10px 10px 0 0;
+}
+
+.searchbox_usr i {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.searchbox_usr i:hover {
+    background-color: #ddd;
+}
+
+.searchbox_usr img {
+    border-radius: 50px;
+    width: 48px;
 }
 /*
 ==================

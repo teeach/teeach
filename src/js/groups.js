@@ -42,6 +42,14 @@ $(document).on("ready", function() {
 
 	});
 
+	$("tr").on("mouseover", function() {
+		$(this).children("td").children(".user_actions").css("opacity", "1");
+	});
+
+	$("tr").on("mouseout", function() {
+		$(this).children("td").children(".user_actions").css("opacity", "0");
+	});
+
 });
 
 /*function new_cal() {
