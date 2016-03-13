@@ -26,7 +26,7 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo _("Install");?> | Teeach</title>
+	<title>Install | Teeach</title>
 	<link rel="stylesheet" href="src/css/main.css">
 	<?php $System->set_head(); ?>
 	<script src='src/js/main.js'></script>

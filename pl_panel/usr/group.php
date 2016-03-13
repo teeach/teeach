@@ -127,8 +127,8 @@
 			//Create group
 			$query = $con->query("INSERT INTO pl_groups(name,h,category_h) VALUES ('$group_name','$h','$category_h')")or die("Query error!");
 
-			//Create first leader
-			$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$h','$User->h','leader')")or die("Query error!");
+			//Create first moderator
+			$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$h','$User->h','moderator')")or die("Query error!");
 
 			echo '<script>location.href="group.php?h='.$h.'&page=index"</script>';
 
@@ -181,18 +181,18 @@
 				case 1:
 					//Direct ~ No need permission
 					$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','active')")or die("Query error!");
-					echo _("Great! You've joined to group. <a href='group.php?group=".$gh."&page=index'>Enter</a>");
+					echo "Great! You've joined to group. <a href='group.php?group=".$gh."&page=index'>Enter</a>";
 				case 2:
 					//Request ~ Need permission
 					$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','waiting')")or die("Query error!");
-					echo _("You've sent a request successfully! <a href='index.php'>Return to Index Page</a>");
+					echo "You've sent a request successfully! <a href='index.php'>Return to Index Page</a>";
 					break;
 				case 3:
 					//Diabled ~ Lock requests
-					echo _("The administrator has disabled the activation to groups. Try again later. <a href='index.php'>Accept</a>");
+					echo "The administrator has disabled the activation to groups. Try again later. <a href='index.php'>Accept</a>";
 				default:
 					//Error ~ Invalid setting
-					echo _("Error in table pl_settings The value of JP is invalid!");
+					echo "Error in table pl_settings The value of JP is invalid!";
 			}
 
 		} elseif(@$_GET['action'] == "view") {
@@ -231,7 +231,7 @@
 				}
             }
 
-			if ($status == "leader") {
+			if ($status == "moderator") {
 				echo '<div class="ui_actions">';
 				if($Work->type != 1) {
 					if($Work->status == "visible") {
@@ -256,7 +256,7 @@
                        		<li><a href="group.php?h='.$Work->group_h.'&page=index">'.$lang["works"].'</a></li>
                        		<li><a href="group.php?h='.$Work->group_h.'&page=users">'.$lang["users"].'</a></li>';
 
-                       		if($status == "leader") {
+                       		if($status == "moderator") {
                        			echo '<li><a href="group.php?h='.$Work->group_h.'&page=requests">'.$lang["requests"].'</a></li>';
                        		}
                        		
@@ -304,7 +304,7 @@
             				</div>
             			';
             		} else {
-            			if($status != "leader") {
+            			if($status != "moderator") {
             				echo '
 								<div class="answer">
 									<form method="post" action="group.php?h='.$_GET["h"].'&action=answer" enctype="multipart/form-data">
@@ -361,7 +361,7 @@
 
 				}
 
-				if($status == "leader") {
+				if($status == "moderator") {
             		echo '
             				<input id="work_h" type="hidden" value="'.$Work->h.'">
 							<button id="view_cal">'.$lang["view_califications"].'</button>
@@ -460,7 +460,7 @@
 			$row_status = mysqli_fetch_array($query_status);
 			$status = $row_status['status'];
 
-			if($status != "leader") {
+			if($status != "moderator") {
 				die("Error!");
 			}
 
@@ -481,11 +481,11 @@
 			$row_status = mysqli_fetch_array($query_status);
 			$status = $row_status['status'];
 
-			if($status != "leader") {
+			if($status != "moderator") {
 				die("Error!");
 			}
 
-			$query = $con->query("UPDATE pl_groupuser SET status='leader' WHERE user_h='$user_h' AND group_h='$group_h'")or die("Query error!");
+			$query = $con->query("UPDATE pl_groupuser SET status='moderator' WHERE user_h='$user_h' AND group_h='$group_h'")or die("Query error!");
 
 			echo "<script>location.href='group.php?h=".$group_h."&page=users'</script>";
 
@@ -495,7 +495,7 @@
 			$row_status = mysqli_fetch_array($query_status);
 			$status = $row_status['status'];
 			
-			if($status != "leader") {
+			if($status != "moderator") {
 				die($lang["not_permission"]." <a href='group.php?h=".$h."&page=index'>".$lang['accept']."</a>");
 			}
 
@@ -531,7 +531,7 @@
 					</table>
 			</form>
 			</div>
-			
+
 			<script type="text/javascript">  
                 CKEDITOR.replace( "editor1", {
                 enterMode: CKEDITOR.ENTER_BR,
@@ -551,25 +551,9 @@
                     { name: "colors", items: [ "TextColor", "BGColor" ] },
                     { name: "tools", items: [ "Maximize"] }
                 ]
-                });      
+                });
         </script>
-        
-        <script>
-		var attachments = 0;
-		
-		$( ".add_attachments" ).on("click", function() {
-			$( ".attachments" ).append("<div class=\"attachment\"><i class=\"fa fa-times del_attachment\"></i><input type=\"file\" name=\""+attachments+"\"></div>" );
-			attachments += 1;
-		});
-
-		$( ".attachments" ).on("click", ".del_attachment", function() {
-			console.log("Por el buen camino");
-			$(this).prev().detach();
-		});
-        
-        
-        </script>
-			';
+		';
 
 		} elseif(@$_GET['action'] == "save_work") {
 
@@ -835,7 +819,7 @@
                         			<li class="active"><a href="group.php?h='.$gh.'&page=index">'.$lang["works"].'</a></li>
                         			<li><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>';
 
-                        			if ($status == "leader") {
+                        			if ($status == "moderator") {
                         				echo '<li><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].' <span id="num_requests"></span></a></li>';
                         			}
 
@@ -868,7 +852,7 @@
 					$work_type = $row2['type'];
 					$work_status = $row2['status'];
 
-					if($status == "leader") {
+					if($status == "moderator") {
 						if($work_status == "invisible") {
 							echo '<a style="opacity: 0.5" href="group.php?action=view&h='.$work_h.'"><li class="work"><i class="fa fa-eye-slash"></i>'.$work_name.'<a href="group.php?action=del_work&h='.$work_h.'" class="right group_button"><i class="fa fa-trash"></i></a> <a href="group.php?action=edit_work&h='.$work_h.'" class="right group_button"><i class="fa fa-pencil-square-o"></i></a></li></a>';
 						} else {
@@ -881,14 +865,14 @@
 					}					
 				}
 
-				if ($status == "leader") {
+				if ($status == "moderator") {
 					echo '
 						<a href="group.php?action=new_work&h='.$h.'&unit='.$unit_h.'"><li class="new_work">'.$lang["new_work"].'</li></a>';
 				}
 				echo '</ul>';				
 			}
 
-			if ($status == "leader") {
+			if ($status == "moderator") {
 				echo '
 					<a onclick="open_popup()"><li class="new_unit">'.$lang["new_unit"].'</li></a>';
 			}
@@ -927,7 +911,7 @@
                     <ul>
                         <li><a href="group.php?h='.$gh.'&page=index">'.$lang["works"].'</a></li>
                         <li class="active"><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>';
-                        if ($status == "leader") {
+                        if ($status == "moderator") {
                         	echo '<li><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].' <span id="num_requests"></span></a></li>';
                         }
                     echo '
@@ -979,7 +963,7 @@
 
 					echo '<tr><td><input type="checkbox"></td>';
 
-					if ($row['status'] == "leader") {
+					if ($row['status'] == "moderator") {
 						echo '<td><a style="color:#0B0B3B; font-weight: bold " href="profile.php?h='.$user_h.'">'.$name." ".$surname.'</a></td>';
 					} else {
 						echo '<td><a href="profile.php?h='.$user_h.'">'.$name." ".$surname.'</a></td>';
@@ -1001,8 +985,8 @@
 
 					echo '<td>'.$last_time.' ('.$days.')</td><td><div class="user_actions"><a href="messages.php?action=new&to='.$user_h.'"><i class="fa fa-envelope"></i></a>';
 
-					if ($status == "leader") {
-						if($row['status'] != "leader") {
+					if ($status == "moderator") {
+						if($row['status'] != "moderator") {
 							echo '<a href="group.php?action=convert_mod&group='.$gh.'&user='.$user_h.'"><i class="fa fa-user-md"></i></a>';
 						}
 						echo '<a href="group.php?action=quit&group='.$gh.'&user='.$user_h.'"><i class="fa fa-eraser"></i></a>';
@@ -1027,7 +1011,7 @@
 			$row1 = mysqli_fetch_array($query1);
 			$groupname = $row1['name'];
 
-			if($status != "leader") {
+			if($status != "moderator") {
 				die($lang["not_permission"]." <a href='group.php?h=".$h."&page=index'>".$lang['accept']."</a>");
 			}
 

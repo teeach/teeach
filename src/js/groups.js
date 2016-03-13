@@ -2,6 +2,20 @@ $(document).on("ready", function() {
 
 	var group_h = $("#group_h").attr("value");
 
+	//Add attachments
+	var attachments = 0;
+		
+	$(".add_attachments").on("click", function() {
+		attachments += 1;
+		$(".attachments").append("<div class=\"attachment "+attachments+"\"><i class=\"fa fa-times del_attachment\" id=\""+attachments+"\"></i><input type=\"file\" name=\""+attachments+"\"></div>" );
+	});
+
+	$(".attachments").on("click", ".del_attachment", function() {
+		console.log("Por el buen camino");
+		attachments -= 1;
+		$("div."+$(this).attr("id")).slideUp();
+	});
+
 	//Load group requests
 	$.ajax({
 		url: "../../src/ajax/load_grouprequests.php",
