@@ -50,7 +50,8 @@ CREATE TABLE IF NOT EXISTS `pl_posts` (
   `title` varchar(99) CHARACTER SET utf8 NOT NULL,
   `body` longtext CHARACTER SET utf8 NOT NULL,
   `h` varchar(99) CHARACTER SET utf8 NOT NULL,
-  `author` varchar(99) CHARACTER SET utf8 NOT NULL
+  `author` varchar(99) CHARACTER SET utf8 NOT NULL,
+  `creation_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `pl_settings` (
@@ -79,7 +80,7 @@ CREATE TABLE IF NOT EXISTS `pl_users` (
   `h` char(13) CHARACTER SET utf8 NOT NULL,
   `lang` varchar(5) CHARACTER SET utf8 NOT NULL,
   `photo` text CHARACTER SET utf8 NOT NULL,
-  `birthday` date NOT NULL,
+  `birthdate` date NOT NULL,
   `pass` char(99) CHARACTER SET utf8 NOT NULL,
   `privilege` int(2) NOT NULL,
   `creation_date` datetime NOT NULL,

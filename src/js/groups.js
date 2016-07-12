@@ -50,10 +50,24 @@ $(document).on("ready", function() {
 
 	$("#cal").on("click",".new_cal_btn", function() {
 		
+		$(this).next(".edit_cal").css("display", "block");
+		$(this).css("display", "none");
+
+	});
+
+	$("#cal").on("click",".send_cal_btn", function() {
+
 		console.log("Correcto!");
 
-		$(this).prev().html("<form><table><tr><td>Nota</td><td>Observaciones</td></tr><tr><td><input type='text' name='mark'></td><td><textarea name='observations'></textarea></td></tr></table></form><input type='submit' value='Guardar'>");
-
+		$.ajax({
+			url: "../../src/ajax/send_calification.php",
+			type: "POST",
+			data: {},
+			timeout: 10000,
+			success: function() {
+				$(this).css("display", "none");
+			}
+		});
 	});
 
 	$("tr").on("mouseover", function() {
@@ -64,9 +78,9 @@ $(document).on("ready", function() {
 		$(this).children("td").children(".user_actions").css("opacity", "0");
 	});
 
+	$("#add_user_button").on("click", function() {
+		$(this).css("background-color", "#c96");
+		$("#group_add_user").css("display", "block");
+		$(this).addClass("selected");
+	});
 });
-
-/*function new_cal() {
-	
-	
-}*/

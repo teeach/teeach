@@ -277,7 +277,7 @@
             	<div>
             	<br>';
             	foreach($attachments as $attachment){
-					echo'<a class="ui_attachment" href="../../'.$attachment->{"path"}.'"><i class="fa fa-paperclip"></i> '.$attachment->{"name"}.'</a><br>';
+					echo'<a class="ui_attachment" href="../../'.$attachment->{"path"}.'"><i class="fa fa-paperclip"></i> '.$attachment->{"name"}.'</a><br><br><br>';
 				}
 				echo'
             	</div><br><br>';
@@ -433,23 +433,26 @@
 
 		} elseif(@$_GET['action'] == "add") {
 
-			$group_h = $_GET['group'];
-			$user_h = $_GET['user'];
+			$group_h = $_GET['group_h'];
+			$user = $_POST['user'];
 
-			//ID Group
-			$querygroup = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query error!");
-			$rowgroup = mysqli_fetch_array($querygroup);
-			$group_id = $rowgroup['id'];
+			if (!ereg("^([a-zA-Z0-9._]+)@([a-zA-Z0-9.-]+).([a-zA-Z]{2,4})$",$user)) {
+      			//Username detected
+      			$query = $con->query("SELECT * FROM pl_users WHERE username='$user'")or die("Query error!");
+  			} else {
+       			//Mail detected
+       			$query = $con->query("SELECT * FROM pl_users WHERE email='$user'")or die("Query error!");
+  			}
 
-			//ID User
-			$queryuser = $con->query("SELECT * FROM pl_users WHERE h='$user_h'")or die("Query error!");
-			$rowuser = mysqli_fetch_array($queryuser);
-			$user_id = $rowuser['id'];
+  			if($row = mysqli_fetch_array($query)) {
+  				$user_h = $row['h'];
+  			} else {
+  				echo "Error! Username or email not detected!";
+  			}
 
-			//Add
-			$queryadd = $con->query("INSERT INTO pl_groupuser(groupid,userid) VALUES($group_id,$user_id)")or die("Query error!");
+			$queryadd = $con->query("INSERT INTO pl_groupuser(group_h,user_h) VALUES('$group_h','$user_h')")or die("Query error!");
 
-			echo '<a href="group.php?h='.$group_h.'">Accept</a>';
+			echo 'Añadido '.$user.' con un hash de '.$user_h;
 
 		} elseif(@$_GET['action'] == "quit") {
 
@@ -519,10 +522,9 @@
 						<select name="type">
 							<option value="1">'.$lang["notes"].'</option>
 							<option value="2">'.$lang["homework"].'</option>
-							<option value="3">'.$lang["exam"].'</option>
 						</select>
 					</td></tr>
-					<tr><td><label for="visible">'.$lang["visible"].'</label> <div class="tip">asdfñjklasf</div></td><td><input type="checkbox" name="visible" checked="true"></td></tr>
+					<tr><td><label for="visible">'.$lang["visible"].'</label> <div class="tip">[]</div></td><td><input type="checkbox" name="visible" checked="true"></td></tr>
 
 					<tr><td></td><td><textarea cols="80" id="editor1" name="desc" rows="10"></textarea></td></tr>
 					<tr><td>'.$lang["attachments_files"].'</td><td class="attachments"></td><td></td></tr>
@@ -564,7 +566,7 @@
 
 			$workname = $_POST['workname'];
 			$type = $_POST['type'];
-			$desc = $_POST['desc'];
+			$desc = $System->filter_obscene_language($_POST['desc'], $con);
 			$visible = $_POST['visible'];
 
 			if($visible == "on") {
@@ -642,28 +644,24 @@
 											echo '
 												<option value="1" selected>'.$lang["notes"].'</option>
 												<option value="2">'.$lang["homework"].'</option>
-												<option value="3">'.$lang["exam"].'</option>
 											';
 											break;
 										case 2:
 											echo '
 												<option value="1">'.$lang["notes"].'</option>
 												<option value="2" selected>'.$lang["homework"].'</option>
-												<option value="3">'.$lang["exam"].'</option>
 											';
 											break;
 										case 3:
 											echo '
 												<option value="1">'.$lang["notes"].'</option>
 												<option value="2">'.$lang["homework"].'</option>
-												<option value="3" selected>'.$lang["exam"].'</option>
 											';
 											break;
 										default:
 											echo '
 												<option value="1">'.$lang["notes"].'</option>
 												<option value="2">'.$lang["homework"].'</option>
-												<option value="3">'.$lang["exam"].'</option>
 											';
 									}
 
@@ -795,9 +793,7 @@
 		} elseif(@$_GET['page'] == "index") {
 
 			$gh = $_GET['h'];
-			$query = $con->query("SELECT * FROM pl_groups WHERE h='$gh'")or die("Query error!");
-			$row = mysqli_fetch_array($query);
-			$groupname = $row['name'];
+			$Group = $System->get_group_by_h($gh, $con);
 
 			//USER STATUS
 			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$gh' AND user_h='$User->h'")or die("Query error!");
@@ -811,22 +807,12 @@
 				echo '				
 					<div class="ui_full_width">
             			<div class="ui_head ui_head_width_actions">
-                			<h2><i class="fa fa-users"></i> '.$groupname.'</h2>
-            			</div>
-            			<div class="ui_sidebar left">
-                			<nav class="ui_vertical_nav">
-                    			<ul>
-                        			<li class="active"><a href="group.php?h='.$gh.'&page=index">'.$lang["works"].'</a></li>
-                        			<li><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>';
+                			<h2><i class="fa fa-users"></i> '.$Group->name.'</h2>
+            			</div>';
 
-                        			if ($status == "moderator") {
-                        				echo '<li><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].' <span id="num_requests"></span></a></li>';
-                        			}
+            			$Group->set_nav_menu($Group, $status, "index", $lang);
 
-                			echo '
-                    			</ul>
-                			</nav>                            
-            			</div>
+            	echo '
             			<input type="hidden" id="group_h" value="'.$gh.'">
             
             <div class="ui_width_sidebar right">
@@ -883,13 +869,11 @@
 
 			$gh = $_GET['h'];
 
+			$Group = $System->get_group_by_h($h, $con);
+
 			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query error!");
 			$row_status = mysqli_fetch_array($query_status);
 			$status = $row_status['status'];
-
-			$query1 = $con->query("SELECT * FROM pl_groups WHERE h='$gh'")or die("Query error!");
-			$row1 = mysqli_fetch_array($query1);
-			$groupname = $row1['name'];
 
 			$query_address = $con->query("SELECT * FROM pl_settings WHERE property='show_address'")or die("Query error!");
 			$query_phone = $con->query("SELECT * FROM pl_settings WHERE property='show_phone'")or die("Query error!");
@@ -897,28 +881,39 @@
 			$row_phone = mysqli_fetch_array($query_phone);
 
 			echo '
-
 			<div class="ui_full_width">
             <div class="ui_head ui_head_width_actions">
-                <h2><i class="fa fa-users"></i> '.$groupname.'</h2>
+                <h2><i class="fa fa-users"></i> '.$Group->name.'</h2>
                 <div class="ui_actions">
-                    <a href="group.php?action=add&h='.$gh.'"><button class="ui_action" class="ui_tooltip" title="Add New"><i class="fa fa-plus"></i></button></a>
+                    <a href="#"><button class="ui_action" class="ui_tooltip" title="Add New" id="add_user_button"><i class="fa fa-plus"></i></button></a>
+                    <div id="group_add_user">
+                		<form action="group.php?action=add&group_h='.$gh.'" method="POST">
+                    		<table>
+								<tr>
+									<td>
+										Correo o usuario:
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="text" name="user" size="25">
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<input type="submit" value="Añadir">
+									</td>
+								</tr>
+                    		</table>
+                    	</form>
+                    </div>
                     <!--<button class="ui_action" class="ui_tooltip" title="Remove Selections"><i class="fa fa-trash"></i></button>-->
                 </div>
-            </div>
-            <div class="ui_sidebar left">
-                <nav class="ui_vertical_nav">
-                    <ul>
-                        <li><a href="group.php?h='.$gh.'&page=index">'.$lang["works"].'</a></li>
-                        <li class="active"><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>';
-                        if ($status == "moderator") {
-                        	echo '<li><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].' <span id="num_requests"></span></a></li>';
-                        }
-                    echo '
-                    </ul>
-                </nav>
-            </div>
+            </div>';
 
+            $Group->set_nav_menu($Group, $status, "users", $lang);
+
+            echo '
             <input type="hidden" id="group_h" value="'.$gh.'">
             
             <div class="ui_width_sidebar right">
@@ -960,6 +955,10 @@
 					$phone = $row2['phone'];
 					$last_time = $row['last_time'];
 					$days = $System->how_many_days($last_time, $lang);
+					$last_date_format = $System->get_date_format($last_time,$lang,$con);
+					$last_time_format = $System->get_time_format($last_time,$con);
+
+					$year = date("Y", strtotime($last_time));
 
 					echo '<tr><td><input type="checkbox"></td>';
 
@@ -983,7 +982,13 @@
                     	}
                     }
 
-					echo '<td>'.$last_time.' ('.$days.')</td><td><div class="user_actions"><a href="messages.php?action=new&to='.$user_h.'"><i class="fa fa-envelope"></i></a>';
+                    if($year < date("Y")) {
+                    	echo '<td>'.$lang["never"].'</td>';
+                    } else {
+                    	echo '<td>'.$last_date_format.' ~ '.$last_time_format.' ('.$days.')</td>';
+                    }
+
+                    echo '<td><div class="user_actions"><a href="messages.php?action=new&to='.$user_h.'"><i class="fa fa-envelope"></i></a>';
 
 					if ($status == "moderator") {
 						if($row['status'] != "moderator") {
@@ -1003,13 +1008,11 @@
 
 			$gh = $_GET['h'];
 
+			$Group = $System->get_group_by_h($h, $con);
+
 			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query error!");
 			$row_status = mysqli_fetch_array($query_status);
 			$status = $row_status['status'];
-
-			$query1 = $con->query("SELECT * FROM pl_groups WHERE h='$gh'")or die("Query error!");
-			$row1 = mysqli_fetch_array($query1);
-			$groupname = $row1['name'];
 
 			if($status != "moderator") {
 				die($lang["not_permission"]." <a href='group.php?h=".$h."&page=index'>".$lang['accept']."</a>");
@@ -1018,19 +1021,14 @@
 			echo '
 				<div class="ui_full_width">
             		<div class="ui_head ui_head_width_actions">
-                		<h2><i class="fa fa-users"></i> '.$groupname.'</h2>
-            		</div>
-            		<div class="ui_sidebar left">
-                		<nav class="ui_vertical_nav">
-                    		<ul>
-                        		<li><a href="group.php?h='.$gh.'&page=index">'.$lang["works"].'</a></li>
-                        		<li><a href="group.php?h='.$gh.'&page=users">'.$lang["users"].'</a></li>
-                        		<li class="active"><a href="group.php?h='.$gh.'&page=requests">'.$lang["requests"].' <span id="num_requests"></span></a></li>
-                    		</ul>
-                		</nav>
-            		</div>
+                		<h2><i class="fa fa-users"></i> '.$Group->name.'</h2>
+            		</div>';
 
-            		<input type="hidden" id="group_h" value="'.$gh.'">
+            		$Group->set_nav_menu($Group, $status, "requests", $lang);
+
+            		echo '
+
+            		<input type="hidden" id="group_h" value="'.$Group->h.'">
 
             		<div class="ui_width_sidebar right">
 			';
@@ -1060,6 +1058,61 @@
 
 			echo '</div></div>';
 
+		} elseif(@$_GET['page'] == "absences") {
+
+			$gh = $_GET['h'];
+
+			$Group = $System->get_group_by_h($h, $con);
+
+			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h' AND group_h='$Group->h'")or die("Query error!");
+			$row_status = mysqli_fetch_array($query_status);
+			$status = $row_status['status'];
+
+			if($status != "moderator") {
+				die($lang["not_permission"]." <a href='group.php?h=".$h."&page=index'>".$lang['accept']."</a>");
+			}
+
+			echo '
+				<div class="ui_full_width">
+            		<div class="ui_head ui_head_width_actions">
+                		<h2><i class="fa fa-users"></i> '.$Group->name.'</h2>
+            		</div>';
+
+            		$Group->set_nav_menu($Group, $status, "absences", $lang);
+
+            		echo '
+
+            		<input type="hidden" id="group_h" value="'.$Group->h.'">
+
+            		<div class="ui_width_sidebar right">
+
+            			<div class="absences">
+
+            			<table class="absences_table">
+            				<thead>
+            					<th>NAME</th>
+            				</thead>
+            				<tbody>
+							';
+
+							$query = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$Group->h'")or die("Query error!");
+							while ($row = mysqli_fetch_array($query)) {
+								$user_h = $row['user_h'];
+								$user_selected = $System->get_user_by_id($user_h, $con);
+								echo '
+									<tr>
+										<td>'.$user_selected->surname.' '.$user_selected->name.'</td>
+									</tr>
+								';
+							}
+
+							echo '
+							</tbody>
+						</table>
+						<a href="#" class="new_absence">Nuevo</a>
+
+						</div>
+						';
 		}
 		
 	?>		

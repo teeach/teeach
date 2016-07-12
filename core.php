@@ -19,10 +19,6 @@
                 
 			";
 		}
-
-        function get_date() {
-            echo date("d-m-Y H:i:s");
-        }
                 
 		function set_header($centername) {
 
@@ -41,6 +37,10 @@
                     Early Development Version
                 </footer>";
 		}
+
+        function get_date() {
+            echo date("d-m-Y H:i:s");
+        }
 
 		function load_locale() {
 			
@@ -129,25 +129,25 @@
                         <li><a href="messages.php">'.$lang["messages"].'</a></li>
                     
             ';
-        //If you're Admin...
-		if ($p >= 3) {
-			echo '				
-    			<li>
-                    <a href="../admin">'.$lang["admin"].'</a>
-                    <ul>
-                        <li><a class="icon_users" href="../admin/users.php?action"><i class="fa fa-users"></i> '.$lang["users"].'</a></li>
-                        <li><a class="icon_org" href="../admin/groups.php?action"><i class="fa fa-graduation-cap"></i> '.$lang["groups"].'</a></li>
-                        <li><a class="icon_post" href="../admin/posts.php?action"><i class="fa fa-pencil"></i> '.$lang["posts"].'</a></li>
-                        <li><a class="icon_config" href="../admin/settings.php?action"><i class="fa fa-cog"></i> '.$lang["settings"].'</a></li>
-                    </ul>
-                </li>
-			';
-        }
+            //If you're Admin...
+		    if ($p >= 3) {
+			    echo '				
+    			    <li>
+                        <a href="../admin">'.$lang["admin"].'</a>
+                        <ul>
+                            <li><a class="icon_users" href="../admin/users.php?action"><i class="fa fa-users"></i> '.$lang["users"].'</a></li>
+                            <li><a class="icon_org" href="../admin/groups.php?action"><i class="fa fa-graduation-cap"></i> '.$lang["groups"].'</a></li>
+                            <li><a class="icon_post" href="../admin/posts.php?action"><i class="fa fa-pencil"></i> '.$lang["posts"].'</a></li>
+                            <li><a class="icon_config" href="../admin/settings.php?action"><i class="fa fa-cog"></i> '.$lang["settings"].'</a></li>
+                        </ul>
+                    </li>
+			    ';
+            }
 
-		echo '
-            </ul>
-        </nav>
-        <nav class="user_menu">
+		    echo '
+                </ul>
+            </nav>
+            <nav class="user_menu">
                 <ul>
                     <li><a class="user_image" href="#"><img src="'.$profile_photo.'" /></a>
                     <ul>
@@ -157,16 +157,16 @@
                             <span>'.$lang["view_profile"].'</span>
                         </a>
                         </li>
-                        <li class="edit_profile"><a href="editprofile.php"><i class="fa fa-pencil"></i> '.$lang["edit_profile"].'</a></li>
-                        <li class="logout_user"><a href="logout.php"><i class="fa fa-sign-out"></i> '.$lang["log_out"].'</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
+                            <li class="edit_profile"><a href="editprofile.php"><i class="fa fa-pencil"></i> '.$lang["edit_profile"].'</a></li>
+                            <li class="logout_user"><a href="logout.php"><i class="fa fa-sign-out"></i> '.$lang["log_out"].'</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
         </header>
         </header>
         ';
-	}
+	    }
 
 		function conDB($filejson) {
 			$fp = fopen($filejson, "r");
@@ -188,8 +188,15 @@
         function get_user_by_id($h, $connection) {
             $query = $connection->query("SELECT * FROM pl_users WHERE h='$h'")or die("Query error!");
             $result = mysqli_fetch_array($query);
-            $user = new User($result['id'],$result['username'],$result['name'],$result['surname'],$result['email'],$result['address'],$result['phone'],$result['level'],$result['h'],$result['lang'],$result['photo'],$result['birthday'],$result['pass'],$result['privilege'],$result['creation_date'],$result['last_time'],$result['status']);
+            $user = new User($result['id'],$result['username'],$result['name'],$result['surname'],$result['email'],$result['address'],$result['phone'],$result['level'],$result['h'],$result['lang'],$result['photo'],$result['birthdate'],$result['pass'],$result['privilege'],$result['creation_date'],$result['last_time'],$result['status']);
             return $user;
+        }
+
+        function get_group_by_h($h, $con) {
+            $query = $con->query("SELECT * FROM pl_groups WHERE h='$h'")or die("Query error!");
+            $row = mysqli_fetch_array($query);
+            $group = new Group($row['id'],$row['name'],$row['h'],$row['category_h']);
+            return $group;
         }
 
         function get_work_by_h($h, $con) {
@@ -215,6 +222,135 @@
             }
 
             return $str;
+        }
+
+        function get_month($lang, $month) {
+            switch ($month) {
+                case 01:
+                    return $lang["january"];
+                    break;
+                case 02:
+                    return $lang["february"];
+                    break;
+                case 03:
+                    return $lang["march"];
+                    break;
+                case 04:
+                    return $lang["april"];
+                    break;
+                case 05:
+                    return $lang["may"];
+                    break;
+                case 06:
+                    return $lang["june"];
+                    break;
+                case 07:
+                    return $lang["july"];
+                    break;
+                case 08:
+                    return $lang["august"];
+                    break;
+                case 09:
+                    return $lang["september"];
+                    break;
+                case 10:
+                    return $lang["october"];
+                    break;
+                case 11:
+                    return $lang["november"];
+                    break;
+                case 12:
+                    return $lang["december"];
+                    break;
+                default:
+                    return $lang["unknown"];
+            }
+        }
+
+        function get_date_format($date, $lang, $con) {
+            $query = $con->query("SELECT * FROM pl_settings WHERE property='date_format'")or die("Query error!");
+            $row = mysqli_fetch_array($query);
+            $date_format_setting = $row['value'];
+
+            $date = strtotime($date);
+
+            $year = date("Y", $date);
+            $month = date("m", $date);
+            $day = date("j", $date);
+
+            if($date_format_setting == "1") {
+                $date_format = $month."/".$day."/".$year;
+            } elseif($date_format_setting == "2") {
+                $date_format = $day."/".$month."/".$year;
+            } elseif($date_format_setting == "3") {
+
+                switch ($month) {
+                    case 01:
+                        $month_writed = $lang["january"];
+                        break;
+                    case 02:
+                        $month_writed = $lang["february"];
+                        break;
+                    case 03:
+                        $month_writed = $lang["march"];
+                        break;
+                    case 04:
+                        $month_writed = $lang["april"];
+                        break;
+                    case 05:
+                        $month_writed = $lang["may"];
+                        break;
+                    case 06:
+                        $month_writed = $lang["june"];
+                        break;
+                    case 07:
+                        $month_writed = $lang["july"];
+                        break;
+                    case 08:
+                        $month_writed = $lang["august"];
+                        break;
+                    case 09:
+                        $month_writed = $lang["september"];
+                        break;
+                    case 10:
+                        $month_writed = $lang["october"];
+                        break;
+                    case 11:
+                        $month_writed = $lang["november"];
+                        break;
+                    case 12:
+                        $month_writed = $lang["december"];
+                        break;
+                    default:
+                        $month_writed = $lang["unknown"];
+                }
+
+                $date_format = $day." ".$lang['of_date']." ".$month_writed." ".$lang['of_date']." ".$year;
+
+            }
+
+            return $date_format;
+        }
+
+        function get_time_format($time, $con) {
+            $query = $con->query("SELECT * FROM pl_settings WHERE property='time_format'")or die("Query error!");
+            $row = mysqli_fetch_array($query);
+            $time_format_setting = $row['value'];
+
+            $time = strtotime($time);
+
+            $minutes = date("i", $time);
+
+            if($time_format_setting == "12") {
+                $hour = date("g", $time);
+                $meridiem = date("A", $time);
+                $time = $hour.":".$minutes." ".$meridiem;
+            } else {
+                $hour = date("G", $time);
+                $time = $hour.":".$minutes;
+            }
+
+            return $time;
         }
 
         function check_usr() {
@@ -311,6 +447,40 @@
 
         }
 
+        function filter_obscene_language($str, $con) {
+            $query = $con->query("SELECT * FROM pl_settings WHERE property='filter_obscene_language'")or die("Query error!");
+            $row = mysqli_fetch_array($query);
+            $filter_obscene_language = $row['value'];
+
+            $obscene_words = "acojonar,agilipollada,agilipollado,ass,bastarda,bastardo,bitch,bitching,boluda,boludo,boludez,bullshit,cabron,cabrón,cabrona,cabroncete,cachonda,cachondo,carajo,chichi,chocho,chochona,chuloputas,chumino,cock,cocksucker,cojon,cojón,cojonudo,coñocunt,dick,folla,follada,follado,follador,folladora,follamos,follando,follar,follarse,follo,foutre,fuck,fucked,fucker,fuckers,fuckface,fucking,fucksville,gili,gilipolla,gilipollas,gilipuertas,hijadeputa,hijaputa,hijadeputo,hijaputo,hostia,huevon,huevón,huevona,idiota,imbécil,joder,joderos,jodete,jódete,jodida,jodido,joputa,lameculo,lameculos,malfollada,malfollado,malnacida,malnacido,malparida,malparido,mamada,mamamela,mámamela,mamarla,mamon,mamón,mamona,marica,maricon,maricón,maricona,mariconazo,mariposon,mariposón,merde,mierda,motherfucker,pendeja,pendejo,polla,pollada,pollon,pollón,prick,puta,putada,putain,putas,pute,putilla,putillo,putita,putito,puto,puton,putón,putona,putos,pussyshit,salope,shitty,soplaflautas,soplapollas,shitkicker,subnormal,tocacojones,tocapelotas,tragapollas,tragasables,twat";
+
+            if($filter_obscene_language == 1) {
+                $str = "";
+                $i = 0;
+                $j = 0;
+                while ($array_str= explode(" ", $str)) {
+
+                    while ($array_obscene_words = explode(",", $obscene_words)) {
+
+                        if ($array_str[$i] == $array_obscene_words[$j]) {
+
+                            $str += " ****** ";
+
+                        }
+
+                        $j++;
+
+                    }
+                    
+                    $str += " ".$array_str[$i]." ";
+                    $i++;
+
+                }
+            }
+
+            return $str;
+        }
+
         function read_language($lang) {
             switch($lang) {
                 case 'es_ES':
@@ -337,7 +507,7 @@
     
     class User {
         
-        function __construct($id, $username, $name, $surname, $email, $address, $phone, $level, $h, $lang, $photo, $birthday, $pass, $privilege, $creation_date, $last_time, $status) {
+        function __construct($id, $username, $name, $surname, $email, $address, $phone, $level, $h, $lang, $photo, $birthdate, $pass, $privilege, $creation_date, $last_time, $status) {
             $this->id = $id;
             $this->username = $username;
             $this->name = $name;
@@ -348,7 +518,7 @@
             $this->level = $level;
             $this->h = $h;
             $this->photo = $photo;
-            $this->birthday = $birthday;
+            $this->birthdate = $birthdate;
             $this->pass = $pass;
             $this->privilege = $privilege;
             $this->creation_date = $creation_date;
@@ -363,6 +533,28 @@
             $this->name = $name;
             $this->h = $h;
             $this->category_h = $category_h;
+        }
+
+        function set_nav_menu($Group,$privilege,$page,$lang) {
+            echo '
+                <div class="ui_sidebar left">
+                    <nav class="ui_vertical_nav">
+                        <ul>
+                            <li';if($page=="index"){echo' class="active"';}echo'><a href="group.php?h='.$Group->h.'&page=index">'.$lang["works"].'</a></li>
+                            <li';if($page=="users"){echo' class="active"';}echo'><a href="group.php?h='.$Group->h.'&page=users">'.$lang["users"].'</a></li>';
+
+                            if($privilege == "moderator") {
+                                echo '
+                                    <li';if($page=="requests"){echo' class="active"';}echo'><a href="group.php?h='.$Group->h.'&page=requests">'.$lang["requests"].' <span id="num_requests"></span></a></li>
+                                    <li';if($page=="absences"){echo' class="active"';}echo'><a href="group.php?h='.$Group->h.'&page=absences">'.$lang["absences"].'</a></li>
+                                ';
+                            }
+                            
+                            echo '
+                        </ul>
+                    </nav>
+                </div>
+            ';
         }
     }
 

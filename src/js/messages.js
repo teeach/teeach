@@ -104,23 +104,13 @@ $(document).on("ready", function() {
 
 	// Attach a submit handler to the form
 	/*$( "#addusers" ).submit(function( event ) {
-		// Stop form from submitting normally
-		event.preventDefault();
 
 		// Get some values from elements on the page:
 		var $form = $( this ),
 		term = elements,
 		url = $form.attr( "action" );
 		///////////////////////////var sender = '.json_encode($_SESSION['h']).'
-					 
-		// Send the data using post
-		var posting = $.post( url, { users: term, subject: $("#subject").val(), content: CKEDITOR.instances['editor1'].getData(), sender: sender});
-		//Put the results in a div
-		posting.done(function( data ) {
-			alert(data);
-			var content = $( data ).find( "#content" );
-			$( "#result" ).empty().append( content );
-		});
+        
 	});*/
 
 });

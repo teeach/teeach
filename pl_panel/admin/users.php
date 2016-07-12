@@ -89,7 +89,7 @@
             $pass = $t_hasher->HashPassword($password);
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("INSERT INTO pl_users(username,name,surname,email,phone,address,birthday,h,pass,privilege) VALUES ('$user','$name','$surname','$email',$phone,'$address','$birth','$h','$pass',$privilege)")or die("Error");
+    		$query = $con->query("INSERT INTO pl_users(username,name,surname,email,phone,address,birthdate,h,pass,privilege) VALUES ('$user','$name','$surname','$email',$phone,'$address','$birth','$h','$pass',$privilege)")or die("Error");
     		echo "<p>¡Perfecto la contraseña es: ".$password."</p><a href='users.php?action'>".$lang['accept']."</a>";
 
     	} elseif($action == "edit") {
@@ -111,7 +111,7 @@
 					<tr><td><label for="email">'.$lang["email"].': </label></td><td><input type="email" name="email" value="'.$row['email'].'" required/></td></tr>
 					<tr><td><label for="phone">'.$lang["phone"].': </label></td><td><input type="tel" name="phone" value="'.$row['phone'].'" required onblur="checkPhone()"/></td></tr>
 					<tr><td><label for="home">'.$lang["address"].': </label></td><td><input type="text" name="address" value="'.$row['home'].'" required/></td></tr>
-					<tr><td><label for="birth">'.$lang["birthdate"].': </label></td><td><input type="date" name="birth" value="'.$row['birthday'].'" required/></td></tr>
+					<tr><td><label for="birth">'.$lang["birthdate"].': </label></td><td><input type="date" name="birth" value="'.$row['birthdate'].'" required/></td></tr>
 					<tr><td><label for="privilege">'.$lang["privilege"].': </label></td><td>
 						<select name="privilege">
 							<option value="1">'.$lang["student"].'</option>
@@ -138,7 +138,7 @@
     		$privilege = $_POST['privilege'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("UPDATE pl_users SET username='$username',name='$name',surname='$surname',email='$email',phone='$phone',address='$address',birthday='$birth',privilege=$privilege WHERE h='$h'")or die("Query error!");
+    		$query = $con->query("UPDATE pl_users SET username='$username',name='$name',surname='$surname',email='$email',phone='$phone',address='$address',birthdate='$birth',privilege=$privilege WHERE h='$h'")or die("Query error!");
 
     		echo "<a href='users.php?action'>".$lang['accept']."</a>";
 
@@ -216,6 +216,7 @@
 						case 4:
 							$privilege = $lang["admin"];
 					}
+
 					echo "
 					<tr>
 						<td class='select'><input type='checkbox' class='checkbox' /></td>
@@ -225,7 +226,7 @@
 						<td>".$row['username']."</td>
 						<td>".$row['email']."</td>
 						<td>".$row['phone']."</td>
-						<td>".$row['birthday']."</td>
+						<td>".$birthdate = $System->get_date_format($row['birthdate'], $lang, $con)."</td>
 						<td>".$row['address']."</td>
 						<td>".$privilege."</td>
 						<td class='actions'>

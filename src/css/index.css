@@ -37,6 +37,8 @@
 	transition: all 0.2s ease;
 	padding: 15px;
 	margin: 10px 0;
+	font-size: 1rem;
+	line-height: 20px;
 }
 
 .post:hover {
@@ -59,6 +61,14 @@
 
 .post b, .post strong {
 	font-weight: bold;
+}
+
+.post ul {
+	list-style-type: circle;
+}
+
+.post ul li {
+	margin-left: 25px;
 }
 
 .sectiontitle {

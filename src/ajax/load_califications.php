@@ -39,7 +39,7 @@
 
 					if($mark == 0 && $observations == "") {
 						
-						echo '<td><div class="edit_cal"><a class="new_cal_btn">'.$lang["rate"].'</a></div></td>';
+						echo '<td><a class="new_cal_btn">'.$lang["rate"].'</a><div class="edit_cal" style="display:none"><form><table class="cal_insert"><tr><td>Nota</td><td>Observaciones</td></tr><tr><td><input type="text" name="mark" class="cal_insert_mark"></td><td><textarea name="observations" class="cal_insert_observations"></textarea></td></tr></table></form><input type="submit" value="Guardar" class="send_cal_btn"></div></td>';
 
 					} else {
 						echo '<td>'.$mark.'</td>';

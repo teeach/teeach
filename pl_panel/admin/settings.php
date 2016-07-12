@@ -21,6 +21,7 @@
     <script src="../../src/js/tabs.js"></script>
     <!-- Check All JS -->
     <script src="../../src/js/check-all.js"></script>
+    <script src="../../src/js/settings.js"></script>
 
     <script type="text/javascript">
     	$('.tip').before( "Ayuda" );
@@ -38,8 +39,11 @@
 			$logo = $_POST['logo'];
 			$accesspass = $_POST['accesspass'];
 			$lang_val = $_POST['lang'];
+            $date_format = $_POST['date_format'];
+            $time_format = $_POST['time_format'];
             $post_per_page = $_POST['post_per_page'];
             @$show_post_author = $_POST['show_post_author'];
+            @$show_post_date = $_POST['show_post_date'];
 
             //--Privacy
 			$show_last_time = $_POST['show_last_time'];
@@ -57,6 +61,12 @@
 			} else {
 				$show_post_author = "false";
 			}
+
+            if(@$show_post_date == "on") {
+                $show_post_date = "true";
+            } else {
+                $show_post_date = "false";
+            }
 
             if(@$enable_profile_photo == "on") {
                 $enable_profile_photo = "true";
@@ -82,6 +92,17 @@
             //SET Language (string) ~ The default language
             $query = $con->query("UPDATE pl_settings SET value='$lang_val' WHERE property='lang'")or die("Query error!");
 
+            //SET Date Format (integer) ~ The date format
+            //       1 => MM/DD/YYYY
+            //       2 => DD/MM/YYYY
+            //       3 => DD Month YYYY
+            $query = $con->query("UPDATE pl_settings SET value='$date_format' WHERE property='date_format'")or die("Query error!");
+
+            //SET Time Format (integer) ~ The time format (12h or 24h)
+            //       12 => 12h
+            //       24 => 24h
+            $query = $con->query("UPDATE pl_settings SET value='$time_format' WHERE property='time_format'")or die("Query error!");
+
             //SET Post per page (integer) ~ The number of pages that fit on one page
             $query = $con->query("UPDATE pl_settings SET value='$post_per_page' WHERE property='post_per_page'")or die("Query error!");
 
@@ -90,6 +111,9 @@
 
             //SET Show post author (boolean) ~ Show post author
             $query = $con->query("UPDATE pl_settings SET value='$show_post_author' WHERE property='show_post_author'")or die("Query error!");
+
+            //SET Show post date (boolean) ~ Show post date
+            $query = $con->query("UPDATE pl_settings SET value='$show_post_date' WHERE property='show_post_date'")or die("Query error!");
 
             //SET Show last time (integer) ~ Show last time
             //       1 => All
@@ -171,8 +195,11 @@
 			$query_logo = $con->query("SELECT * FROM pl_settings WHERE property='logo'");
 			$query_accesspass = $con->query("SELECT * FROM pl_settings WHERE property='accesspass'");
             $query_lang = $con->query("SELECT * FROM pl_settings WHERE property='lang'");
+            $query_date_format = $con->query("SELECT * FROM pl_settings WHERE property='date_format'");
+            $query_time_format = $con->query("SELECT * FROM pl_settings WHERE property='time_format'");
             $query_post_per_page = $con->query("SELECT * FROM pl_settings WHERE property='post_per_page'");
             $query_show_post_author = $con->query("SELECT * FROM pl_settings WHERE property='show_post_author'");
+            $query_show_post_date = $con->query("SELECT * FROM pl_settings WHERE property='show_post_date'");
             $query_show_last_time = $con->query("SELECT * FROM pl_settings WHERE property='show_last_time'");
             $query_show_address = $con->query("SELECT * FROM pl_settings WHERE property='show_address'");
             $query_show_phone = $con->query("SELECT * FROM pl_settings WHERE property='show_phone'");
@@ -186,8 +213,11 @@
 			$row_logo = mysqli_fetch_array($query_logo);
 			$row_accesspass = mysqli_fetch_array($query_accesspass);
             $row_lang = mysqli_fetch_array($query_lang);
+            $row_date_format = mysqli_fetch_array($query_date_format);
+            $row_time_format = mysqli_fetch_array($query_time_format);
             $row_post_per_page = mysqli_fetch_array($query_post_per_page);
             $row_show_post_author = mysqli_fetch_array($query_show_post_author);
+            $row_show_post_date = mysqli_fetch_array($query_show_post_date);
             $row_show_last_time = mysqli_fetch_array($query_show_last_time);
             $row_show_address = mysqli_fetch_array($query_show_address);
             $row_show_phone = mysqli_fetch_array($query_show_phone);
@@ -201,8 +231,11 @@
 			$logo = $row_logo['value'];
 			$accesspass = $row_accesspass['value'];
             $lang_val = $row_lang['value'];
+            $date_format = $row_date_format['value'];
+            $time_format = $row_time_format['value'];
             $post_per_page = $row_post_per_page['value'];
             $show_post_author = $row_show_post_author['value'];
+            $show_post_date = $row_show_post_date['value'];
             $show_last_time = $row_show_last_time['value'];
             $show_address = $row_show_address['value'];
             $show_phone = $row_show_phone['value'];
@@ -261,7 +294,7 @@
                                 <li><a href="#tab_02">'.$lang["privacy"].'</a></li>
                                 <li><a href="#tab_03">'.$lang["advanced"].'</a></li>
                                 <li><a href="#tab_04">'.$lang["about"].'</a></li>
-                            </ul>        
+                            </ul>
                         </nav>
 
 
@@ -281,7 +314,14 @@
 
                                         <tr>
                                         	<td><label for="logo">'.$lang["logo"].': </label><div class="tip">'.$lang["tip_logo"].'<a target="_blank" href="http://teeach.org/go?link=b1l14nqQ&lang=es_ES">'.$lang["more_information"].'</a></div></td>
-                                        	<td><input type="text" name="logo" id="logo" value="'.$logo.'"></td>
+                                        	<td>
+                                                <!--<select name="logo_type" id="logoType">
+                                                    <option name="url">URL</option>
+                                                    <option name="upload">'.$lang["upload"].'</option>
+                                                </select>-->
+                                                <div id="logoURL"><input type="text" name="logo" id="logo" value="'.$logo.'"></div>
+                                                <!--<div id="logoUpload"><input type="file" name="up_logo"></div>-->
+                                            </td>
                                         </tr>
 
                                         <tr>
@@ -292,6 +332,21 @@
                                         <tr>
                                         	<td><label for="accesspass">'.$lang["accesspass"].': </label><div class="tip">'.$lang["tip_accesspass"].'<a target="_blank" href="http://teeach.org/go?link=23aaa535&lang=es_ES">'.$lang["more_information"].'</a></div></td>
                                         	<td><input type="text" id="accesspass" name="accesspass" value="'.$accesspass.'"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="default_main_page">'.$lang["default_main_page"].': </label></td>
+                                            <td>
+                                                <select name="default_main_page">
+                                                    <option name="login">'.$lang["log_in"].'</option>
+                                                    <option name="posts">'.$lang["posts"].'</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><p style="font-family:RobotoBold">'.$lang["hour_and_language"].'</p></td>
+                                            <td></td>
                                         </tr>
                                         
                                         <tr>
@@ -313,6 +368,30 @@
                                         </tr>
 
                                         <tr>
+                                            <td><label for="date_format">'.$lang["date_format"].': </label></td>
+                                            <td>
+                                                <input type="radio" name="date_format" value="1" id="date1" ';if($date_format == 1){echo'checked';}echo'><label for="date1">'.date("m/d/Y").'</label><br>
+                                                <input type="radio" name="date_format" value="2" id="date2" ';if($date_format == 2){echo'checked';}echo'><label for="date2">'.date("d/m/Y").'</label><br>                                                
+                                                <input type="radio" name="date_format" value="3" id="date3" ';if($date_format == 3){echo'checked';}echo'><label for="date3">'.date("d").' '.$lang["of_date"].' '.$month=$System->get_month($lang, date("m")).' '.$lang["of_date"].' '.date("Y").'</label>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="time_format">'.$lang["time_format"].'</label>: </td>
+                                            <td>
+                                                <select name="time_format">
+                                                    <option value="12" ';if($time_format==12){echo'selected';}echo'>12 '.$lang["hours"].'</option>
+                                                    <option value="24" ';if($time_format==24){echo'selected';}echo'>24 '.$lang["hours"].'</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="filter_obscene_language">'.$lang["filter_obscene_language"].'</label>: </td>
+                                            <td><input type="checkbox" name="filter_obscene_language"></td>
+                                        </tr>
+
+                                        <tr>
                                         	<td><p style="font-family:RobotoBold">'.$lang["posts"].'</p></td>
                                         	<td></td>
                                         </tr>
@@ -330,6 +409,11 @@
                                         <tr>
                                         	<td><label for="show_post_author">'.$lang["show_author"].':</label></td>
                                         	<td><input type="checkbox" id="show_author" name="show_post_author" ';if($show_post_author=="true"){echo "checked";} echo '></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="show_post_date">'.$lang["show_post_date"].':</label></td>
+                                            <td><input type="checkbox" id="show_post_date" name="show_post_date" ';if($show_post_date=="true"){echo "checked";} echo '></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -428,7 +512,7 @@
                                 </div>
                                 <div id="tab_04" class="ui_tab_content">
                                 <span style="font-weight: bold">Teeach</span><br>
-                                <p>Version 0.1 Pre-Alpha</p><br>
+                                <p>Early Development Version</p><br>
                                 '._("Server time: ").' '.date("d-m-Y H:i:s").'
             				</div>
    						</div>

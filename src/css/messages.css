@@ -29,6 +29,8 @@
 .msg_actions i {
 	padding: 10px;
 	cursor: pointer;
+	border-radius: 100%;
+	transition: all 0.2s ease;
 }
 
 .msg_actions i:hover {

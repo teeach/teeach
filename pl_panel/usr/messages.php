@@ -51,6 +51,7 @@
 
 			if (isset($_GET['to'])) {
 
+				//~ Reply
 				$to_h = $_GET['to'];
 				$query = $con->query("SELECT * FROM pl_users WHERE h='$to_h'")or die("Query error!");
 				$row = mysqli_fetch_array($query);
@@ -74,6 +75,7 @@
 
 			} else {
 
+				//~ Multi-send
 				echo '
 				<div class="ui_full_width">
 					<div class="ui_head ui_head_width_actions">
@@ -87,7 +89,7 @@
 					<table>
 						<form action="messages.php?action=multisend" method="POST" id="addusers">
 							<tr><td><label for="subject">'.$lang["subject"].'</label></td><td><input type="text" id="subject" name="subject" value="" size="40"></td></tr>
-							<tr><td></td><td><textarea cols="80" id="editor1" name="editor1" rows="10"></textarea></td></tr>
+							<tr><td></td><td><textarea cols="80" id="editor1" name="body" rows="10"></textarea></td></tr>
 							<tr><td></td><td><input type="submit" value="Enviar"></td></tr>
 						</form>
 					</table>
@@ -116,7 +118,7 @@
                 		]
                 	});      
         			</script>
-				';			
+				';
 
 		} elseif(@$_GET['action'] == "send") {
 
@@ -191,7 +193,8 @@
 
 					$to_h = $row['to_h'];
 					$subject = $row['subject'];
-					$date = $row['date'];
+					$date = $System->get_date_format($row['date'], $lang, $con);
+					$time = $System->get_time_format($row['date'], $con);
 					$body = $row['body'];
 					$h = $row['h'];
 
@@ -201,7 +204,7 @@
 					$to_name = $row1['name'];
 					$to_surname = $row1['surname'];
 
-					echo '<div id="'.$h.'" class="'.$h.' message">'.$to_name.' '.$to_surname.' <div class="msg_subject"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="msg_actions"><i id="'.$h.'" class="fa fa-share-square-o action msg_answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+					echo '<div id="'.$h.'" class="'.$h.' message">'.$to_name.' '.$to_surname.' <div class="msg_subject"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.$date.' ~ '.$time.'<div class="msg_actions"><i id="'.$h.'" class="fa fa-share-square-o action msg_answer"></i> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 				}
                 
                 echo '
@@ -215,8 +218,11 @@
 
 			$Message = $System->get_message_by_h($h, $con);
 
-			$query = $con->query("UPDATE pl_messages SET unread=0")or die("Query error!");
-
+			//Mark like read
+			if ($Message->to_h == $_SESSION['h']) {
+				$query = $con->query("UPDATE pl_messages SET unread=0 WHERE h='$Message->h'")or die("Query error!");
+			}
+			
 			echo '
 				<div class="ui_full_width">
 					<div class="ui_head ui_head_width_actions">
@@ -286,7 +292,8 @@
 					$from_name = $row_from['name'];
 					$from_surname = $row_from['surname'];
 					$subject = $row['subject'];
-					$date = $row['date'];
+					$date = $System->get_date_format($row['date'], $lang, $con);
+					$time = $System->get_time_format($row['date'], $con);
 					$unread = $row['unread'];
 
 					$from = $System->get_user_by_id($from_h, $con);
@@ -294,9 +301,9 @@
 					$h = $row['h'];
 
 					if($unread == 1) {
-						echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div class="msg_subject" style="font-family:RobotoBold"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="msg_actions"><a href="messages.php?action=new&to='.$from_h.'"><i id="'.$h.'" class="fa fa-share-square-o action msg_answer msg_reply"></i></a> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+						echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div class="msg_subject" style="font-family:RobotoBold"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.$date.' ~ '.$time.'<div class="msg_actions"><a href="messages.php?action=new&to='.$from_h.'"><i id="'.$h.'" class="fa fa-share-square-o action msg_answer msg_reply"></i></a> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 					} else {
-						echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div class="msg_subject"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.date("d-m-Y H:i", strtotime($date)).' <div class="msg_actions"><a href="messages.php?action=new&to='.$from_h.'"><i id="'.$h.'" class="fa fa-share-square-o action msg_answer msg_reply"></i></a> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
+						echo '<div id="'.$h.'" class="'.$h.' message">'.$from->name.' '.$from->surname.' <div class="msg_subject"><a href="messages.php?action=view&h='.$h.'">'.$subject.'</a></div> '.$date.' ~ '.$time.'<div class="msg_actions"><a href="messages.php?action=new&to='.$from_h.'"><i id="'.$h.'" class="fa fa-share-square-o action msg_answer msg_reply"></i></a> <i id="'.$h.'" class="fa fa-trash-o action delete"></i></div></div>';
 					}
 				}
             echo '

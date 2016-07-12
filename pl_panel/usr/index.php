@@ -60,29 +60,42 @@
 			$body = $row['body'];
 			$h = $row['h'];
 			$author_h = $row['author'];
+			$creation_date = $row['creation_date'];
 
 			$query_setting_show_author = $con->query("SELECT * FROM pl_settings WHERE property='show_post_author'")or die("Query error!");
 			$row_setting_show_author = mysqli_fetch_array($query_setting_show_author);
+			$query_setting_show_date = $con->query("SELECT * FROM pl_settings WHERE property='show_post_date'")or die("Query error!");
+			$row_setting_show_date = mysqli_fetch_array($query_setting_show_date);
 
 			echo '
 				<div class="post">
-					<h2>'.$title.'</h2>';
+					<h2>'.$title.'</h2>
+					<h5>';
 
 			if ($row_setting_show_author['value'] == "true") {
 				
 				if($author_h == "teeach") {
-					echo '<h5>'.$lang["writed_by"].' <a target="_blank" href="http://teeach.org">Teeach</a></h5>';
+					echo $lang["writed_by"].' <a target="_blank" href="http://teeach.org">Teeach</a> ';
 				} else {
 					$query2 = $con->query("SELECT * FROM pl_users WHERE h='$author_h'")or die("Query error!");
 					$row2 = mysqli_fetch_array($query2);
 
 					$author = $row2['name']." ".$row2['surname'];
 
-					echo '<h5>'.$lang["writed_by"].' <a target="_blank" href="profile.php?h='.$author_h.'">'.$author.'</a></h5>';
-				}				
+					echo $lang["writed_by"].' <a target="_blank" href="profile.php?h='.$author_h.'">'.$author.'</a> ';
+				}
+
 			}
 
-			echo $body.'</div>';
+			if($row_setting_show_author['value'] == $row_setting_show_date['value']) {
+				echo '~ ';
+			}
+
+			if($row_setting_show_date['value'] == "true") {
+				echo $creation_date_format = $System->get_date_format($creation_date, $lang, $con);
+			}
+
+			echo '</h5>'.$body.'</div>';
 
 		}		
 		

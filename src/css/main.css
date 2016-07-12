@@ -566,6 +566,8 @@ color: #000;
 .ui_table .fa {
     color: #320;
     padding: 10px;
+    border-radius: 100%;
+    transition: all 0.2s ease;
 }
 
 .ui_table .fa:hover {
@@ -929,6 +931,66 @@ TRANSITIONS
     font-size: 2.2rem;
 }
 
+/* Califications
+   =========================================================== */
+
+.cal_insert td {
+    vertical-align: middle;
+}
+
+.cal_insert_mark {
+    font-size: 2rem;
+    width: 80px;
+}
+
+.cal_insert_observations {
+    width: 280px;
+    height: 65px;
+}
+
+.new_cal_btn {
+    text-align: center;
+    cursor: pointer;
+}
+
+/* Groups ~ ADD USERS*/
+#group_add_user {
+    display: none;
+    position: fixed;
+    background-color: #fff;
+    border: 3px solid #c96;
+    padding: 15px;
+    margin-left: -100px;
+    text-align: center;
+}
+
+/* Absences
+   =========================================================== */
+
+.absences {
+    border: 1px solid #300;
+}
+
+.absences_table {
+    display: inline-block;
+}
+
+.absences_table td, .absences_table th {
+    border: 1px solid #320;
+    padding: 10px;
+}
+
+.new_absence {
+    writing-mode: vertical-lr;
+    transform: rotate(180deg);
+    text-transform: uppercase;
+    background-color: #DDD;
+    padding: 15px;
+}
+
+.new_absence:hover {
+    text-decoration: none;
+}
 
 /* Footer
    =========================================================== */
