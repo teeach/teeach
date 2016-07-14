@@ -455,30 +455,43 @@
             $obscene_words = "acojonar,agilipollada,agilipollado,ass,bastarda,bastardo,bitch,bitching,boluda,boludo,boludez,bullshit,cabron,cabrón,cabrona,cabroncete,cachonda,cachondo,carajo,chichi,chocho,chochona,chuloputas,chumino,cock,cocksucker,cojon,cojón,cojonudo,coñocunt,dick,folla,follada,follado,follador,folladora,follamos,follando,follar,follarse,follo,foutre,fuck,fucked,fucker,fuckers,fuckface,fucking,fucksville,gili,gilipolla,gilipollas,gilipuertas,hijadeputa,hijaputa,hijadeputo,hijaputo,hostia,huevon,huevón,huevona,idiota,imbécil,joder,joderos,jodete,jódete,jodida,jodido,joputa,lameculo,lameculos,malfollada,malfollado,malnacida,malnacido,malparida,malparido,mamada,mamamela,mámamela,mamarla,mamon,mamón,mamona,marica,maricon,maricón,maricona,mariconazo,mariposon,mariposón,merde,mierda,motherfucker,pendeja,pendejo,polla,pollada,pollon,pollón,prick,puta,putada,putain,putas,pute,putilla,putillo,putita,putito,puto,puton,putón,putona,putos,pussyshit,salope,shitty,soplaflautas,soplapollas,shitkicker,subnormal,tocacojones,tocapelotas,tragapollas,tragasables,twat";
 
             if($filter_obscene_language == 1) {
-                $str = "";
-                $i = 0;
-                $j = 0;
-                while ($array_str= explode(" ", $str)) {
 
-                    while ($array_obscene_words = explode(",", $obscene_words)) {
+                $array_str = explode(" ", $str);
+                $array_obscene_words = explode(",", $obscene_words);
 
-                        if ($array_str[$i] == $array_obscene_words[$j]) {
+                $filter_str = "";
 
-                            $str += " ****** ";
+                foreach($array_str as $i) {
 
+                    foreach($array_obscene_words as $j) {
+
+                        $i_mod = strtolower($i);
+                        $i_mod = str_replace(".", "", $i_mod);
+                        $i_mod = str_replace(",", "", $i_mod);
+
+                        if ($i_mod == $j) {
+
+                            $filter_str = $filter_str." ****** ";
+                            $obscene_word = true;
+                            break;
+
+                        } else {
+                            $obscene_word = false;
                         }
 
-                        $j++;
-
                     }
-                    
-                    $str += " ".$array_str[$i]." ";
-                    $i++;
 
+                    if($obscene_word == false) {
+
+                        $filter_str = $filter_str." ".$i." ";
+
+                    }                    
+ 
                 }
+
             }
 
-            return $str;
+            return $filter_str;
         }
 
         function read_language($lang) {

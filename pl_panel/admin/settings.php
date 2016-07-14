@@ -41,6 +41,7 @@
 			$lang_val = $_POST['lang'];
             $date_format = $_POST['date_format'];
             $time_format = $_POST['time_format'];
+            $filter_obscene_language = $_POST['filter_obscene_language'];
             $post_per_page = $_POST['post_per_page'];
             @$show_post_author = $_POST['show_post_author'];
             @$show_post_date = $_POST['show_post_date'];
@@ -80,6 +81,12 @@
                 $allow_create_categories = "false";
             }
 
+            if(@$filter_obscene_language == "on") {
+                $filter_obscene_language = 1;
+            } else {
+                $filter_obscene_language = 0;
+            }
+
             //SET Centername (string) ~ The name of the center
 			$query = $con->query("UPDATE pl_settings SET value='$centername' WHERE property='centername'")or die("Query error!");
 
@@ -102,6 +109,9 @@
             //       12 => 12h
             //       24 => 24h
             $query = $con->query("UPDATE pl_settings SET value='$time_format' WHERE property='time_format'")or die("Query error!");
+
+            //SET Filter Obscene Language (boolean) ~ Filter Obscene Language
+            $query = $con->query("UPDATE pl_settings SET value='$filter_obscene_language' WHERE property='filter_obscene_language'")or die("Query error!");
 
             //SET Post per page (integer) ~ The number of pages that fit on one page
             $query = $con->query("UPDATE pl_settings SET value='$post_per_page' WHERE property='post_per_page'")or die("Query error!");
@@ -197,6 +207,7 @@
             $query_lang = $con->query("SELECT * FROM pl_settings WHERE property='lang'");
             $query_date_format = $con->query("SELECT * FROM pl_settings WHERE property='date_format'");
             $query_time_format = $con->query("SELECT * FROM pl_settings WHERE property='time_format'");
+            $query_filter_obscene_language = $con->query("SELECT * FROM pl_settings WHERE property='filter_obscene_language'");
             $query_post_per_page = $con->query("SELECT * FROM pl_settings WHERE property='post_per_page'");
             $query_show_post_author = $con->query("SELECT * FROM pl_settings WHERE property='show_post_author'");
             $query_show_post_date = $con->query("SELECT * FROM pl_settings WHERE property='show_post_date'");
@@ -215,6 +226,7 @@
             $row_lang = mysqli_fetch_array($query_lang);
             $row_date_format = mysqli_fetch_array($query_date_format);
             $row_time_format = mysqli_fetch_array($query_time_format);
+            $row_filter_obscene_language = mysqli_fetch_array($query_filter_obscene_language);
             $row_post_per_page = mysqli_fetch_array($query_post_per_page);
             $row_show_post_author = mysqli_fetch_array($query_show_post_author);
             $row_show_post_date = mysqli_fetch_array($query_show_post_date);
@@ -233,6 +245,7 @@
             $lang_val = $row_lang['value'];
             $date_format = $row_date_format['value'];
             $time_format = $row_time_format['value'];
+            $filter_obscene_language = $row_filter_obscene_language['value'];
             $post_per_page = $row_post_per_page['value'];
             $show_post_author = $row_show_post_author['value'];
             $show_post_date = $row_show_post_date['value'];
@@ -387,8 +400,8 @@
                                         </tr>
 
                                         <tr>
-                                            <td><label for="filter_obscene_language">'.$lang["filter_obscene_language"].'</label>: </td>
-                                            <td><input type="checkbox" name="filter_obscene_language"></td>
+                                            <td><label for="filter_obscene_language">'.$lang["filter_obscene_language"].'</label>: <div class="tip">'.$lang["tip_filter_obscene_language"].'<a target="_blank" href="#">'.$lang["more_information"].'</a></div></td>
+                                            <td><input type="checkbox" name="filter_obscene_language" ';if($filter_obscene_language==1){echo "checked";}echo'></td>
                                         </tr>
 
                                         <tr>
