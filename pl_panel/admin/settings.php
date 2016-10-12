@@ -15,6 +15,7 @@
 	<meta charset="UTF-8">
 	<title><?php echo $lang["settings"]; ?> | Teeach</title>
 	<link rel="stylesheet" href="../../src/css/main.css" />
+    <link rel="stylesheet" href="../../src/css/settings.css" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'/>
 	<?php $System->set_head(); ?>
     <!-- Tabs JS -->
@@ -41,7 +42,7 @@
 			$lang_val = $_POST['lang'];
             $date_format = $_POST['date_format'];
             $time_format = $_POST['time_format'];
-            $filter_obscene_language = $_POST['filter_obscene_language'];
+            @$filter_obscene_language = $_POST['filter_obscene_language'];
             $post_per_page = $_POST['post_per_page'];
             @$show_post_author = $_POST['show_post_author'];
             @$show_post_date = $_POST['show_post_date'];
@@ -53,9 +54,21 @@
             $show_groups = $_POST['show_groups'];
             @$enable_profile_photo = $_POST['enable_profile_photo'];
 
+            //--Security
+            $login_method = $_POST['login_method'];
+
             //--Advanced
             $JP = $_POST['JP'];
             @$allow_create_categories = $_POST['allow_create_categories'];
+            $smtp_server = $_POST['smtp_server'];
+            $email_username = $_POST['email_username'];
+            $email_password = $_POST['email_password'];
+            $email_address = $_POST['email_address'];
+            $smtp_port = $_POST['smtp_port'];
+            $email_name = $_POST['email_name'];
+            $email_charset = $_POST['email_charset'];
+            @$require_ssl = $_POST['require_ssl'];
+            $email_timeout = $_POST['email_timeout'];
 
 			if(@$show_post_author == "on") {
 				$show_post_author = "true";
@@ -85,6 +98,12 @@
                 $filter_obscene_language = 1;
             } else {
                 $filter_obscene_language = 0;
+            }
+
+            if(@$require_ssl == "on") {
+                $require_ssl = 1;
+            } else {
+                $require_ssl = 0;
             }
 
             //SET Centername (string) ~ The name of the center
@@ -152,15 +171,48 @@
             //SET Enable profile photo (boolean)
             $query = $con->query("UPDATE pl_settings SET value='$enable_profile_photo' WHERE property='enable_profile_photo'")or die("Query error!");
 
-            //SET Join a Group method (integer) ~ The method for joining a group.
-            //       1 => Direct  ~ Confirmation of a moderator is not required.
-            //       2 => Request ~ Confirmation of a moderatior is required.
-            //       3 => Null    ~ Access to groups are closed.
+            //SET Show phone (integer) ~ Show phone
+            //       1 => All
+            //       2 => Only teachers
+            //       3 => Only administrators
+            $query = $con->query("UPDATE pl_settings SET value='$login_method' WHERE property='login_method'")or die("Query error!");
+
+            //SET Login method (integer) ~ The method for log in.
+            //       1 => Email or username
+            //       2 => Only email
+            //       3 => Only username
             $query = $con->query("UPDATE pl_settings SET value=$JP WHERE property='JP'")or die("Query error!");
 
             //SET Allow create categories (boolean) ~ Anyone can create new categories
             $query = $con->query("UPDATE pl_settings SET value='$allow_create_categories' WHERE property='allow_create_categories'")or die("Query error!");
 		
+            //SET SMTP server (string) ~ SMTP server for email
+            $query = $con->query("UPDATE pl_settings SET value='$smtp_server' WHERE property='smtp_server'")or die("Query error!");
+
+            //SET Email username (string)
+            $query = $con->query("UPDATE pl_settings SET value='$email_username' WHERE property='email_username'")or die("Query error!");
+
+            //SET Email password (string)
+            $query = $con->query("UPDATE pl_settings SET value='$email_password' WHERE property='email_password'")or die("Query error!");
+
+            //SET Email address (string)
+            $query = $con->query("UPDATE pl_settings SET value='$email_address' WHERE property='email_address'")or die("Query error!");
+
+            //SET SMTP port (integer)
+            $query = $con->query("UPDATE pl_settings SET value='$smtp_port' WHERE property='smtp_port'")or die("Query error!");
+
+            //SET Email name (string) ~ Email from name
+            $query = $con->query("UPDATE pl_settings SET value='$email_name' WHERE property='email_name'")or die("Query error!");
+
+            //SET Email charset (string)
+            $query = $con->query("UPDATE pl_settings SET value='$email_charset' WHERE property='email_charset'")or die("Query error!");
+
+            //SET Require SSL (boolean) ~ Require SSL?
+            $query = $con->query("UPDATE pl_settings SET value='$require_ssl' WHERE property='require_ssl'")or die("Query error!");
+
+            //SET Timeout (integer) ~ On seconds
+            $query = $con->query("UPDATE pl_settings SET value='$email_timeout' WHERE property='email_timeout'")or die("Query error!");
+
 			if($_FILES["up_lang"]["size"] != 0) {
 				$target_dir = "../../src/lang/";
 				$target_file = $target_dir . basename($_FILES["up_lang"]["name"]);
@@ -216,8 +268,18 @@
             $query_show_phone = $con->query("SELECT * FROM pl_settings WHERE property='show_phone'");
 			$query_show_groups = $con->query("SELECT * FROM pl_settings WHERE property='show_groups'");
             $query_enable_profile_photo = $con->query("SELECT * FROM pl_settings WHERE property='enable_profile_photo'");
+            $query_login_method = $con->query("SELECT * FROM pl_settings WHERE property='login_method'");
             $query_JP = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
             $query_allow_create_categories = $con->query("SELECT * FROM pl_settings WHERE property='allow_create_categories'");
+            $query_smtp_server = $con->query("SELECT * FROM pl_settings WHERE property='smtp_server'");
+            $query_email_username = $con->query("SELECT * FROM pl_settings WHERE property='email_username'");
+            $query_email_password = $con->query("SELECT * FROM pl_settings WHERE property='email_password'");
+            $query_email_address = $con->query("SELECT * FROM pl_settings WHERE property='email_address'");
+            $query_smtp_port = $con->query("SELECT * FROM pl_settings WHERE property='smtp_port'");
+            $query_email_name = $con->query("SELECT * FROM pl_settings WHERE property='email_name'");
+            $query_email_charset = $con->query("SELECT * FROM pl_settings WHERE property='email_charset'");
+            $query_require_ssl = $con->query("SELECT * FROM pl_settings WHERE property='require_ssl'");
+            $query_email_timeout = $con->query("SELECT * FROM pl_settings WHERE property='email_timeout'");
 
 			//---Arrays
 			$row_centername = mysqli_fetch_array($query_centername);
@@ -235,8 +297,18 @@
             $row_show_phone = mysqli_fetch_array($query_show_phone);
             $row_show_groups = mysqli_fetch_array($query_show_groups);
             $row_enable_profile_photo = mysqli_fetch_array($query_enable_profile_photo);
+            $row_login_method = mysqli_fetch_array($query_login_method);
             $row_JP = mysqli_fetch_array($query_JP);
             $row_allow_create_categories = mysqli_fetch_array($query_allow_create_categories);
+            $row_smtp_server = mysqli_fetch_array($query_smtp_server);
+            $row_email_username = mysqli_fetch_array($query_email_username);
+            $row_email_password = mysqli_fetch_array($query_email_password);
+            $row_email_address = mysqli_fetch_array($query_email_address);
+            $row_smtp_port = mysqli_fetch_array($query_smtp_port);
+            $row_email_name = mysqli_fetch_array($query_email_name);
+            $row_email_charset = mysqli_fetch_array($query_email_charset);
+            $row_require_ssl = mysqli_fetch_array($query_require_ssl);
+            $row_email_timeout = mysqli_fetch_array($query_email_timeout);
 
 			//---Values
 			$centername = $row_centername['value'];
@@ -254,9 +326,18 @@
             $show_phone = $row_show_phone['value'];
 			$show_groups = $row_show_groups['value'];
             $enable_profile_photo = $row_enable_profile_photo['value'];
+            $login_method = $row_login_method['value'];
             $JP = $row_JP['value'];
             $allow_create_categories = $row_allow_create_categories['value'];
-
+            $smtp_server = $row_smtp_server['value'];
+            $email_username = $row_email_username['value'];
+            $email_password = $row_email_password['value'];
+            $email_address = $row_email_address['value'];
+            $smtp_port = $row_smtp_port['value'];
+            $email_name = $row_email_name['value'];
+            $email_charset = $row_email_charset['value'];
+            $require_ssl = $row_require_ssl['value'];
+            $email_timeout = $row_email_timeout['value'];
 			
 			/*echo '
 			
@@ -305,6 +386,7 @@
                             <ul>
                                 <li class="active"><a href="#tab_01">'.$lang["basic"].'</a></li>
                                 <li><a href="#tab_02">'.$lang["privacy"].'</a></li>
+                                <li><a href="#tab_05">'.$lang["security"].'</a></li>
                                 <li><a href="#tab_03">'.$lang["advanced"].'</a></li>
                                 <li><a href="#tab_04">'.$lang["about"].'</a></li>
                             </ul>
@@ -313,6 +395,8 @@
 
                         <div class="ui_tabs_content">
                             <form class="ui_form">
+
+                                <!-- Basic Settings -->
                                 <div id="tab_01" class="ui_tab_content">
                                     <table>
                                     	<tr>
@@ -400,7 +484,7 @@
                                         </tr>
 
                                         <tr>
-                                            <td><label for="filter_obscene_language">'.$lang["filter_obscene_language"].'</label>: <div class="tip">'.$lang["tip_filter_obscene_language"].'<a target="_blank" href="#">'.$lang["more_information"].'</a></div></td>
+                                            <td><label for="filter_obscene_language">'.$lang["filter_obscene_language"].'</label>: <div class="tip">'.$lang["tip_filter_obscene_language"].'<a target="_blank" href="http://teeach.org/go?link=7d64dfe2">'.$lang["more_information"].'</a></div></td>
                                             <td><input type="checkbox" name="filter_obscene_language" ';if($filter_obscene_language==1){echo "checked";}echo'></td>
                                         </tr>
 
@@ -433,7 +517,7 @@
                                 
                                 <div id="tab_02" class="ui_tab_content">
                                 
-                                <!--Privacy Settings-->
+                                <!-- Privacy Settings -->
 
                                 	<table>
                                 		<tr>
@@ -491,7 +575,51 @@
                                     	<tr><td><label for="enable_profile_photo">'.$lang["enable_profile_photo"].'</label></td><td><input type="checkbox" name="enable_profile_photo" ';if($enable_profile_photo == "true"){echo'checked';}echo'></td></tr>
                                     </table>
                                 </div>
+                                
+                                <!-- Security Settings -->
+                                <div id="tab_05" class="ui_tab_content">
+                                    <table>
+
+                                        <tr>
+                                            <td><p style="font-family:RobotoBold">'.$lang["login_options"].'</p></td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="login_method">'.$lang["login_with"].'</label> <div class="tip">'.$lang["tip_login_method"].'<a target="_blank" href="#">'.$lang["more_information"].'</a></div></td>
+                                            <td>
+                                                <select name="login_method">
+                                                    <option value="1" '; if($login_method == 1){echo'selected';}echo'>'.$lang["email_or_user"].'</option>
+                                                    <option value="2" '; if($login_method == 2){echo'selected';}echo'>'.$lang["email"].'</option>
+                                                    <option value="3" '; if($login_method == 3){echo'selected';}echo'>'.$lang["user"].'</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="logon_tries">Intentos de inicio de sesión:</label></td>
+                                            <td><input type="number" name="logon_tries" min="1" value="'.$row_post_per_page["value"].'"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="logon_tries">Duración del bloqueo:</label></td>
+                                            <td>
+                                                <select name="block_timelapse">
+                                                    <option value="1">15 '.$lang["minutes"].'</option>
+                                                    <option value="2">30 '.$lang["minutes"].'</option>
+                                                    <option value="3">1 '.$lang["hour"].'</option>
+                                                    <option value="4">3 '.$lang["hours"].'</option>
+                                                    <option value="5">12 '.$lang["hours"].'</option>
+                                                    <option value="6">1 '.$lang["day"].'</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+                                </div>
+
                                 <div id="tab_03" class="ui_tab_content">
+                                <!-- Advanced Settings -->
                                 	<table>
                                 		<tr>
                                         	<td><p style="font-family:RobotoBold">'.$lang["categories_and_groups"].'</p></td>
@@ -513,14 +641,71 @@
                                         	<td><label for="allow_create_categories">'.$lang["allow_create_categories"].'</label></td>
                                         	<td><input type="checkbox" name="allow_create_categories" ';if($allow_create_categories == "true"){echo 'checked';} echo '></td>
                                         </tr>
-                                    </table>
+
+                                        <tr>
+                                            <td><label for="up_lang">'.$lang["upload_lang"].': </label></td>
+                                            <td><input type="file" name="up_lang"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><p style="font-family:RobotoBold">'.$lang["email_options"].'</p></td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="smtp_server">'.$lang["smtp_server"].'</label></td>
+                                            <td><input type="text" name="smtp_server" value="'.$smtp_server.'"></input></td>
+                                        </tr>
+
+                                        <tr></tr>
+
+                                        <tr>
+                                            <td><label for="email_username">'.$lang["username"].'</label></td>
+                                            <td><input type="text" name="email_username" value="'.$email_username.'"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="email_password">'.$lang["password"].'</label></td>
+                                            <td><input type="password" name="email_password" value="'.$email_password.'"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><a href="#" id="more_email_options_button">Más opciones de correo electrónico</a></td>
+                                        </tr>
+
                                     
-									<label for="lang">'.$lang["language"].': </label>
-									
-									<br>
-									<label for="up_lang">'.$lang["upload_lang"].': </label>
-									<input type="file" name="up_lang">
-									
+                                    <tbody id="more_email_options">
+                                        <tr>
+                                            <td><label for="email_address">'.$lang["address"].'</label></td>
+                                            <td><input type="text" name="email_address" value="'.$email_address.'"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="smtp_port">'.$lang["smtp_port"].'</label></td>
+                                            <td><input type="text" name="smtp_port" value="'.$smtp_port.'"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="email_name">'.$lang["name"].'</label></td>
+                                            <td><input type="text" name="email_name" value="'.$email_name.'""></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="email_charset">'.$lang["charset"].'</label></td>
+                                            <td><input type="text" name="email_charset" value="'.$email_charset.'"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="require_ssl">'.$lang["require_ssl"].'</label></td>
+                                            <td><input type="checkbox" name="require_ssl" ';if($require_ssl == 1){echo 'checked';} echo '></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td><label for="email_timeout">'.$lang["timeout"].'</label></td>
+                                            <td><input type="number" name="email_timeout" min="1" max="9999" value="'.$email_timeout.'"></td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
                                     </form>
                                 </div>
                                 <div id="tab_04" class="ui_tab_content">

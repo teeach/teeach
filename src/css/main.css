@@ -170,6 +170,10 @@ h1 {
     padding: 15px;
 }
 
+input, button {
+    padding: 3px;
+}
+
 /*===============================================================
 4.0 HEADER
 ===============================================================*/
@@ -301,7 +305,7 @@ header a:hover {
     background: #FFF;
     border-radius: 100%;
     height: 48px;
-    width: 48px;    
+    width: 48px;
 }
 
 .user_menu ul li a {
@@ -335,6 +339,20 @@ header a:hover {
     display: inline-block;
     font-size: 13px;
 }
+
+.user_menu .guest_login {
+    margin-top: 10px;
+    color: #320;
+    height: 30px;
+    border: 1px solid #320;
+    font-size: 14px;
+}
+
+.user_menu .guest_login:hover {
+    color: #320;
+    text-decoration: underline;
+}
+
 
 /* Posts
    =========================================================== */
@@ -828,7 +846,7 @@ TRANSITIONS
 
 .new_unit {
     cursor: pointer;
-    padding: 20px 10px;
+    padding: 20px 20px;
     border: 2px dashed #320;
     background-color: #fff;
     font-size: 1.5rem;
@@ -859,11 +877,13 @@ TRANSITIONS
 
 .group_button i {
     color: #320;
-    padding: 8px;
+    padding: 10px;
+    border-radius: 100%;
+    transition: all 0.2s ease;
 }
 
 .group_button i:hover {
-    background-color: #ccc;
+    background-color: #DDD;
 }
 
 .grouplist li {

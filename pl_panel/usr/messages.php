@@ -8,7 +8,7 @@
 	$System->check_usr();
 	$System = new System();
 	$con = $System->conDB("../../config.json");
-	$User = $System->get_user_by_id($_SESSION['h'], $con);
+	$User = $System->get_user_by_h($_SESSION['h'], $con);
 
 	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
 
@@ -155,7 +155,7 @@
     		$date = date("Y-m-d H:i:s");
     		json_encode($data);
 
-    		//~ $sender = $System->get_user_by_id($sender, $con);
+    		$sender = $System->get_user_by_h($sender, $con);
     		foreach ($users as $user) {
         		$query = $con->query("INSERT INTO pl_messages(from_h,to_h,subject,body,h,date) VALUES ('$sender', '$user', '$subject', '$content', '$h', '$date')")or die("Query error!");
     		}

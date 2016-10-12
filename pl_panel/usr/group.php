@@ -5,7 +5,7 @@
 	$System->check_usr();
 	
 	$con = $System->conDB("../../config.json");
-	$User = $System->get_user_by_id($_SESSION['h'], $con);
+	$User = $System->get_user_by_h($_SESSION['h'], $con);
 
 	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
 
@@ -33,11 +33,8 @@
 	<meta charset="UTF-8">
 	<?php $System->set_head(); ?>
 	<title><?php echo $lang["groups"]; ?> | Teeach</title>
-	<link rel="stylesheet" href="../../src/css/main.css">
 	<script src="../../src/js/groups.js"></script>
 	<script src="../../src/ckeditor/ckeditor.js"></script>
-
-	<script></script>
 
 	<script>
 		//Popups

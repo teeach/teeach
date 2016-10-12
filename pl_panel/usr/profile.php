@@ -9,7 +9,7 @@
 	@session_start();
 
 	$con = $System->conDB("../../config.json");
-	$User = $System->get_user_by_id($_SESSION['h'], $con);
+	$User = $System->get_user_by_h($_SESSION['h'], $con);
 
 	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
 

@@ -6,13 +6,14 @@
 				<link rel='stylesheet' href='../../src/css/main.css'>
 
                 <!--jQuery-->
-                <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+                <script src='../../src/js/jquery/jquery-3.1.1.min.js'></script>
 
                 <!--jQuery UI-->
-                <script src='http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js'></script>
-                <link rel='stylesheet' href='../../src/js/jquery/jquery-ui.theme.css' />
+                <script src='../../src/js/jquery-ui/jquery-ui.min.js'></script>
+                <link rel='stylesheet' href='../../src/js/jquery-ui/jquery-ui.min.css'>
 
-                <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'>
+                <!--Font awesome-->
+                <link rel='stylesheet' href='../../src/font-awesome/css/font-awesome.min.css'>
 
                 <script src='../../src/js/check-all.js'></script>
                 <script src='../../src/js/main.js'></script>
@@ -103,6 +104,23 @@
             if ($profile_photo == "") {
                 $profile_photo = "../../src/ico/user.png";
             }
+
+            //Guest Menu
+            if(!isset($h)) {
+                echo '
+                    <header>
+                        <nav class="user_menu">
+                            <ul>
+                                <li>
+                                    <a href="login.php" class="guest_login">'.$lang["log_in"].'</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </header>
+                    </header>
+                ';
+                return;
+            }
 			
 			
             //Main Menu
@@ -185,8 +203,8 @@
 
 		}
         
-        function get_user_by_id($h, $connection) {
-            $query = $connection->query("SELECT * FROM pl_users WHERE h='$h'")or die("Query error!");
+        function get_user_by_h($h, $con) {
+            $query = $con->query("SELECT * FROM pl_users WHERE h='$h'")or die("Query error!");
             $result = mysqli_fetch_array($query);
             $user = new User($result['id'],$result['username'],$result['name'],$result['surname'],$result['email'],$result['address'],$result['phone'],$result['level'],$result['h'],$result['lang'],$result['photo'],$result['birthdate'],$result['pass'],$result['privilege'],$result['creation_date'],$result['last_time'],$result['status']);
             return $user;
@@ -226,31 +244,31 @@
 
         function get_month($lang, $month) {
             switch ($month) {
-                case 01:
+                case 1:
                     return $lang["january"];
                     break;
-                case 02:
+                case 2:
                     return $lang["february"];
                     break;
-                case 03:
+                case 3:
                     return $lang["march"];
                     break;
-                case 04:
+                case 4:
                     return $lang["april"];
                     break;
-                case 05:
+                case 5:
                     return $lang["may"];
                     break;
-                case 06:
+                case 6:
                     return $lang["june"];
                     break;
-                case 07:
+                case 7:
                     return $lang["july"];
                     break;
-                case 08:
+                case 8:
                     return $lang["august"];
                     break;
-                case 09:
+                case 9:
                     return $lang["september"];
                     break;
                 case 10:
@@ -285,31 +303,31 @@
             } elseif($date_format_setting == "3") {
 
                 switch ($month) {
-                    case 01:
+                    case 1:
                         $month_writed = $lang["january"];
                         break;
-                    case 02:
+                    case 2:
                         $month_writed = $lang["february"];
                         break;
-                    case 03:
+                    case 3:
                         $month_writed = $lang["march"];
                         break;
-                    case 04:
+                    case 4:
                         $month_writed = $lang["april"];
                         break;
-                    case 05:
+                    case 5:
                         $month_writed = $lang["may"];
                         break;
-                    case 06:
+                    case 6:
                         $month_writed = $lang["june"];
                         break;
-                    case 07:
+                    case 7:
                         $month_writed = $lang["july"];
                         break;
-                    case 08:
+                    case 8:
                         $month_writed = $lang["august"];
                         break;
-                    case 09:
+                    case 9:
                         $month_writed = $lang["september"];
                         break;
                     case 10:
@@ -452,7 +470,7 @@
             $row = mysqli_fetch_array($query);
             $filter_obscene_language = $row['value'];
 
-            $obscene_words = "acojonar,agilipollada,agilipollado,ass,bastarda,bastardo,bitch,bitching,boluda,boludo,boludez,bullshit,cabron,cabrón,cabrona,cabroncete,cachonda,cachondo,carajo,chichi,chocho,chochona,chuloputas,chumino,cock,cocksucker,cojon,cojón,cojonudo,coñocunt,dick,folla,follada,follado,follador,folladora,follamos,follando,follar,follarse,follo,foutre,fuck,fucked,fucker,fuckers,fuckface,fucking,fucksville,gili,gilipolla,gilipollas,gilipuertas,hijadeputa,hijaputa,hijadeputo,hijaputo,hostia,huevon,huevón,huevona,idiota,imbécil,joder,joderos,jodete,jódete,jodida,jodido,joputa,lameculo,lameculos,malfollada,malfollado,malnacida,malnacido,malparida,malparido,mamada,mamamela,mámamela,mamarla,mamon,mamón,mamona,marica,maricon,maricón,maricona,mariconazo,mariposon,mariposón,merde,mierda,motherfucker,pendeja,pendejo,polla,pollada,pollon,pollón,prick,puta,putada,putain,putas,pute,putilla,putillo,putita,putito,puto,puton,putón,putona,putos,pussyshit,salope,shitty,soplaflautas,soplapollas,shitkicker,subnormal,tocacojones,tocapelotas,tragapollas,tragasables,twat";
+            $obscene_words = "acojonar,agilipollada,agilipollado,ass,bastarda,bastardo,bitch,bitching,boluda,boludo,boludez,bullshit,cabron,cabrón,cabrona,cabroncete,cachonda,cachondo,carajo,chichi,chocho,chochona,chuloputas,chumino,cock,cocksucker,cojon,cojón,cojonudo,coñocunt,dick,folla,follada,follado,follador,folladora,follamos,follando,follar,follarse,follo,foutre,fuck,fucked,fucker,fuckers,fuckface,fucking,fucksville,gili,gilipolla,gilipollas,gilipuertas,hijadeputa,hijaputa,hijadeputo,hijaputo,hostia,hostion,hostión,huevon,huevón,huevona,idiota,imbécil,joder,joderos,jodete,jódete,jodida,jodido,joputa,lameculo,lameculos,malfollada,malfollado,malnacida,malnacido,malparida,malparido,mamada,mamamela,mámamela,mamarla,mamon,mamón,mamona,marica,maricon,maricón,maricona,mariconazo,mariposon,mariposón,merde,mierda,motherfucker,pendeja,pendejo,polla,pollada,pollon,pollón,prick,puta,putada,putain,putas,pute,putilla,putillo,putita,putito,puto,puton,putón,putona,putos,pussyshit,salope,shitty,soplaflautas,soplapollas,shitkicker,subnormal,tocacojones,tocapelotas,tragapollas,tragasables,twat";
 
             if($filter_obscene_language == 1) {
 

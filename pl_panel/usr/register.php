@@ -69,7 +69,7 @@
 				<form action="register.php?action=success" method="post">
 					<table>
 						<tr><td><label for="username">'.$lang["username"].': </label></td><td><input type="text" name="username"></td></tr>
-						<tr><td><label for="email">'.$lang["email"].': </label></td><td><input type="text" name="email"></td></tr>
+						<tr><td><label for="email">'.$lang["email"].': </label></td><td><input type="email" name="email" value="'.@$_GET["email"].'"></td></tr>
 						<tr><td><label for="password">'.$lang["password"].': </label></td><td><input type="password" name="password"></td></tr>
 						<tr><td><label for="rpassword">'.$lang["repeat_password"].': </label></td><td><input type="password" name="rpassword"></td></tr>
 		';

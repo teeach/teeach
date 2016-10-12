@@ -4,10 +4,18 @@
 	session_start();
 
 	$System = new System();
-	$System->check_usr();
-
 	$con = $System->conDB("../../config.json");
-	$User = $System->get_user_by_id($_SESSION['h'], $con);
+	$query = $con->query("SELECT * FROM pl_settings WHERE property='index_page'")or die("Query error!");
+	$row = mysqli_fetch_array($query);
+	$index_page = $row['value'];
+
+	if($index_page == 1) {
+		if(!isset($_SESSION['h'])) {
+        	header('Location: ../../index.php');
+    	}
+	}
+	
+	@$User = $System->get_user_by_h($_SESSION['h'], $con);
 	
 	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
 
@@ -22,7 +30,7 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo "Hi, $User->name | Teeach"; ?></title>
+	<title><?php echo $lang['hi'].", $User->name | Teeach"; ?></title>
 	<link rel="stylesheet" href="../../src/css/index.css">
 	<?php
 		$System->set_head();
@@ -31,9 +39,9 @@
 <body>
 	<?php
 
-	if(!isset($_SESSION['h'])) {
-		die("You aren't logged in.");
-	}
+	//if(!isset($_SESSION['h'])) {
+	//	die("You aren't logged in.");
+	//}
 
 	$query = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
 	$row = mysqli_fetch_array($query);
@@ -153,7 +161,7 @@
 	<?php
 		$query = $con->query("SELECT * FROM pl_users WHERE h='$User->h'")or die("Query error!");
 		$row = mysqli_fetch_array($query);
-		if($row['tour'] == 0) {
+		if($row['tour'] == 0 && isset($_SESSION['h'])) {
 			echo '
 			<div class="horizontal_box">
 				<h1>'.$lang["welcome_teeach"].'</h1>

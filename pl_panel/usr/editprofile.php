@@ -9,7 +9,7 @@
     $System->check_usr();
     
     $connection = $System->conDB("../../config.json");
-    $User = $System->get_user_by_id($h, $connection);
+    $User = $System->get_user_by_h($h, $connection);
 
     $lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
     
@@ -21,7 +21,7 @@
 		$email = $_POST['email'];
 		$url_img = $_POST['url_img'];
 		$lang_val = $_POST['lang'];
-        if($_POST['act_password'] != $_POST['new_password']){
+        if ($_POST['act_password'] != $_POST['new_password']) {
             
             $t_hasher = new PasswordHash(8, FALSE);
             

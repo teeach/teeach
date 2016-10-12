@@ -265,7 +265,7 @@
 				$lang_val = $_SESSION["lang"];
 
 				//SET Settings Table
-				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES ('centername','$centername'),('logo','$logo'),('accesspass','$accesspass'),('lang','$lang_val'),('post_per_page','5'),('show_post_author','true'),('show_post_date','true'),('show_last_time','1'),('show_address','2'),('show_phone','2'),('show_groups','1'),('enable_profile_photo','true'),('JP','2'),('allow_create_categories','true'),('date_format','2'),('time_format','24'),('filter_obscene_language','0')")or die("Query error!");
+				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES ('centername','$centername'),('logo','$logo'),('accesspass','$accesspass'),('lang','$lang_val'),('post_per_page','5'),('show_post_author','true'),('show_post_date','true'),('show_last_time','1'),('show_address','2'),('show_phone','2'),('show_groups','1'),('enable_profile_photo','true'),('JP','2'),('allow_create_categories','true'),('date_format','2'),('time_format','24'),('filter_obscene_language','0'),('login_method','1'),('smtp_server',''),('email_username',''),('email_password',''),('email_address',''),('smtp_port','')('email_name','$centername'),('email_charset','UTF-8'),('require_ssl','false'),('email_timeout','60')")or die("Query error!");
 
 				echo '
 					<center>
