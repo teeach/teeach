@@ -1,10 +1,8 @@
 <?php
 	include("../../core.php");
 	$System = new System;
-	
-	$con = $System->conDB("../../config.json");
-
-	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+	$con = $System->conDB();
+	$lang = $System->parse_lang();
 ?>
 
 <!DOCTYPE html>
@@ -20,8 +18,8 @@
 	if (@$_GET['action'] == "success") {
 
 		$email = $_POST['email'];
-		$query =  $con->query("SELECT * FROM pl_users WHERE email='$email'");
-		$row = mysqli_fetch_array($query);
+		$query =  $System->queryDB("SELECT * FROM pl_users WHERE email='$email'", $con);
+		$row = $System->fetch_array($query);
 		if(!isset($row['email'])) {
 			die("Esa dirección de correo electrónico no existe en nuestra base de datos. Si le pertence, puede crear una nueva cuenta con ese correo electrónico haciendo clic "."<a href='register.php?email=".$email."'>"."aquí"."</a>.");
 		}
@@ -35,25 +33,25 @@
     	$t_hasher = new PasswordHash(8, FALSE);
         $new_pass_hash = $t_hasher->HashPassword($new_pass);
 
-    	$query1 = $con->query("SELECT * FROM pl_settings WHERE property='smtp_server'");
-    	$query2 = $con->query("SELECT * FROM pl_settings WHERE property='email_username'");
-    	$query3 = $con->query("SELECT * FROM pl_settings WHERE property='email_password'");
-    	$query4 = $con->query("SELECT * FROM pl_settings WHERE property='email_address'");
-    	$query5 = $con->query("SELECT * FROM pl_settings WHERE property='email_name'");
-    	$query6 = $con->query("SELECT * FROM pl_settings WHERE property='email_charset'");
-    	$query7 = $con->query("SELECT * FROM pl_settings WHERE property='require_ssl'");
-    	$query8 = $con->query("SELECT * FROM pl_settings WHERE property='email_timeout'");
-    	$query9 = $con->query("SELECT * FROM pl_settings WHERE property='smtp_port'");
+    	$query1 = $System->queryDB("SELECT * FROM pl_settings WHERE property='smtp_server'", $con);
+    	$query2 = $System->queryDB("SELECT * FROM pl_settings WHERE property='email_username'", $con);
+    	$query3 = $System->queryDB("SELECT * FROM pl_settings WHERE property='email_password'", $con);
+    	$query4 = $System->queryDB("SELECT * FROM pl_settings WHERE property='email_address'", $con);
+    	$query5 = $System->queryDB("SELECT * FROM pl_settings WHERE property='email_name'", $con);
+    	$query6 = $System->queryDB("SELECT * FROM pl_settings WHERE property='email_charset'", $con);
+    	$query7 = $System->queryDB("SELECT * FROM pl_settings WHERE property='require_ssl'", $con);
+    	$query8 = $System->queryDB("SELECT * FROM pl_settings WHERE property='email_timeout'", $con);
+    	$query9 = $System->queryDB("SELECT * FROM pl_settings WHERE property='smtp_port'", $con);
 
-    	$row1 = mysqli_fetch_array($query1);
-    	$row2 = mysqli_fetch_array($query2);
-    	$row3 = mysqli_fetch_array($query3);
-    	$row4 = mysqli_fetch_array($query4);
-    	$row5 = mysqli_fetch_array($query5);
-    	$row6 = mysqli_fetch_array($query6);
-    	$row7 = mysqli_fetch_array($query7);
-    	$row8 = mysqli_fetch_array($query8);
-    	$row9 = mysqli_fetch_array($query9);
+    	$row1 = $System->fetch_array($query1);
+    	$row2 = $System->fetch_array($query2);
+    	$row3 = $System->fetch_array($query3);
+    	$row4 = $System->fetch_array($query4);
+    	$row5 = $System->fetch_array($query5);
+    	$row6 = $System->fetch_array($query6);
+    	$row7 = $System->fetch_array($query7);
+    	$row8 = $System->fetch_array($query8);
+    	$row9 = $System->fetch_array($query9);
 
     	$smtp_server = $row1['value'];
     	$email_username = $row2['value'];
@@ -92,7 +90,7 @@
     	$exito = $mail->Send();
 
     if($exito == true) {
-    	$query = $con->query("UPDATE pl_users SET pass='$new_pass_hash' WHERE email='$email'")or die("Query error!");
+    	$query = $System->queryDB("UPDATE pl_users SET pass='$new_pass_hash' WHERE email='$email'", $con);
       die('Te hemos mandado tu nueva contraseña por correo electrónico. Inicia sesión con esta haciendo clic <a href="login.php">aquí</a><br><br>Si no le aparece nuestro mensaje, puede haber aparecido por error en la carpeta de Spam o Correo no deseado.');
     } else {
       die("No podemos enviarte la información ahora. Inténtelo más tarde.<br><br>Información avanzada: No podemos conectarnos al servidor SMTP. Si eres el administrador, por favor, revise los parámetros en Ajustes.");

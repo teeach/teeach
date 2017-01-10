@@ -1,13 +1,11 @@
 $(document).on("ready", function() {
 
-	//Lang Selector
-
+	//-- Lang Selector
 	$("#lang_selector").change(function() {
 		$("#lang_form").submit();
 	});
 
-	//Password secure-insecure
-
+	//-- Password secure-insecure
 	$("#initial_settings_button").on("click", function() {
 		var pass = document.initial_settings.pass.value;
 		if (pass.length < 8) {
@@ -18,10 +16,9 @@ $(document).on("ready", function() {
 		}
 	});
 
-	//Auto localhost
-
+	//-- Auto localhost
 	var url = $("#url").attr("value");
-	if (url.contains("localhost")) {
+	if (url.indexOf("localhost") !== -1) {
 		$("#server_db").attr("value", "localhost");
 	}
 

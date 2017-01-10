@@ -2,8 +2,8 @@
 	session_start();
 	include("../../core.php");
 	$System = new System();
-	$con = $System->conDB("../../config.json");
-	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+	$con = $System->conDB();
+	$lang = $System->parse_lang();
 
 	// Check login method
 	//
@@ -11,8 +11,8 @@
 	// 2 ~ Only email
 	// 3 ~ Only username
 
-	$query = $con->query("SELECT * FROM pl_settings WHERE property='login_method'")or die("Query error!");
-	$row = mysqli_fetch_array($query);
+	$query = $System->queryDB("SELECT * FROM pl_settings WHERE property='login_method'", $con);
+	$row = $System->fetch_array($query);
 	$login_method = $row['value'];
 
 	if (@$_GET['action']=="check") {
@@ -23,15 +23,15 @@
 		$t_hasher = new PasswordHash(8, FALSE);
 
 		if($login_method == "1") {
-			$query = $con->query("SELECT * FROM pl_users WHERE username='$user' OR email='$user'")or die("Query error!");
+			$query = $System->queryDB("SELECT * FROM pl_users WHERE username='$user' OR email='$user'", $con);
 		} elseif($login_method == "2") {
-			$query = $con->query("SELECT * FROM pl_users WHERE email='$user'")or die("Query error!");
+			$query = $System->queryDB("SELECT * FROM pl_users WHERE email='$user'", $con);
 		} else {
-			$query = $con->query("SELECT * FROM pl_users WHERE username='$user'")or die("Query error!");
+			$query = $System->queryDB("SELECT * FROM pl_users WHERE username='$user'", $con);
 		}
 
 		
-		$row = mysqli_fetch_array($query);
+		$row = $System->fetch_array($query);
 		$user_h = $row['h'];
 		$pass_db = $row['pass'];
 
@@ -52,7 +52,7 @@
 	if (isset($_SESSION['h'])) {
 		$user_h = $row['h'];
 		$time = date("Y-m-d H:i:s");
-		$query_last_time = $con->query("UPDATE pl_users SET last_time='$time' WHERE h='$user_h'")or die("Query error!");
+		$query_last_time = $System->queryDB("UPDATE pl_users SET last_time='$time' WHERE h='$user_h'", $con);
 		header('Location: index.php');
 	}
 

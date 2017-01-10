@@ -4,9 +4,8 @@
 
 	$System = new System();
 	$System->check_admin();
-	$con = $System->conDB("../../config.json");
-
-	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+	$con = $System->conDB();
+	$lang = $System->parse_lang();
 ?>
 
 <!DOCTYPE html>
@@ -38,15 +37,15 @@
 			$System = new System();
 
 			$con = $System->conDB("../../config.json");
-    		$query = $con->query("INSERT INTO pl_categories(name,h) VALUES ('$name','$h')")or die("Error");
+    		$query = $System->queryDB("INSERT INTO pl_categories(name,h) VALUES ('$name','$h')", $con);
     		echo "<script>location.href='categories.php?action'</script>";
     	} elseif($action == "edit") {
 
     		$h = $_GET['h'];
 
     		$System->conDB("../../config.json");
-    		$query = $con->query("SELECT * FROM pl_categories WHERE h='$h'");
-    		$row = mysqli_fetch_array($query);
+    		$query = $System->queryDB("SELECT * FROM pl_categories WHERE h='$h'", $con);
+    		$row = $System->fetch_array($query);
 
     		$cat_name = $row['name'];
 
@@ -64,7 +63,7 @@
 
 			$con = $System->conDB("../../config.json");
 
-			$query = $con->query("UPDATE pl_categories SET name='$cat_name' WHERE h='$h'")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_categories SET name='$cat_name' WHERE h='$h'", $con);
 
 			echo "<script>location.href='categories.php?action'</script>";
 
@@ -74,7 +73,7 @@
 
 			$con = $System->conDB("../../config.json");
 
-			$query = $con->query("DELETE FROM pl_categories WHERE h='$h'")or die("Query error!");
+			$query = $System->queryDB("DELETE FROM pl_categories WHERE h='$h'", $con);
 
 			echo "<script>location.href='categories.php?action'</script>";
 
@@ -107,11 +106,11 @@
 		';
 				$query = $con->query("SELECT * FROM pl_categories");
 
-				while($row = mysqli_fetch_array($query)) {
+				while($row = $System->fetch_array($query)) {
 
 					$category_h = $row['h'];
 
-					$query2 = $con->query("SELECT * FROM pl_groupuser WHERE groupid=$category_h");
+					$query2 = $System->queryDB("SELECT * FROM pl_groupuser WHERE groupid=$category_h", $con);
 
 					echo "
 					<tr>

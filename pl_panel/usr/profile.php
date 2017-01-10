@@ -8,13 +8,13 @@
 	
 	@session_start();
 
-	$con = $System->conDB("../../config.json");
+	$con = $System->conDB();
 	$User = $System->get_user_by_h($_SESSION['h'], $con);
 
-	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+	$lang = $System->parse_lang();
 
-	$query = $con->query("SELECT * FROM pl_users WHERE h='$get_usr'")or die("Query error 1!");
-	$row = mysqli_fetch_array($query);
+	$query = $System->queryDB("SELECT * FROM pl_users WHERE h='$get_usr'", $con);
+	$row = $System->fetch_array($query);
 	$profile_name = $row['name'];
 	$profile_surname = $row['surname'];
 	$profile_email = $row['email'];
@@ -33,11 +33,7 @@
 </head>
 <body>
 	<?php
-		$query = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
-		$row = mysqli_fetch_array($query);
-		$centername = $row['value'];
-		$System->set_header($centername);
-		$System->set_usr_menu($User->h,$User->privilege,$lang);
+		$System->set_header($User->h,$lang);
 	?>
 
 	<table class="profile_table">
@@ -63,8 +59,8 @@
 
 
 	<?php
-		$query = $con->query("SELECT * FROM pl_settings WHERE property='showgroups'")or die("Query error 2!");
-		$row = mysqli_fetch_array($query);
+		$query = $System->queryDB("SELECT * FROM pl_settings WHERE property='showgroups'", $con);
+		$row = $System->fetch_array($query);
 		$show_groups = $row['value'];
 		if ($show_groups <= 2) {
 			if($show_groups == 1 OR $User->privilege >= 2) {
@@ -77,11 +73,11 @@
 				';
 
 				$userid = $User->id;
-				$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$get_usr'")or die("Query Error 3!");
-				while ($row = mysqli_fetch_array($query)) {
+				$query = $System->queryDB("SELECT * FROM pl_groupuser WHERE user_h='$get_usr'", $con);
+				while ($row = $System->fetch_array($query)) {
 					$group_h = $row['group_h'];
-					$query2 = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query Error 4!");
-					$row2 = mysqli_fetch_array($query2);
+					$query2 = $System->queryDB("SELECT * FROM pl_groups WHERE h='$group_h'", $con);
+					$row2 = $System->fetch_array($query2);
 					$groupname = $row2['name'];
 
 					echo '<tr><td><a href="group.php?h='.$group_h.'&page=index">'.$groupname.'</a></td></tr>';

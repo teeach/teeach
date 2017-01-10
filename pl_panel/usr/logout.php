@@ -10,7 +10,6 @@
 	<?php
 		$System = new System();
 		$System->check_usr();
-		
 		$System->set_head(); 
 	?>
 	<meta charset="UTF-8">

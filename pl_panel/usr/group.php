@@ -4,11 +4,9 @@
 	$System = new System();
 	$System->check_usr();
 	
-	$con = $System->conDB("../../config.json");
+	$con = $System->conDB();
 	$User = $System->get_user_by_h($_SESSION['h'], $con);
-
-	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
-
+	$lang = $System->parse_lang();
 	$user_h = $_SESSION['h'];
 
 	@$h = $_GET['h'];
@@ -20,8 +18,8 @@
 		}
 	}
 	*/
-	$query = $con->query("SELECT * FROM pl_groups WHERE h='$h'")or die(_("This group doesn't exist."));
-	$row = mysqli_fetch_array($query);
+	$query = $System->queryDB("SELECT * FROM pl_groups WHERE h='$h'", $con);
+	$row = $System->fetch_array($query);
 
 	$group_name = $row['name'];
 	$groupid = $row['id'];
@@ -65,11 +63,7 @@
 
 			';
 
-		$query = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
-		$row = mysqli_fetch_array($query);
-		$centername = $row['value'];
-		$System->set_header($centername);
-		$System->set_usr_menu($User->h,$User->privilege,$lang);
+		$System->set_header($User->h, $lang);
 
 		if (@$_GET['action'] == "create") {
 
@@ -80,8 +74,8 @@
 						<tr><td><label for="name">'.$lang["name"].': </label></td><td><input type="text" name="name"></td></tr>
 						<tr><td><label for="category">'.$lang["category"].': </label></td><td>
 							<div id="category"><select name="category">';
-								$query = $con->query("SELECT * FROM pl_categories");
-								while($row = mysqli_fetch_array($query)) {
+								$query = $System->queryDB("SELECT * FROM pl_categories", $con);
+								while($row = $System->fetch_array($query)) {
 									$name = $row['name'];
 									$h = $row['h'];
 
@@ -89,8 +83,8 @@
 								}
 						echo ' </select>';
 
-								$query = $con->query("SELECT * FROM pl_settings WHERE property='allow_create_categories'");
-								$row_acc = mysqli_fetch_array($query);
+								$query = $System->queryDB("SELECT * FROM pl_settings WHERE property='allow_create_categories'", $con);
+								$row_acc = $System->fetch_array($query);
 								$allow_create_categories = $row_acc['value'];
 
 								if ($allow_create_categories == "true") {
@@ -113,19 +107,19 @@
 			$category_h = $_POST['category'];
 
 			if($_POST['new_category'] != "") {
-				$new_category_h = substr( md5(microtime()), 1, 18);
+				$new_category_h = $System->rand_str(10);
 				$category_name = $_POST['new_category'];
-				$query = $con->query("INSERT INTO pl_categories(name,h) VALUES('$category_name','$new_category_h')")or die("Query error!");
+				$query = $System->queryDB("INSERT INTO pl_categories(name,h) VALUES('$category_name','$new_category_h')", $con);
 				$category_h = $new_category_h;
 			}
 
-			$h = substr( md5(microtime()), 1, 18);
+			$h = $System->rand_str(10);
 
 			//Create group
-			$query = $con->query("INSERT INTO pl_groups(name,h,category_h) VALUES ('$group_name','$h','$category_h')")or die("Query error!");
+			$query = $System->queryDB("INSERT INTO pl_groups(name,h,category_h) VALUES ('$group_name','$h','$category_h')", $con);
 
 			//Create first moderator
-			$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$h','$User->h','moderator')")or die("Query error!");
+			$query = $System->queryDB("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$h','$User->h','moderator')", $con);
 
 			echo '<script>location.href="group.php?h='.$h.'&page=index"</script>';
 
@@ -136,8 +130,8 @@
 					<p>'.$lang["select_group"].' </p>
 						';
 
-					$query1 = $con->query("SELECT * FROM pl_categories")or die("Query error!");
-					while ($row1 = mysqli_fetch_array($query1)) {
+					$query1 = $System->queryDB("SELECT * FROM pl_categories", $con);
+					while ($row1 = $System->fetch_array($query1)) {
 						$category_name = $row1['name'];
 						$category_h = $row1['h'];
 						echo '
@@ -145,8 +139,8 @@
 							<ul class="grouplist">
 						';
 
-						$query2 = $con->query("SELECT * FROM pl_groups WHERE category_h='$category_h'")or die("Query error!");
-						while ($row2 = mysqli_fetch_array($query2)) {
+						$query2 = $System->queryDB("SELECT * FROM pl_groups WHERE category_h='$category_h'", $con);
+						while ($row2 = $System->fetch_array($query2)) {
 							$groupname = $row2['name'];
 							$gh = $row2['h'];
 							echo '<a href="group.php?action=send_request&group='.$gh.'"><li>'.$groupname.'</li></a>';
@@ -162,26 +156,26 @@
 			$gh = $_GET['group'];
 			$user_h = $User->h;
 
-			$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$user_h'")or die("Query error!");
-			while ($row = mysqli_fetch_array($query)) {
+			$query = $System->queryDB("SELECT * FROM pl_groupuser WHERE user_h='$user_h'", $con);
+			while ($row = $System->fetch_array($query)) {
 				if($gh == $row['group_h']) {
 					die("<div id='content'>".$lang["already_group"]." <a href='index.php'><button>".$lang["accept"]."</button></a></div>");
 				}
 			}
 
 			//Check Settings
-			$query_settings = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
-			$row_settings = mysqli_fetch_array($query_settings);
+			$query_settings = $System->queryDB("SELECT * FROM pl_settings WHERE property='JP'", $con);
+			$row_settings = $System->fetch_array($query_settings);
 			$JP = $row_settings['value'];
 			
 			switch($JP) {
 				case 1:
 					//Direct ~ No need permission
-					$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','active')")or die("Query error!");
+					$query = $System->queryDB("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','active')", $con);
 					echo "Great! You've joined to group. <a href='group.php?group=".$gh."&page=index'>Enter</a>";
 				case 2:
 					//Request ~ Need permission
-					$query = $con->query("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','waiting')")or die("Query error!");
+					$query = $System->queryDB("INSERT INTO pl_groupuser(group_h,user_h,status) VALUES('$gh','$user_h','waiting')", $con);
 					echo "You've sent a request successfully! <a href='index.php'>Return to Index Page</a>";
 					break;
 				case 3:
@@ -198,8 +192,8 @@
 			$Work = $System->get_work_by_h($work_h, $con);
 			$attachment_json = $Work->attachment;
 
-			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query error!");
-			$row_status = mysqli_fetch_array($query_status);
+			$query_status = $System->queryDB("SELECT * FROM pl_groupuser WHERE user_h='$User->h'", $con);
+			$row_status = $System->fetch_array($query_status);
 			$status = $row_status['status'];
 
 			echo '
@@ -282,8 +276,8 @@
 
             		//Check if you have sent the reply before
             		$user_h = $_SESSION['h'];
-            		$query = $con->query("SELECT * FROM pl_califications WHERE user_h='$user_h' AND work_h='$Work->h'")or die("Query error!");
-            		if($row = mysqli_fetch_array($query)) {
+            		$query = $System->queryDB("SELECT * FROM pl_califications WHERE user_h='$user_h' AND work_h='$Work->h'", $con);
+            		if($row = $System->fetch_array($query)) {
             			$description = $row['description'];
             			$attachment_json_answer = $row['attachments'];
             			$attachments_answer = json_decode($attachment_json_answer);
@@ -375,7 +369,7 @@
 			$work_h = $_GET['h'];
 			$user_h = $_SESSION['h'];
 			$description = $_POST['description'];
-			$h = substr( md5(microtime()), 1, 18);
+			$h = $System->rand_str(10);
 			$delivery_date = date("Y-m-d H:i:s");
 
 			$upload_error = 0;
@@ -404,7 +398,7 @@
 			
 			
 			if ($upload_error == 0) {
-				$query = $con->query("INSERT INTO pl_califications(work_h,user_h,h,description,attachments,delivery_date) VALUES('$work_h','$user_h','$h','$description','$attachment_json','$delivery_date')")or die("Query error!");
+				$query = $con->queryDB("INSERT INTO pl_califications(work_h,user_h,h,description,attachments,delivery_date) VALUES('$work_h','$user_h','$h','$description','$attachment_json','$delivery_date')", $con);
 				echo '<script>location.href="group.php?action=view&h='.$work_h.'"</script>';
 			} else {
 				echo ''.$lang["upload_error"].' <a href="group.php?action=view&h='.$work_h.'">'.$lang["return"].'</a>';
@@ -424,7 +418,7 @@
 				//~ }
 			//~ }
 
-			$query = $con->query("INSERT INTO pl_califications(work_h,user_h,h,description,attachments,delivery_date) VALUES('$work_h','$user_h','$h','$description','$delivery_date')")or die("Query error!");
+			$query = $System->queryDB("INSERT INTO pl_califications(work_h,user_h,h,description,attachments,delivery_date) VALUES('$work_h','$user_h','$h','$description','$delivery_date')", $con);
 
 			echo '<script>location.href="group.php?action=view&h='.$work_h.'"</script>';
 
@@ -435,10 +429,10 @@
 
 			if (!ereg("^([a-zA-Z0-9._]+)@([a-zA-Z0-9.-]+).([a-zA-Z]{2,4})$",$user)) {
       			//Username detected
-      			$query = $con->query("SELECT * FROM pl_users WHERE username='$user'")or die("Query error!");
+      			$query = $Syste->queryDB("SELECT * FROM pl_users WHERE username='$user'", $con);
   			} else {
        			//Mail detected
-       			$query = $con->query("SELECT * FROM pl_users WHERE email='$user'")or die("Query error!");
+       			$query = $System->queryDB("SELECT * FROM pl_users WHERE email='$user'", $con);
   			}
 
   			if($row = mysqli_fetch_array($query)) {
@@ -447,7 +441,7 @@
   				echo "Error! Username or email not detected!";
   			}
 
-			$queryadd = $con->query("INSERT INTO pl_groupuser(group_h,user_h) VALUES('$group_h','$user_h')")or die("Query error!");
+			$queryadd = $System->queryDB("INSERT INTO pl_groupuser(group_h,user_h) VALUES('$group_h','$user_h')", $con);
 
 			echo 'Añadido '.$user.' con un hash de '.$user_h;
 
@@ -456,8 +450,8 @@
 			$group_h = $_GET['group'];
 
 			//USER STATUS
-			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$group_h' AND user_h='$User->h'")or die("Query error!");
-			$row_status = mysqli_fetch_array($query_status);
+			$query_status = $System->queryDB("SELECT * FROM pl_groupuser WHERE group_h='$group_h' AND user_h='$User->h'", $con);
+			$row_status = $System->fetch_array($query_status);
 			$status = $row_status['status'];
 
 			if($status != "moderator") {
@@ -467,7 +461,7 @@
 			$group_h = $_GET['group'];
 			$user_h = $_GET['user'];
 
-			$query = $con->query("DELETE FROM pl_groupuser WHERE group_h='$group_h' AND user_h='$user_h'")or die("Query error!");
+			$query = $System->queryDB("DELETE FROM pl_groupuser WHERE group_h='$group_h' AND user_h='$user_h'", $con);
 			
 			echo '<script>location.href="group.php?h='.$group_h.'&page=users"</script>';
 
@@ -477,22 +471,22 @@
 			$user_h = $_GET['user'];
 
 			//USER STATUS
-			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$group_h' AND user_h='$User->h'")or die("Query error!");
-			$row_status = mysqli_fetch_array($query_status);
+			$query_status = $System->queryDB("SELECT * FROM pl_groupuser WHERE group_h='$group_h' AND user_h='$User->h'", $con);
+			$row_status = $System->fetch_array($query_status);
 			$status = $row_status['status'];
 
 			if($status != "moderator") {
 				die("Error!");
 			}
 
-			$query = $con->query("UPDATE pl_groupuser SET status='moderator' WHERE user_h='$user_h' AND group_h='$group_h'")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_groupuser SET status='moderator' WHERE user_h='$user_h' AND group_h='$group_h'", $con);
 
 			echo "<script>location.href='group.php?h=".$group_h."&page=users'</script>";
 
 		} elseif(@$_GET['action'] == "new_work") {
 
-			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query error!");
-			$row_status = mysqli_fetch_array($query_status);
+			$query_status = $System->queryDB("SELECT * FROM pl_groupuser WHERE user_h='$User->h'", $con);
+			$row_status = $System->fetch_array($query_status);
 			$status = $row_status['status'];
 			
 			if($status != "moderator") {
@@ -503,8 +497,8 @@
 			$gh = $_GET['h'];
 			$unit_h = $_GET['unit'];
 
-			$query = $con->query("SELECT * FROM pl_units WHERE h='$unit_h'")or die("Query error!");
-			$row = mysqli_fetch_array($query);
+			$query = $System->queryDB("SELECT * FROM pl_units WHERE h='$unit_h'", $con);
+			$row = $System->fetch_array($query);
 			$unit_name = $row['name'];
 
 			echo '
@@ -572,7 +566,7 @@
 				$status = "invisible";
 			}
 
-			$h = substr( md5(microtime()), 1, 18);
+			$h = $System->rand_str(10);
 			$date = date("Y-m-d H:i:s");
 
 			$upload_error = 0;
@@ -583,7 +577,7 @@
 				$target_dir = "uploads/";
 				$info = new SplFileInfo($file["name"]);
 				$extension = $info->getExtension();
-				$target_file = $target_dir . $System->rand_string(10).'.'.$extension;
+				$target_file = $target_dir . $System->rand_str(10).'.'.$extension;
 				
 				if (move_uploaded_file($file["tmp_name"], '../../'.$target_file)) {
 					$file_data = [];
@@ -601,7 +595,7 @@
 			
 			
 			if ($upload_error == 0) {
-				$query = $con->query("INSERT INTO pl_works(name,type,h,creation_date,description,group_h,unit_h,status,attachment) VALUES('$workname',$type,'$h','$date','$desc','$gh','$unit_h','$status','$attachment_json')")or die("Query error!");
+				$query = $System->queryDB("INSERT INTO pl_works(name,type,h,creation_date,description,group_h,unit_h,status,attachment) VALUES('$workname',$type,'$h','$date','$desc','$gh','$unit_h','$status','$attachment_json')", $con);
 				echo '<script>location.href="group.php?h='.$gh.'&page=index"</script>';
 			} else {
 				echo ''.$lang["upload_error"].' <a href="group.php?h='.$gh.'&page=index">'.$lang["return"].'</a>';
@@ -708,7 +702,7 @@
                     { name: "tools", items: [ "Maximize"] }
                 ]
                 });      
-        </script>
+        	</script>
 			';
 
 		} elseif(@$_GET['action'] == "update_work") {
@@ -727,16 +721,16 @@
 				$status = "invisible";
 			}
 
-			$query = $con->query("UPDATE pl_works SET name='$name',description='$description',type='$type',status='$status' WHERE h='$work_h'")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_works SET name='$name',description='$description',type='$type',status='$status' WHERE h='$work_h'", $con);
 			echo "<script>location.href='group.php?action=view&h=".$work_h."'</script>";
 
 		} elseif(@$_GET['action'] == "del_work") {
 
 			$work_h = $_GET['h'];
 
-			$query = $con->query("SELECT * FROM pl_works WHERE h='$work_h'")or die("Query error!");
+			$query = $System->queryDB("SELECT * FROM pl_works WHERE h='$work_h'", $con);
 
-			$row = mysqli_fetch_array($query);
+			$row = $System->fetch_array($query);
 			$work_name = $row['name'];
 			$group_h = $row['group_h'];
 
@@ -749,7 +743,7 @@
 			$work_h = $_GET['h'];
 			$group_h = $_GET['group'];
 
-			$query = $con->query("DELETE FROM pl_works WHERE h='$work_h'")or die("Query error!");
+			$query = $System->queryDB("DELETE FROM pl_works WHERE h='$work_h'", $con);
 
 			echo "<script>location.href='group.php?h=".$group_h."&page=index'</script>";
 
@@ -759,7 +753,7 @@
 			$h = substr( md5(microtime()), 1, 18);
 			$gh = $_GET['h'];
 
-			$query = $con->query("INSERT INTO pl_units(name,h,group_h) VALUES ('$unit','$h','$gh')")or die("Query error!");
+			$query = $System->queryDB("INSERT INTO pl_units(name,h,group_h) VALUES ('$unit','$h','$gh')", $con);
 
 			echo "<script>location.href='group.php?h=".$gh."&page=index'</script>";
 
@@ -767,7 +761,7 @@
 
 			$request_id = $_GET['request_id'];
 
-			$query = $con->query("UPDATE pl_groupuser SET status='active' WHERE id=$request_id")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_groupuser SET status='active' WHERE id=$request_id", $con);
 
 			echo "<script>location.href='index.php'</script>";
 
@@ -775,7 +769,7 @@
 
 			$h = $_GET['h'];
 
-			$query = $con->query("UPDATE pl_works SET status='visible' WHERE h='$h'")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_works SET status='visible' WHERE h='$h'", $con);
 
 			echo "<script>location.href='group.php?action=view&h=".$h."'</script>";
 
@@ -783,7 +777,7 @@
 
 			$h = $_GET['h'];
 
-			$query = $con->query("UPDATE pl_works SET status='closed' WHERE h='$h'")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_works SET status='closed' WHERE h='$h'", $con);
 
 			echo "<script>location.href='group.php?action=view&h=".$h."'</script>";
 
@@ -793,13 +787,13 @@
 			$Group = $System->get_group_by_h($gh, $con);
 
 			//USER STATUS
-			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$gh' AND user_h='$User->h'")or die("Query error!");
-			$row_status = mysqli_fetch_array($query_status);
+			$query_status = $System->queryDB("SELECT * FROM pl_groupuser WHERE group_h='$gh' AND user_h='$User->h'", $con);
+			$row_status = $System->fetch_array($query_status);
 			$status = $row_status['status'];
 
 			//Update last_time
 			$last_time = date("Y-m-d H:i:s");
-			$query = $con->query("UPDATE pl_groupuser SET last_time='$last_time' WHERE group_h='$gh' AND user_h='$User->h'")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_groupuser SET last_time='$last_time' WHERE group_h='$gh' AND user_h='$User->h'", $con);
 
 				echo '				
 					<div class="ui_full_width">
@@ -817,8 +811,8 @@
 
 			echo '<ul class="units">';
 
-			$query1 = $con->query("SELECT * FROM pl_units WHERE group_h='$gh'")or die("Query error!");
-			while ($row1 = mysqli_fetch_array($query1)) {
+			$query1 = $System->queryDB("SELECT * FROM pl_units WHERE group_h='$gh'", $con);
+			while ($row1 = $System->fetch_array($query1)) {
 				$unit_h = $row1['h'];
 				$unit_name = $row1['name'];
 
@@ -827,8 +821,8 @@
 					<ul class="works">
 				';
 
-				$query2 = $con->query("SELECT * FROM pl_works WHERE unit_h='$unit_h'")or die("Query error works!");
-				while ($row2 = mysqli_fetch_array($query2)) {					
+				$query2 = $System->queryDB("SELECT * FROM pl_works WHERE unit_h='$unit_h'", $con);
+				while ($row2 = $System->fetch_array($query2)) {					
 					$work_h = $row2['h'];
 					$work_name = $row2['name'];
 					$work_desc = $row2['description'];
@@ -868,14 +862,14 @@
 
 			$Group = $System->get_group_by_h($h, $con);
 
-			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query error!");
-			$row_status = mysqli_fetch_array($query_status);
+			$query_status = $System->queryDB("SELECT * FROM pl_groupuser WHERE user_h='$User->h'", $con);
+			$row_status = $System->fetch_array($query_status);
 			$status = $row_status['status'];
 
-			$query_address = $con->query("SELECT * FROM pl_settings WHERE property='show_address'")or die("Query error!");
-			$query_phone = $con->query("SELECT * FROM pl_settings WHERE property='show_phone'")or die("Query error!");
-			$row_address = mysqli_fetch_array($query_address);
-			$row_phone = mysqli_fetch_array($query_phone);
+			$query_address = $System->queryDB("SELECT * FROM pl_settings WHERE property='show_address'", $con);
+			$query_phone = $System->queryDB("SELECT * FROM pl_settings WHERE property='show_phone'", $con);
+			$row_address = $System->fetch_array($query_address);
+			$row_phone = $System->fetch_array($query_phone);
 
 			echo '
 			<div class="ui_full_width">
@@ -939,11 +933,11 @@
                     <th class="actions"></th>
                 </thead>
                 <tbody>';
-                $query = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$gh' AND status!='waiting'");
-				while ($row = mysqli_fetch_array($query)) {
+                $query = $System->queryDB("SELECT * FROM pl_groupuser WHERE group_h='$gh' AND status!='waiting'", $con);
+				while ($row = $System->fetch_array($query)) {
 					$user_h = $row['user_h'];
-					$query2 = $con->query("SELECT * FROM pl_users WHERE h='$user_h'");
-					$row2 = mysqli_fetch_array($query2);
+					$query2 = $System->queryDB("SELECT * FROM pl_users WHERE h='$user_h'", $con);
+					$row2 = $System->fetch_array($query2);
 
 					$name = $row2['name'];
 					$surname = $row2['surname'];
@@ -1007,8 +1001,8 @@
 
 			$Group = $System->get_group_by_h($h, $con);
 
-			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query error!");
-			$row_status = mysqli_fetch_array($query_status);
+			$query_status = $System->queryDB("SELECT * FROM pl_groupuser WHERE user_h='$User->h'", $con);
+			$row_status = $System->fetch_array($query_status);
 			$status = $row_status['status'];
 
 			if($status != "moderator") {
@@ -1030,18 +1024,18 @@
             		<div class="ui_width_sidebar right">
 			';
 
-			$query = $con->query("SELECT * FROM pl_groupuser WHERE status='waiting' AND group_h='$gh'")or die("Query error!");
-			while ($row = mysqli_fetch_array($query)) {
+			$query = $System->queryDB("SELECT * FROM pl_groupuser WHERE status='waiting' AND group_h='$gh'", $con);
+			while ($row = $System->fetch_array($query)) {
 
 				$group_h = $row['group_h'];
 				$user_h = $row['user_h'];
 				$request_id = $row['id'];
 
-				$query_group = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query error!");
-				$query_user = $con->query("SELECT * FROM pl_users WHERE h='$user_h'")or die("Query error!");
+				$query_group = $System->queryDB("SELECT * FROM pl_groups WHERE h='$group_h'", $con);
+				$query_user = $System->queryDB("SELECT * FROM pl_users WHERE h='$user_h'", $con);
 
-				$row_group = mysqli_fetch_array($query_group);
-				$row_user = mysqli_fetch_array($query_user);
+				$row_group = $System->fetch_array($query_group);
+				$row_user = $System->fetch_array($query_user);
 
 				//~User Data
 				$name = $row_user['name'];
@@ -1061,8 +1055,8 @@
 
 			$Group = $System->get_group_by_h($h, $con);
 
-			$query_status = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h' AND group_h='$Group->h'")or die("Query error!");
-			$row_status = mysqli_fetch_array($query_status);
+			$query_status = $System->queryDB("SELECT * FROM pl_groupuser WHERE user_h='$User->h' AND group_h='$Group->h'", $con);
+			$row_status = $System->fetch_array($query_status);
 			$status = $row_status['status'];
 
 			if($status != "moderator") {
@@ -1092,8 +1086,8 @@
             				<tbody>
 							';
 
-							$query = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$Group->h'")or die("Query error!");
-							while ($row = mysqli_fetch_array($query)) {
+							$query = $System->queryDB("SELECT * FROM pl_groupuser WHERE group_h='$Group->h'", $con);
+							while ($row = $System->fetch_array($queryDB)) {
 								$user_h = $row['user_h'];
 								$user_selected = $System->get_user_by_id($user_h, $con);
 								echo '

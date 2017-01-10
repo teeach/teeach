@@ -1,3 +1,8 @@
+if(typeof jQuery == "undefined") {
+	alert("Error: jQuery no está cargado, y por lo tanto, Teeach no puede funcionar correctamente");
+}
+
+
 $(document).on("ready", function() {
 
 	$('.tip').before("<i class='fa fa-question-circle tip_button'></i>");

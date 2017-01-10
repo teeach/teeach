@@ -4,12 +4,12 @@
 	session_start();
 
 	$System = new System();
-	$con = $System->conDB("../../config.json");
-	$query = $con->query("SELECT * FROM pl_settings WHERE property='index_page'")or die("Query error!");
-	$row = mysqli_fetch_array($query);
+	$con = $System->conDB();
+	$query = $System->queryDB("SELECT * FROM pl_settings WHERE property='index_page'", $con);
+	$row = $System->fetch_array($query);
 	$index_page = $row['value'];
 
-	if($index_page == 1) {
+	if($index_page == 1) { //~ If index page is "login" ...
 		if(!isset($_SESSION['h'])) {
         	header('Location: ../../index.php');
     	}
@@ -17,10 +17,10 @@
 	
 	@$User = $System->get_user_by_h($_SESSION['h'], $con);
 	
-	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+	$lang = $System->parse_lang();
 
 	if(@$_GET['action'] == "close") {
-		$query = $con->query("UPDATE pl_users SET tour=1 WHERE h='$User->h'")or die("Query error!");
+		$query = $System->queryDB("UPDATE pl_users SET tour=1 WHERE h='$User->h'", $con);
 		header('Location: index.php');
 	}
     
@@ -30,7 +30,7 @@
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
-	<title><?php echo $lang['hi'].", $User->name | Teeach"; ?></title>
+	<title><?php echo $lang['hi'].", ".$User->name." | Teeach"; ?></title>
 	<link rel="stylesheet" href="../../src/css/index.css">
 	<?php
 		$System->set_head();
@@ -43,26 +43,21 @@
 	//	die("You aren't logged in.");
 	//}
 
-	$query = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
-	$row = mysqli_fetch_array($query);
-	$centername = $row['value'];
-	$System->set_header($centername);
-	$System->set_usr_menu($User->h,$User->privilege,$lang);
+	$System->set_header($User->h, $lang);
 
 		echo "
 			<div class='index_page'>
 				<div class='index_posts'>
-					<h1>".$lang['posts']."</h1>
 			";
 				
 		$page = (int) (!isset($_GET["p"]) ? 1 : $_GET["p"]);
 		
 		$Pagination = new Pagination(5);
 		$Pagination->prepaginate($page);		
-		$query = $con->query("SELECT * FROM pl_posts ORDER BY id DESC LIMIT ".$Pagination->startpoint.", ".$Pagination->limit."");
+		$query = $System->queryDB("SELECT * FROM pl_posts ORDER BY id DESC LIMIT ".$Pagination->startpoint.", ".$Pagination->limit."", $con);
 		
 		
-		while ($row = mysqli_fetch_array($query)) {
+		while ($row = $System->fetch_array($query)) {
 
 			$title = $row['title'];
 			$body = $row['body'];
@@ -70,23 +65,23 @@
 			$author_h = $row['author'];
 			$creation_date = $row['creation_date'];
 
-			$query_setting_show_author = $con->query("SELECT * FROM pl_settings WHERE property='show_post_author'")or die("Query error!");
-			$row_setting_show_author = mysqli_fetch_array($query_setting_show_author);
-			$query_setting_show_date = $con->query("SELECT * FROM pl_settings WHERE property='show_post_date'")or die("Query error!");
-			$row_setting_show_date = mysqli_fetch_array($query_setting_show_date);
+			$query_setting_show_author = $System->queryDB("SELECT * FROM pl_settings WHERE property='show_post_author'", $con);
+			$row_setting_show_author = $System->fetch_array($query_setting_show_author);
+			$query_setting_show_date = $System->queryDB("SELECT * FROM pl_settings WHERE property='show_post_date'", $con);
+			$row_setting_show_date = $System->fetch_array($query_setting_show_date);
 
 			echo '
 				<div class="post">
-					<h2>'.$title.'</h2>
-					<h5>';
+					<h1>'.$title.'</h1>
+					<p>';
 
 			if ($row_setting_show_author['value'] == "true") {
 				
 				if($author_h == "teeach") {
 					echo $lang["writed_by"].' <a target="_blank" href="http://teeach.org">Teeach</a> ';
 				} else {
-					$query2 = $con->query("SELECT * FROM pl_users WHERE h='$author_h'")or die("Query error!");
-					$row2 = mysqli_fetch_array($query2);
+					$query2 = $System->queryDB("SELECT * FROM pl_users WHERE h='$author_h'", $con);
+					$row2 = $System->fetch_array($query2);
 
 					$author = $row2['name']." ".$row2['surname'];
 
@@ -103,11 +98,18 @@
 				echo $creation_date_format = $System->get_date_format($creation_date, $lang, $con);
 			}
 
-			echo '</h5>'.$body.'</div>';
+			echo '</p>'.$body.'<div class="postbox">';
+
+			if($User->privilege >= 3) {
+				echo '<a href="../admin/posts.php?action=edit&h='.$h.'">'.$lang["edit"].'</a> ';
+			}
+
+			$num_comments = $System->queryDB("SELECT * FROM pl_comments WHERE post_h='$h'", $con)->num_rows;
+			echo '<a href="posts.php?h='.$h.'"><i class="fa fa-comment-o" aria-hidden="true"></i>'.$num_comments.'</a></div></div>';
 
 		}		
 		
-		$items = $con->query("SELECT * FROM pl_posts")->num_rows;
+		$items = $System->queryDB("SELECT * FROM pl_posts", $con)->num_rows;
 		$Pagination->paginate($items);
 
 		echo "
@@ -125,13 +127,13 @@
 				<ul>
 					<?php
 						$userid = $User->id;
-						$query = $con->query("SELECT * FROM pl_groupuser WHERE user_h='$User->h'")or die("Query 1 Error!");
-						while ($row = mysqli_fetch_array($query)) {
+						$query = $System->queryDB("SELECT * FROM pl_groupuser WHERE user_h='$User->h'", $con);
+						while ($row = $System->fetch_array($query)) {
 							$group_h = $row['group_h'];
 							$status = $row['status'];					
 							if($status != "waiting") {
-								$query2 = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query 2 Error!");
-								$row2 = mysqli_fetch_array($query2);
+								$query2 = $System->queryDB("SELECT * FROM pl_groups WHERE h='$group_h'", $con);
+								$row2 = $System->fetch_array($query2);
 								$groupname = $row2['name'];
 								//~ $grouph = $row2['h'];
 								echo '<li><a href="group.php?h='.$group_h.'&page=index">'.$groupname.'</a></li>';
@@ -146,8 +148,8 @@
 					echo '<a href="group.php?action=create"><button>'.$lang["create"].'</button></a>';
 				}
 
-				$query = $con->query("SELECT * FROM pl_settings WHERE property='JP'")or die("Query error!");
-				$row = mysqli_fetch_array($query);
+				$query = $System->queryDB("SELECT * FROM pl_settings WHERE property='JP'", $con);
+				$row = $System->fetch_array($query);
 				$JP = $row['value'];
 
 				if($JP != "3") {
@@ -159,8 +161,8 @@
 	</div>
 	<!--<?php echo $System->set_footer(); ?>-->
 	<?php
-		$query = $con->query("SELECT * FROM pl_users WHERE h='$User->h'")or die("Query error!");
-		$row = mysqli_fetch_array($query);
+		$query = $System->queryDB("SELECT * FROM pl_users WHERE h='$User->h'", $con);
+		$row = $System->fetch_array($query);
 		if($row['tour'] == 0 && isset($_SESSION['h'])) {
 			echo '
 			<div class="horizontal_box">

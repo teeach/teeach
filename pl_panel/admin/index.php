@@ -2,8 +2,7 @@
 	include("../../core.php");
 	$System = new System();
 	$System->check_admin();
-
-	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+	$lang = $System->parse_lang();
 ?>
 
 <!DOCTYPE html>

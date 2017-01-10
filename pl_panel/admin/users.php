@@ -5,7 +5,7 @@
 	$System = new System();
 	$System->check_admin();
 
-	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+	$lang = $System->parse_lang();
 ?>
 
 <!DOCTYPE html>
@@ -83,13 +83,13 @@
 			$address = $_POST['address'];
 			$birth = $_POST['birth'];
 			$privilege = $_POST['privilege'];
-    		$h = substr( md5(microtime()), 1, 18);
+    		$h = $System->rand_str(10);
     		$password = substr( md5(microtime()), 1, 6);
     		$t_hasher = new PasswordHash(8, FALSE);
             $pass = $t_hasher->HashPassword($password);
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("INSERT INTO pl_users(username,name,surname,email,phone,address,birthdate,h,pass,privilege) VALUES ('$user','$name','$surname','$email',$phone,'$address','$birth','$h','$pass',$privilege)")or die("Error");
+    		$query = $System->queryDB("INSERT INTO pl_users(username,name,surname,email,phone,address,birthdate,h,pass,privilege) VALUES ('$user','$name','$surname','$email',$phone,'$address','$birth','$h','$pass',$privilege)", $con);
     		echo "<p>¡Perfecto la contraseña es: ".$password."</p><a href='users.php?action'>".$lang['accept']."</a>";
 
     	} elseif($action == "edit") {
@@ -97,8 +97,8 @@
     		$h = $_GET['h'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("SELECT * FROM pl_users WHERE h='$h'")or die("Query error!");
-    		$row = mysqli_fetch_array($query);
+    		$query = $System->queryDB("SELECT * FROM pl_users WHERE h='$h'", $con);
+    		$row = $System->fetch_array($query);
 
     		echo '
 				<a href="index.php"><img src="../../src/ico/back.svg" alt="Atrás" class="btn_back"></a><h2><a href="index.php">Admin</a> >> <a href="users.php?action">Usuarios</a> >> Edit</h2>
@@ -138,7 +138,7 @@
     		$privilege = $_POST['privilege'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("UPDATE pl_users SET username='$username',name='$name',surname='$surname',email='$email',phone='$phone',address='$address',birthdate='$birth',privilege=$privilege WHERE h='$h'")or die("Query error!");
+    		$query = $System->queryDB("UPDATE pl_users SET username='$username',name='$name',surname='$surname',email='$email',phone='$phone',address='$address',birthdate='$birth',privilege=$privilege WHERE h='$h'", $con);
 
     		echo "<a href='users.php?action'>".$lang['accept']."</a>";
 
@@ -147,8 +147,8 @@
     		$h = $_GET['h'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("SELECT * FROM pl_users WHERE h='$h'")or die("Query error!");
-    		$row = mysqli_fetch_array($query);
+    		$query = $System->queryDB("SELECT * FROM pl_users WHERE h='$h'", $con);
+    		$row = $System->fetch_array($query);
 
     		$privilege = $row['privilege'];
 
@@ -156,7 +156,7 @@
     			die("<h1>"._('What are you doing!?')."</h1><p>"._('You cannot delete the general admin because the database will be destroyed!')."</p><a href='users.php?action'>".$lang['accept']."</a>");
     		}
 
-    		$query = $con->query("DELETE FROM pl_users WHERE h='$h'")or die("Query error!");
+    		$query = $System->queryDB("DELETE FROM pl_users WHERE h='$h'", $con);
 
     		echo "<a href='users.php?action'>Aceptar</a>";
 
@@ -194,8 +194,8 @@
                     <tbody>';
                                     
 				$con = $System->conDB("../../config.json");
-				$query = $con->query("SELECT * FROM pl_users");
-				while($row = mysqli_fetch_array($query)) {
+				$query = $System->queryDB("SELECT * FROM pl_users", $con);
+				while($row = $System->fetch_array($query)) {
 					//Comprobar si es administrador
 					if ($row['privilege'] >= 3) {
 						$nombre = "<b><span style='color:#a00'>".$row['name']."</span></b>";

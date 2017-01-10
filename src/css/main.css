@@ -123,18 +123,19 @@ td {
 ===============================================================*/
 
 *::-moz-selection{
-   background:#c96;
+   background:#C96;
    color:#320;
 }
 
 *::selection {
-    background-color: #c96;
+    background-color: #C96;
     color:#320;
 }
 
 body {
     background: #EEE;    
-    font-family: 'RobotoLight', sans-serif;
+    font-family: 'RobotoRegular', sans-serif;
+    font-size: 0.9rem;
 }
 
 * {
@@ -142,8 +143,9 @@ body {
 }
 
 a {
-    color: #C96;
+    color: #A74;
     transition: all 0.3s ease;
+    font-size: 0.9rem;
 }
 
 a:hover {
@@ -151,9 +153,13 @@ a:hover {
     text-decoration: underline;
 }
 
+p {
+    font-size: 0.9rem;
+}
+
 h1 {
-    font-size: 4rem;
-    font-family: 'RobotoThin', sans-serif;
+    font-size: 2.5rem;
+    font-family: 'RobotoLight', sans-serif;
     color: #320;
 }
 
@@ -203,7 +209,7 @@ header a:hover {
     margin-top: 15px;
 }
 .main_title h1 {
-    color: #332200;
+    color: #320;
     font-size: 24px;
     font-family: 'RobotoBold', sans-serif;
 }
@@ -221,15 +227,15 @@ header a:hover {
 }
 
 .main_menu li a {
-    color: #332200;
+    color: #320;
     display: inline-block;
-    font-size: 16px;
+    font-size: 0.9rem;
     padding: 22px 15px;
 }
 
 
 .main_menu li:hover a {
-    background: #f5f5f5;       
+    background: #F5F5F5;       
 }
 
 .main_menu li:hover > ul {
@@ -366,13 +372,13 @@ header a:hover {
 }
 
 #admin_menu a {
-    border: 1px solid #aaa;
+    border: 1px solid #AAA;
     padding: 20px;
     transition: all 0.3s ease;
 }
 
 #admin_menu a:hover {
-    background-color: #fff;
+    background-color: #FFF;
 }
 
 #admin_menu img {
@@ -408,7 +414,7 @@ header a:hover {
 }
 
 .admin_hmenu {
-    background-color: #ddd;
+    background-color: #DDD;
     width: 100%;
     height: 48px;
     float: left;
@@ -434,7 +440,7 @@ header a:hover {
 
 .submenu {
     display: inline-block;
-    background-color: #ccc;
+    background-color: #CCC;
     width: 100%;
 }
 
@@ -447,7 +453,7 @@ header a:hover {
 
 .submenu a:hover {
     color: #000;
-    background-color: #aaa;
+    background-color: #AAA;
 }
 
 .submenu li {
@@ -589,7 +595,7 @@ color: #000;
 }
 
 .ui_table .fa:hover {
-    background-color: #ccc;
+    background-color: #CCC;
 }
 
 /* Ui Form
@@ -654,7 +660,7 @@ TRANSITIONS
 .profile_table {
     padding: 10px;
     margin: 10px;
-    border: 1px solid #aaa;
+    border: 1px solid #AAA;
 }
 
 .profile_table td {
@@ -664,9 +670,9 @@ TRANSITIONS
 .main_profile_photo {
     width: 100px;
     height: 100px;
-    background-color: #fff;
-    border: 1px solid #aaa;
-    box-shadow: 1px 1px 5px #aaa;
+    background-color: #FFF;
+    border: 1px solid #AAA;
+    box-shadow: 1px 1px 5px #AAA;
     border-radius: 100%;
 }
 
@@ -678,7 +684,7 @@ TRANSITIONS
 /* Container Login
 =========================================================== */
 .container {
-    background: #d1d1d1;
+    background: #D1D1D1;
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.30);
     padding: 50px;
     /*width: 392px;*/
@@ -823,7 +829,7 @@ TRANSITIONS
    =========================================================== */
 
 .notification {
-    background: #d1d1d1;
+    background: #D1D1D1;
     border-left: 4px solid #320;
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.30);
     color: #320;
@@ -838,7 +844,7 @@ TRANSITIONS
 
 .unit {
     padding: 20px 25px;
-    background-color: #ccc;
+    background-color: #CCC;
     color: #320;
     font-size: 1.5rem;
     font-family: 'RobotoBold', sans-serif;
@@ -848,18 +854,18 @@ TRANSITIONS
     cursor: pointer;
     padding: 20px 20px;
     border: 2px dashed #320;
-    background-color: #fff;
+    background-color: #FFF;
     font-size: 1.5rem;
     font-family: 'RobotoBold', sans-serif;
     transition: all 0.2s ease;
 }
 
 .new_unit:hover {
-    background-color: #eee;
+    background-color: #EEE;
 }
 
 .works {
-    border: 10px solid #ccc;
+    border: 10px solid #CCC;
     margin-bottom: 20px;
 }
 
@@ -872,7 +878,7 @@ TRANSITIONS
 }
 
 .new_work {
-    border: 1px dashed #bbb;
+    border: 1px dashed #BBB;
 }
 
 .group_button i {
@@ -893,37 +899,39 @@ TRANSITIONS
 .add_attachments {
     cursor: pointer;
     padding: 10px 30px;
-    background-color: #fff;
+    background-color: #FFF;
     border: 1px solid #320;
     border-radius: 2px;
     transition: all 0.2s ease;
 }
 
 .add_attachments:hover {
-    background-color: #eee;
+    background-color: #EEE;
 }
 
 .del_attachment {
     padding: 8px;
     color: #320;
     cursor: pointer;
+    border-radius: 100%;
+    transition: all 0.2s ease;
 }
 
 .del_attachment:hover {
-    background-color: #ccc;
+    background-color: #DDD;
 }
 
 .answer {
     display: inline-block;
-    border: 1px solid #ccc;
-    background-color: #fff;
+    border: 1px solid #CCC;
+    background-color: #FFF;
     padding: 15px;
-    box-shadow: 0 0 5px #ddd;
+    box-shadow: 0 0 5px #DDD;
     transition: all 0.2s ease;
 }
 
 .answer:hover {
-    border: 1px solid #c96;
+    border: 1px solid #C96;
 }
 
 .answer td {
@@ -978,7 +986,7 @@ TRANSITIONS
     display: none;
     position: fixed;
     background-color: #fff;
-    border: 3px solid #c96;
+    border: 3px solid #C96;
     padding: 15px;
     margin-left: -100px;
     text-align: center;
@@ -1044,21 +1052,21 @@ input {
 }
 
 input[type=submit],input[type=button],button {
-    background-color: #320;
-    color: #fff;
+    background-color: #C96;
+    color: #FFF;
     border: 0;
     outline: 0;
     border-radius: 5px;
-    padding: 10px 30px;
+    padding: 8px 20px;
     margin: 10px;
     cursor: pointer;
-    font-family: 'RobotoLight', sans-serif;
-    font-size: 1rem;
+    font-family: 'RobotoRegular', sans-serif;
+    font-size: 0.9rem;
     transition: all 0.2s ease;
 }
 
 input[type=submit]:hover,input[type=button]:hover,button:hover {
-    background-color: #c96;
+    background-color: #A74;
     box-shadow: none;
 }
 
@@ -1141,8 +1149,8 @@ UI ELEMENTS
 .ui_attachment {
     margin: 10px 0;
     padding: 10px;
-    background-color: #fff;
-    border: 1px solid #aaa;
+    background-color: #FFF;
+    border: 1px solid #AAA;
 }
 
 /*====================================
@@ -1153,12 +1161,12 @@ UI ELEMENTS
     max-width: 450px;
     display: none;
     position: fixed;
-    background-color: #fff;
-    border: 4px solid #c96;
+    background-color: #FFF;
+    border: 4px solid #C96;
     border-radius: 5px;
     padding: 10px;
     font-size: 0.9rem;
-    box-shadow: 1px 1px 5px #aaa;
+    box-shadow: 0 2px 10px rgba(0,0,0, .25);
     opacity: 0.9;
     line-height: 120%;
 }
@@ -1179,12 +1187,12 @@ UI ELEMENTS
 }
 
 .tip_button:hover {
-    color: #c96;
+    color: #C96;
 }
 
 .tip_close {
     cursor: pointer;
-    color: #c96;
+    color: #C96;
     transition: all 0.2s ease;
 }
 
@@ -1200,9 +1208,9 @@ UI ELEMENTS
     top: 200px;
     width: 100%;
     position: fixed;
-    box-shadow: 0 0 5px #c96;
+    box-shadow: 0 0 5px #C96;
     z-index: 99;
-    background-color: #fff;
+    background-color: #FFF;
     text-align: center;
     padding: 50px;
 }
@@ -1223,8 +1231,8 @@ UI ELEMENTS
     width: 1.6em; 
     text-align: center;
     font-size: 5rem;
-    background-color: #c96;
-    color: #fff;
+    background-color: #C96;
+    color: #FFF;
     margin-bottom: 20px;
 }
 
@@ -1243,18 +1251,20 @@ UI ELEMENTS
     font-family: 'RobotoRegular';
     font-size: 0.9rem;
     color: #320;
-    background: #fff;
-    border: 2px solid #ccc;
+    background: #FFF;
+    border: 2px solid #CCC;
     margin: 10px 10px 0 0;
 }
 
 .searchbox_usr i {
     padding: 10px;
     cursor: pointer;
+    border-radius: 100%;
+    transition: all 0.2s ease;
 }
 
 .searchbox_usr i:hover {
-    background-color: #ddd;
+    background-color: #EEE;
 }
 
 .searchbox_usr img {
@@ -1263,6 +1273,6 @@ UI ELEMENTS
 }
 /*
 ==================
-(c)2015 Teeach
+(c)2015-2017 Teeach
 ==================
 */

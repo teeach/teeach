@@ -28,18 +28,24 @@
 	<meta charset="UTF-8">
 	<title>Install | Teeach</title>
 	<link rel="stylesheet" href="src/css/main.css">
-	<?php $System->set_head(); ?>
-	<script src='src/js/main.js'></script>
+	<link rel="stylesheet" href="src/css/install.css">
+	<script src='src/js/jquery/jquery-2.2.4.min.js'></script>
+    <script src='src/js/jquery-ui/jquery-ui.min.js'></script>
+    <link rel='stylesheet' href='src/js/jquery-ui/jquery-ui.min.css'>
+    <link rel='stylesheet' href='src/font-awesome/css/font-awesome.min.css'>
+    <script src='src/js/main.js'></script>
 	<script src='src/js/install.js'></script>
 </head>
 <body>
 	<?php
 
 		echo '
+			
+
 			<div class="installation">
 				<div class="installation_header">
 					<h1>te<span style="color:#c96">e</span>ach</h1>
-					<h3>Installation</h3>
+					<h3>'.$lang["installation"].'</h3>
 				</div>
 		';
 
@@ -57,8 +63,20 @@
 			} else {
 				$step = 1;
 			}
-			
-			if ($step == "1") {
+
+			if ($step == "0") {
+
+				echo '
+					<center>
+						<div class="installation_box">
+							<h1>'.$lang["error"].'</h1>
+							<p>'.$lang["install_jquery_error"].'</p>
+							<a href="install.php"><button>'.$lang["retry"].'</button></a>
+						</div>
+					</center>
+				';
+
+			} else if ($step == "1") { // --- Step 1: Language
 				
 				echo '
 					<center>
@@ -94,12 +112,11 @@
 						</div>
 					</center>
 				';
-			} elseif($step == "2") {
+			} elseif($step == "2") { // --- Step 2: Terms & Conditions
 				echo '
 					<center>
 						<div class="installation_box">
 							<h1>'.$lang["terms"].'</h1>
-					
 								'.$lang["term1"].'<br>
 								'.$lang["term2"].'<br>
 								'.$lang["term3"].'<br>
@@ -111,7 +128,7 @@
 						</div>
 					</center>
 				';
-			} elseif($step == "3") {
+			} elseif($step == "3") { // --- Step 3: Database
 				echo '
 					<div class="installation_box">
 						<h1>'.$lang["database"].'</h1>				
@@ -122,7 +139,7 @@
 
 								<tr>									
 									<td><label for="type_db">'.$lang["database_type"].': </label></td>
-									<td><select name="type_db"><option value="1">MySQL</option></select></td>
+									<td><select name="type_db"><option value="mysql">MySQL</option><option value="postgresql">PostgreSQL</option></select></td>
 								</tr>
 
 								<tr>
@@ -155,20 +172,23 @@
 
 					<script>getUrl();</script>
 				';
-			} elseif($step == "4") {
+			} elseif($step == "4") { // --- Step 4: Check database & Initial Settings
+				
+				// Firstly, check database connection.
 				$url = $_POST['url'];
 				$server_db = $_POST['server_db'];
 				$name_db = $_POST['name_db'];
 				$user_db = $_POST['user_db'];
 				$pass_db = $_POST['pass_db'];
+				$type_db = $_POST['type_db'];
 
 				$fp = fopen("config.json", "w+");
-				$array = array('dbserver' => $server_db, 'database' => $name_db, 'dbuser' => $user_db, 'dbpass' => $pass_db, 'url' => $url);
+				$array = array('dbserver' => $server_db, 'database' => $name_db, 'dbuser' => $user_db, 'dbpass' => $pass_db, 'type' => $type_db, 'url' => $url);
 				$json = json_encode($array);
 				$wrt = fputs($fp, $json);
 				fclose($fp);
 
-				//Crear tablas BD
+				// Make database tables
 
 				$sql = file_get_contents("tmp/db.sql");
 				$tokens = preg_split("/(--.*\s+|\s+|\/\*.*\*\/)/", $sql, null, PREG_SPLIT_NO_EMPTY);
@@ -206,6 +226,7 @@
 					$query .= "{$tokens[$i]} ";
 				}
 
+				// Now, print initial settings form
 				echo '
 					<div class="installation_box">
 						<h1>'.$lang["initial_settings"].'</h1><br/>
@@ -218,7 +239,7 @@
 								<tr><td><h3><b style="font-weight:bold">'.$lang["your_account"].'</b></h3></td><td></td></tr>
 								<tr><td><label for="username">'.$lang["username"].': </label></td><td><input type="text" name="username"></td></tr>
 								<tr><td><label for="email">'.$lang["email"].': </label></td><td><input type="text" name="email"></td></tr>
-								<tr><td><label for="pass">'.$lang["password"].': </label></td><td><input type="password" name="pass"></td></tr>
+								<tr><td><label for="pass">'.$lang["password"].': </label></td><td><input type="password" name="pass" id="pass"></td><td><div class="securepass"></div></td></tr>
 								<tr><td><label for="rpass">'.$lang["repeat_password"].': </label></td><td><input type="password" name="rpass"></td></tr>
 								<tr><td></td><td><input type="button" value="'.$lang["create"].'" id="initial_settings_button"></td></tr>
 							</table>
@@ -229,8 +250,8 @@
 						</form>
 					</div>
 				';
-			} elseif($step == "5") {
-				//Datos del admin
+			} elseif($step == "5") { // --- Step 5: Write initial settings, set settings table and finish
+				// Administrator data
 				$username = $_POST['username'];
 				$email = $_POST['email'];
 				$pass = $_POST['pass'];
@@ -250,23 +271,23 @@
 				$con = $System->conDB("config.json");
 				$query = $con->query("INSERT INTO pl_users(username,email,pass,privilege,h,creation_date,tour) VALUES('$username','$email','$pass_hash',4,'$h','$date',0)")or die(mysql_error());
 
-				//Post de prueba
-
+				// Test post
 				$testpost_title = $lang["testpost_title"];
 				$testpost_body = $lang["testpost_body"];
 				$testpost_h = substr( md5(microtime()), 1, 18);
 
 				$query = $con->query("INSERT INTO pl_posts(title,body,h,author) VALUES('$testpost_title','$testpost_body','$testpost_h','teeach')")or die("Query error!");
 
-				//Datos del centro
+				// Center data
 				$centername = $_POST['centername'];
 				$logo = $_POST['logo'];
 				$accesspass = $_POST['accesspass'];
 				$lang_val = $_SESSION["lang"];
 
-				//SET Settings Table
-				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES ('centername','$centername'),('logo','$logo'),('accesspass','$accesspass'),('lang','$lang_val'),('post_per_page','5'),('show_post_author','true'),('show_post_date','true'),('show_last_time','1'),('show_address','2'),('show_phone','2'),('show_groups','1'),('enable_profile_photo','true'),('JP','2'),('allow_create_categories','true'),('date_format','2'),('time_format','24'),('filter_obscene_language','0'),('login_method','1'),('smtp_server',''),('email_username',''),('email_password',''),('email_address',''),('smtp_port','')('email_name','$centername'),('email_charset','UTF-8'),('require_ssl','false'),('email_timeout','60')")or die("Query error!");
+				// SET Settings Table
+				$query = $con->query("INSERT INTO pl_settings(property,value) VALUES ('centername','$centername'),('logo','$logo'),('accesspass','$accesspass'),('index_page','0'),('lang','$lang_val'),('post_per_page','5'),('show_post_author','true'),('show_post_date','true'),('show_last_time','1'),('show_address','2'),('show_phone','2'),('show_groups','1'),('enable_profile_photo','true'),('JP','2'),('allow_create_categories','true'),('date_format','2'),('time_format','24'),('filter_obscene_language','0'),('login_method','1'),('smtp_server',''),('email_username',''),('email_password',''),('email_address',''),('smtp_port',''),('email_name','$centername'),('email_charset',''),('require_ssl','false'),('email_timeout','60')")or die("Error: Teeach cannot create basics settings.");
 
+				// And print the final message
 				echo '
 					<center>
 						<div class="installation_box">
@@ -281,10 +302,83 @@
 
 		echo '
 				<div class="installation_footer">
-					<p>©2016 Teeach. A open-source project</p>
+					<p>©2016 Teeach. '.$lang["open_source_project"].'</p>
 				</div>
 			</div>
 		';
+
+
+		echo '
+			<script>
+				//-- Check Security
+				$("#pass").on("keyup", function() {
+
+				var points = 0;
+				var pass = document.initial_settings.pass.value;
+
+				if (pass.length >= 6) {
+					points += 10;
+				}
+
+				if (pass.length >= 8) {
+					points += 10;
+				}
+
+				if (pass.length >= 10) {
+					points += 10;
+				}
+
+				if (pass.length >= 12) {
+					points += 15;
+				}
+
+				var numbers = "0123456789";
+				for (i=0; i<pass.length; i++) {
+					if (numbers.indexOf(pass.charAt(i), 0) != -1) {
+						points += 25;
+					}
+				}
+
+				var mayus = "ABCDEFGHYJKLMNÑOPQRSTUVWXYZ";
+				var minus = "abcdefghyjklmnñopqrstuvwxyz";
+				var bMayus = 0;
+				var bMinus = 0;
+				for (i=0; i<pass.length; i++) {
+					if (mayus.indexOf(pass.charAt(i), 0) !=-1) {
+						bMayus++;
+					}
+				}
+				for (i=0; i<pass.length; i++) {
+					if (minus.indexOf(pass.charAt(i), 0) !=-1) {
+						bMinus++;
+					}
+				}
+				if (bMayus != 0 && bMinus != 0) {
+					points += 30;
+				}
+
+				// Point the password
+				if (pass.length < 6) {
+					points = 0;
+				}
+				if (points < 20) {
+					$(".securepass").html("<span class=\'red\'>'.$lang["very_weak"].'</span>");
+				} else if (points >= 20 && points < 50) {
+					$(".securepass").html("<span class=\'orange\'>'.$lang["weak"].'</span>");
+				} else if (points >= 50 && points < 75) {
+					$(".securepass").html("<span class=\'yellow\'>'.$lang["middle"].'</span>");
+				} else if (points >= 75 && points < 100) {
+					$(".securepass").html("<span class=\'green\'>'.$lang["strong"].'</span>");
+				} else if (points >= 100) {
+					$(".securepass").html("<span class=\'stronggreen\'>'.$lang["very_strong"].'</span>");
+				}
+
+			});
+			</script>
+
+		';
+
+
 	?>
 </body>
 </html>

@@ -1,0 +1,15 @@
+.comment b {
+	font-weight: bold;
+	font-size: 0.8rem;
+}
+
+.comment td, .new_comment td {
+	vertical-align: middle;
+}
+
+.comment img, .new_comment img {
+	width: 48px;
+	height: 48px;
+	border-radius: 100%;
+	background-color: #FFF;
+}

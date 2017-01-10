@@ -1,3 +1,4 @@
+
  $(document).ready(function() {
      $('.ui_table .select_all').click(function() {
          if(this.checked) {

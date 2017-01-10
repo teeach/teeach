@@ -2,9 +2,8 @@
 	include("../../core.php");
 	$System = new System;
 	
-	$con = $System->conDB("../../config.json");
-
-	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+	$con = $System->conDB();
+	$lang = $System->parse_lang();
 ?>
 
 <!DOCTYPE html>
@@ -25,8 +24,8 @@
 		$rpassword = $_POST['rpassword'];
 		@$accesspass_form = $_POST['accesspass'];
 
-		$query = $con->query("SELECT * FROM pl_settings WHERE property='accesspass'")or die("Query error!");
-		$row = mysqli_fetch_array($query);
+		$query = $System->queryDB("SELECT * FROM pl_settings WHERE property='accesspass'", $con);
+		$row = $System->fetch_array($query);
 		$accesspass = $row['value'];
 
 		if ($password != $rpassword) {
@@ -39,15 +38,15 @@
 
 		require '../../PasswordHash.php';
 
-		$h = substr( md5(microtime()), 1, 18);
+		$h = $System->rand_str(10);
     	$t_hasher = new PasswordHash(8, FALSE);
         $pass = $t_hasher->HashPassword($password);
         $date = date("Y-m-d H:i:s");
 
-		$query = $con->query("INSERT INTO pl_users(username,email,pass,h,privilege,creation_date) VALUES('$username','$email','$pass','$h',1,'$date')")or die("Query error!");
+		$query = $System->queryDB("INSERT INTO pl_users(username,email,pass,h,privilege,creation_date) VALUES('$username','$email','$pass','$h',1,'$date')", $con);
 
-		$query2 = $con->query("SELECT * FROM pl_settings WHERE property='centername'")or die("Query error!");
-		$row2 = mysqli_fetch_array($query2);
+		$query2 = $System->queryDB("SELECT * FROM pl_settings WHERE property='centername'", $con);
+		$row2 = $System->fetch_array($query2);
 		$centername = $row2['value'];
 
 		echo '
@@ -57,8 +56,8 @@
 		';
 
 	} else {
-		$query = $con->query("SELECT * FROM pl_settings WHERE property='accesspass'")or die("Query error!");
-		$row = mysqli_fetch_array($query);
+		$query = $System->queryDB("SELECT * FROM pl_settings WHERE property='accesspass'", $con);
+		$row = $System->fetch_array($query);
 		$accesspass = $row['value'];
 
 		echo '

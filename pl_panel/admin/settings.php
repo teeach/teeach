@@ -4,8 +4,8 @@
 
 	$System = new System;
     $System->check_admin();
-    $con = $System->conDB("../../config.json");
-    $lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+    $con = $System->conDB();
+    $lang = $System->parse_lang();
     
 ?>
 
@@ -39,6 +39,7 @@
 			$centername = $_POST['centername'];
 			$logo = $_POST['logo'];
 			$accesspass = $_POST['accesspass'];
+            $default_main_page = $_POST['default_main_page'];
 			$lang_val = $_POST['lang'];
             $date_format = $_POST['date_format'];
             $time_format = $_POST['time_format'];
@@ -107,111 +108,116 @@
             }
 
             //SET Centername (string) ~ The name of the center
-			$query = $con->query("UPDATE pl_settings SET value='$centername' WHERE property='centername'")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_settings SET value='$centername' WHERE property='centername'", $con);
 
             //SET Logo (string) ~ The image that represents the center
-			$query = $con->query("UPDATE pl_settings SET value='$logo' WHERE property='logo'")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_settings SET value='$logo' WHERE property='logo'", $con);
 
             //SET Accesspass (string) ~ The access password
-			$query = $con->query("UPDATE pl_settings SET value='$accesspass' WHERE property='accesspass'")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_settings SET value='$accesspass' WHERE property='accesspass'", $con);
+
+            //SET Index Page (integer) ~ Default main page
+            //       0 => Home page (posts)
+            //       1 => Login page
+            $query = $System->queryDB("UPDATE pl_settings SET value='$default_main_page' WHERE property='index_page'", $con);
 
             //SET Language (string) ~ The default language
-            $query = $con->query("UPDATE pl_settings SET value='$lang_val' WHERE property='lang'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$lang_val' WHERE property='lang'", $con);
 
             //SET Date Format (integer) ~ The date format
             //       1 => MM/DD/YYYY
             //       2 => DD/MM/YYYY
             //       3 => DD Month YYYY
-            $query = $con->query("UPDATE pl_settings SET value='$date_format' WHERE property='date_format'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$date_format' WHERE property='date_format'", $con);
 
             //SET Time Format (integer) ~ The time format (12h or 24h)
             //       12 => 12h
             //       24 => 24h
-            $query = $con->query("UPDATE pl_settings SET value='$time_format' WHERE property='time_format'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$time_format' WHERE property='time_format'", $con);
 
             //SET Filter Obscene Language (boolean) ~ Filter Obscene Language
-            $query = $con->query("UPDATE pl_settings SET value='$filter_obscene_language' WHERE property='filter_obscene_language'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$filter_obscene_language' WHERE property='filter_obscene_language'", $con);
 
             //SET Post per page (integer) ~ The number of pages that fit on one page
-            $query = $con->query("UPDATE pl_settings SET value='$post_per_page' WHERE property='post_per_page'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$post_per_page' WHERE property='post_per_page'", $con);
 
             //SET Allow post comments (boolean) ~ Allow post comments (\===IN DEVELOPMENT===/)
             //$query = $con->query("UPDATE pl_settings SET value='$allow_post_comments' WHERE property='allow_post_comments'")or die("Query error!");
 
             //SET Show post author (boolean) ~ Show post author
-            $query = $con->query("UPDATE pl_settings SET value='$show_post_author' WHERE property='show_post_author'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$show_post_author' WHERE property='show_post_author'", $con);
 
             //SET Show post date (boolean) ~ Show post date
-            $query = $con->query("UPDATE pl_settings SET value='$show_post_date' WHERE property='show_post_date'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$show_post_date' WHERE property='show_post_date'", $con);
 
             //SET Show last time (integer) ~ Show last time
             //       1 => All
             //       2 => Only teachers
             //       3 => Only administrators
             //       4 => Nobody
-            $query = $con->query("UPDATE pl_settings SET value='$show_last_time' WHERE property='show_last_time'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$show_last_time' WHERE property='show_last_time'", $con);
 
             //SET Show address (integer) ~ Show address
             //       1 => All
             //       2 => Only teachers
             //       3 => Only administrators
             //       4 => Nobody
-            $query = $con->query("UPDATE pl_settings SET value='$show_address' WHERE property='show_address'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$show_address' WHERE property='show_address'", $con);
 
             //SET Show phone (integer) ~ Show phone
             //       1 => All
             //       2 => Only teachers
             //       3 => Only administrators
             //       4 => Nobody
-            $query = $con->query("UPDATE pl_settings SET value='$show_phone' WHERE property='show_phone'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$show_phone' WHERE property='show_phone'", $con);
 
             //SET Show Groups (boolean) ~ If it's activated, anyone can view the users groups in his profile
-			$query = $con->query("UPDATE pl_settings SET value='$show_groups' WHERE property='show_groups'")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_settings SET value='$show_groups' WHERE property='show_groups'", $con);
 
             //SET Enable profile photo (boolean)
-            $query = $con->query("UPDATE pl_settings SET value='$enable_profile_photo' WHERE property='enable_profile_photo'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$enable_profile_photo' WHERE property='enable_profile_photo'", $con);
 
             //SET Show phone (integer) ~ Show phone
             //       1 => All
             //       2 => Only teachers
             //       3 => Only administrators
-            $query = $con->query("UPDATE pl_settings SET value='$login_method' WHERE property='login_method'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$login_method' WHERE property='login_method'", $con);
 
             //SET Login method (integer) ~ The method for log in.
             //       1 => Email or username
             //       2 => Only email
             //       3 => Only username
-            $query = $con->query("UPDATE pl_settings SET value=$JP WHERE property='JP'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value=$JP WHERE property='JP'", $con);
 
             //SET Allow create categories (boolean) ~ Anyone can create new categories
-            $query = $con->query("UPDATE pl_settings SET value='$allow_create_categories' WHERE property='allow_create_categories'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$allow_create_categories' WHERE property='allow_create_categories'", $con);
 		
             //SET SMTP server (string) ~ SMTP server for email
-            $query = $con->query("UPDATE pl_settings SET value='$smtp_server' WHERE property='smtp_server'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$smtp_server' WHERE property='smtp_server'", $con);
 
             //SET Email username (string)
-            $query = $con->query("UPDATE pl_settings SET value='$email_username' WHERE property='email_username'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$email_username' WHERE property='email_username'", $con);
 
             //SET Email password (string)
-            $query = $con->query("UPDATE pl_settings SET value='$email_password' WHERE property='email_password'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$email_password' WHERE property='email_password'", $con);
 
             //SET Email address (string)
-            $query = $con->query("UPDATE pl_settings SET value='$email_address' WHERE property='email_address'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$email_address' WHERE property='email_address'", $con);
 
             //SET SMTP port (integer)
-            $query = $con->query("UPDATE pl_settings SET value='$smtp_port' WHERE property='smtp_port'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$smtp_port' WHERE property='smtp_port'", $con);
 
             //SET Email name (string) ~ Email from name
-            $query = $con->query("UPDATE pl_settings SET value='$email_name' WHERE property='email_name'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$email_name' WHERE property='email_name'", $con);
 
             //SET Email charset (string)
-            $query = $con->query("UPDATE pl_settings SET value='$email_charset' WHERE property='email_charset'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$email_charset' WHERE property='email_charset'", $con);
 
             //SET Require SSL (boolean) ~ Require SSL?
-            $query = $con->query("UPDATE pl_settings SET value='$require_ssl' WHERE property='require_ssl'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$require_ssl' WHERE property='require_ssl'", $con);
 
             //SET Timeout (integer) ~ On seconds
-            $query = $con->query("UPDATE pl_settings SET value='$email_timeout' WHERE property='email_timeout'")or die("Query error!");
+            $query = $System->queryDB("UPDATE pl_settings SET value='$email_timeout' WHERE property='email_timeout'", $con);
 
 			if($_FILES["up_lang"]["size"] != 0) {
 				$target_dir = "../../src/lang/";
@@ -252,68 +258,71 @@
 
 		} else {
 			
-			//---Queries
-			$query_centername = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
-			$query_logo = $con->query("SELECT * FROM pl_settings WHERE property='logo'");
-			$query_accesspass = $con->query("SELECT * FROM pl_settings WHERE property='accesspass'");
-            $query_lang = $con->query("SELECT * FROM pl_settings WHERE property='lang'");
-            $query_date_format = $con->query("SELECT * FROM pl_settings WHERE property='date_format'");
-            $query_time_format = $con->query("SELECT * FROM pl_settings WHERE property='time_format'");
-            $query_filter_obscene_language = $con->query("SELECT * FROM pl_settings WHERE property='filter_obscene_language'");
-            $query_post_per_page = $con->query("SELECT * FROM pl_settings WHERE property='post_per_page'");
-            $query_show_post_author = $con->query("SELECT * FROM pl_settings WHERE property='show_post_author'");
-            $query_show_post_date = $con->query("SELECT * FROM pl_settings WHERE property='show_post_date'");
-            $query_show_last_time = $con->query("SELECT * FROM pl_settings WHERE property='show_last_time'");
-            $query_show_address = $con->query("SELECT * FROM pl_settings WHERE property='show_address'");
-            $query_show_phone = $con->query("SELECT * FROM pl_settings WHERE property='show_phone'");
-			$query_show_groups = $con->query("SELECT * FROM pl_settings WHERE property='show_groups'");
-            $query_enable_profile_photo = $con->query("SELECT * FROM pl_settings WHERE property='enable_profile_photo'");
-            $query_login_method = $con->query("SELECT * FROM pl_settings WHERE property='login_method'");
-            $query_JP = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
-            $query_allow_create_categories = $con->query("SELECT * FROM pl_settings WHERE property='allow_create_categories'");
-            $query_smtp_server = $con->query("SELECT * FROM pl_settings WHERE property='smtp_server'");
-            $query_email_username = $con->query("SELECT * FROM pl_settings WHERE property='email_username'");
-            $query_email_password = $con->query("SELECT * FROM pl_settings WHERE property='email_password'");
-            $query_email_address = $con->query("SELECT * FROM pl_settings WHERE property='email_address'");
-            $query_smtp_port = $con->query("SELECT * FROM pl_settings WHERE property='smtp_port'");
-            $query_email_name = $con->query("SELECT * FROM pl_settings WHERE property='email_name'");
-            $query_email_charset = $con->query("SELECT * FROM pl_settings WHERE property='email_charset'");
-            $query_require_ssl = $con->query("SELECT * FROM pl_settings WHERE property='require_ssl'");
-            $query_email_timeout = $con->query("SELECT * FROM pl_settings WHERE property='email_timeout'");
+			//---  Queries
+			$query_centername = $System->queryDB("SELECT * FROM pl_settings WHERE property='centername'", $con);
+			$query_logo = $System->queryDB("SELECT * FROM pl_settings WHERE property='logo'", $con);
+			$query_accesspass = $System->queryDB("SELECT * FROM pl_settings WHERE property='accesspass'", $con);
+            $query_default_main_page = $System->queryDB("SELECT * FROM pl_settings WHERE property='index_page'", $con);
+            $query_lang = $System->queryDB("SELECT * FROM pl_settings WHERE property='lang'", $con);
+            $query_date_format = $System->queryDB("SELECT * FROM pl_settings WHERE property='date_format'", $con);
+            $query_time_format = $System->queryDB("SELECT * FROM pl_settings WHERE property='time_format'", $con);
+            $query_filter_obscene_language = $System->queryDB("SELECT * FROM pl_settings WHERE property='filter_obscene_language'", $con);
+            $query_post_per_page = $System->queryDB("SELECT * FROM pl_settings WHERE property='post_per_page'", $con);
+            $query_show_post_author = $System->queryDB("SELECT * FROM pl_settings WHERE property='show_post_author'", $con);
+            $query_show_post_date = $System->queryDB("SELECT * FROM pl_settings WHERE property='show_post_date'", $con);
+            $query_show_last_time = $System->queryDB("SELECT * FROM pl_settings WHERE property='show_last_time'", $con);
+            $query_show_address = $System->queryDB("SELECT * FROM pl_settings WHERE property='show_address'", $con);
+            $query_show_phone = $System->queryDB("SELECT * FROM pl_settings WHERE property='show_phone'", $con);
+			$query_show_groups = $System->queryDB("SELECT * FROM pl_settings WHERE property='show_groups'", $con);
+            $query_enable_profile_photo = $System->queryDB("SELECT * FROM pl_settings WHERE property='enable_profile_photo'", $con);
+            $query_login_method = $System->queryDB("SELECT * FROM pl_settings WHERE property='login_method'", $con);
+            $query_JP = $System->queryDB("SELECT * FROM pl_settings WHERE property='JP'", $con);
+            $query_allow_create_categories = $System->queryDB("SELECT * FROM pl_settings WHERE property='allow_create_categories'", $con);
+            $query_smtp_server = $System->queryDB("SELECT * FROM pl_settings WHERE property='smtp_server'", $con);
+            $query_email_username = $System->queryDB("SELECT * FROM pl_settings WHERE property='email_username'", $con);
+            $query_email_password = $System->queryDB("SELECT * FROM pl_settings WHERE property='email_password'", $con);
+            $query_email_address = $System->queryDB("SELECT * FROM pl_settings WHERE property='email_address'", $con);
+            $query_smtp_port = $System->queryDB("SELECT * FROM pl_settings WHERE property='smtp_port'", $con);
+            $query_email_name = $System->queryDB("SELECT * FROM pl_settings WHERE property='email_name'", $con);
+            $query_email_charset = $System->queryDB("SELECT * FROM pl_settings WHERE property='email_charset'", $con);
+            $query_require_ssl = $System->queryDB("SELECT * FROM pl_settings WHERE property='require_ssl'", $con);
+            $query_email_timeout = $System->queryDB("SELECT * FROM pl_settings WHERE property='email_timeout'", $con);
 
-			//---Arrays
-			$row_centername = mysqli_fetch_array($query_centername);
-			$row_logo = mysqli_fetch_array($query_logo);
-			$row_accesspass = mysqli_fetch_array($query_accesspass);
-            $row_lang = mysqli_fetch_array($query_lang);
-            $row_date_format = mysqli_fetch_array($query_date_format);
-            $row_time_format = mysqli_fetch_array($query_time_format);
-            $row_filter_obscene_language = mysqli_fetch_array($query_filter_obscene_language);
-            $row_post_per_page = mysqli_fetch_array($query_post_per_page);
-            $row_show_post_author = mysqli_fetch_array($query_show_post_author);
-            $row_show_post_date = mysqli_fetch_array($query_show_post_date);
-            $row_show_last_time = mysqli_fetch_array($query_show_last_time);
-            $row_show_address = mysqli_fetch_array($query_show_address);
-            $row_show_phone = mysqli_fetch_array($query_show_phone);
-            $row_show_groups = mysqli_fetch_array($query_show_groups);
-            $row_enable_profile_photo = mysqli_fetch_array($query_enable_profile_photo);
-            $row_login_method = mysqli_fetch_array($query_login_method);
-            $row_JP = mysqli_fetch_array($query_JP);
-            $row_allow_create_categories = mysqli_fetch_array($query_allow_create_categories);
-            $row_smtp_server = mysqli_fetch_array($query_smtp_server);
-            $row_email_username = mysqli_fetch_array($query_email_username);
-            $row_email_password = mysqli_fetch_array($query_email_password);
-            $row_email_address = mysqli_fetch_array($query_email_address);
-            $row_smtp_port = mysqli_fetch_array($query_smtp_port);
-            $row_email_name = mysqli_fetch_array($query_email_name);
-            $row_email_charset = mysqli_fetch_array($query_email_charset);
-            $row_require_ssl = mysqli_fetch_array($query_require_ssl);
-            $row_email_timeout = mysqli_fetch_array($query_email_timeout);
+			//---  Arrays
+			$row_centername = $System->fetch_array($query_centername);
+			$row_logo = $System->fetch_array($query_logo);
+			$row_accesspass = $System->fetch_array($query_accesspass);
+            $row_default_main_page = $System->fetch_array($query_default_main_page);
+            $row_lang = $System->fetch_array($query_lang);
+            $row_date_format = $System->fetch_array($query_date_format);
+            $row_time_format = $System->fetch_array($query_time_format);
+            $row_filter_obscene_language = $System->fetch_array($query_filter_obscene_language);
+            $row_post_per_page = $System->fetch_array($query_post_per_page);
+            $row_show_post_author = $System->fetch_array($query_show_post_author);
+            $row_show_post_date = $System->fetch_array($query_show_post_date);
+            $row_show_last_time = $System->fetch_array($query_show_last_time);
+            $row_show_address = $System->fetch_array($query_show_address);
+            $row_show_phone = $System->fetch_array($query_show_phone);
+            $row_show_groups = $System->fetch_array($query_show_groups);
+            $row_enable_profile_photo = $System->fetch_array($query_enable_profile_photo);
+            $row_login_method = $System->fetch_array($query_login_method);
+            $row_JP = $System->fetch_array($query_JP);
+            $row_allow_create_categories = $System->fetch_array($query_allow_create_categories);
+            $row_smtp_server = $System->fetch_array($query_smtp_server);
+            $row_email_username = $System->fetch_array($query_email_username);
+            $row_email_password = $System->fetch_array($query_email_password);
+            $row_email_address = $System->fetch_array($query_email_address);
+            $row_smtp_port = $System->fetch_array($query_smtp_port);
+            $row_email_name = $System->fetch_array($query_email_name);
+            $row_email_charset = $System->fetch_array($query_email_charset);
+            $row_require_ssl = $System->fetch_array($query_require_ssl);
+            $row_email_timeout = $System->fetch_array($query_email_timeout);
 
-			//---Values
+			//---  Values
 			$centername = $row_centername['value'];
 			$logo = $row_logo['value'];
 			$accesspass = $row_accesspass['value'];
+            $default_main_page = $row_default_main_page['value'];
             $lang_val = $row_lang['value'];
             $date_format = $row_date_format['value'];
             $time_format = $row_time_format['value'];
@@ -435,8 +444,8 @@
                                             <td><label for="default_main_page">'.$lang["default_main_page"].': </label></td>
                                             <td>
                                                 <select name="default_main_page">
-                                                    <option name="login">'.$lang["log_in"].'</option>
-                                                    <option name="posts">'.$lang["posts"].'</option>
+                                                    <option value="1" ';if($default_main_page==1){echo'selected';}echo'>'.$lang["log_in"].'</option>
+                                                    <option value="0" ';if($default_main_page==0){echo'selected';}echo'>'.$lang["posts"].'</option>
                                                 </select>
                                             </td>
                                         </tr>

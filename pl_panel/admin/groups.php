@@ -4,9 +4,8 @@
 
 	$System = new System();
 	$System->check_admin();
-	$con = $System->conDB("../../config.json");
-
-	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+	$con = $System->conDB();
+	$lang = $System->parse_lang();
 ?>
 
 <!DOCTYPE html>
@@ -30,8 +29,8 @@
 					<tr><td><label for="category">'.$lang["category"].'</label></td><td>
 						<select name="category">
 						';
-						$query = $con->query("SELECT * FROM pl_categories")or die("Query error!");
-						while ($row = mysqli_fetch_array($query)) {
+						$query = $System->queryDB("SELECT * FROM pl_categories", $con);
+						while ($row = $System->fetch_array($query)) {
 							$category_id = $row['id'];
 							$category_name = $row['name'];
 							echo '<option value="'.$category_id.'">'.$category_name.'</option>';
@@ -46,23 +45,23 @@
 			';
 		} elseif ($action == "success") {
 			$name = $_POST['name'];
-			$h = substr( md5(microtime()), 1, 18);
+			$h = $System->rand_str(10);
 
 			$category_id = $_POST['category'];
 
-			$query1 = $con->query("SELECT * FROM pl_categories WHERE id=$category_id")or die("Query error!");
-			$row1 = mysqli_fetch_array($query1);
+			$query1 = $System->queryDB("SELECT * FROM pl_categories WHERE id=$category_id", $con);
+			$row1 = $System->fetch_array($query1);
 			$category_h = $row1['h'];
 
-    		$query = $con->query("INSERT INTO pl_groups(name,h,category_h) VALUES ('$name','$h','$category_h')")or die("Query error!");
+    		$query = $System->queryDB("INSERT INTO pl_groups(name,h,category_h) VALUES ('$name','$h','$category_h')", $con);
     		echo "<p>¡Perfecto!</p><a href='groups.php?action'>".$lang['accept']."</a>";
     	} elseif($action == "edit") {
 
     		$h = $_GET['h'];
 
     		$System->conDB("../../config.json");
-    		$query = $con->query("SELECT * FROM pl_groups WHERE h='$h'")or die("Query error!");
-    		$row = mysqli_fetch_array($query);
+    		$query = $System->queryDB("SELECT * FROM pl_groups WHERE h='$h'", $con);
+    		$row = $System->fetch_array($query);
 
     		$groupname = $row['name'];
 
@@ -81,7 +80,7 @@
 
 			$con = $System->conDB("../../config.json");
 
-			$query = $con->query("UPDATE pl_groups SET name='$groupname' WHERE h='$h'")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_groups SET name='$groupname' WHERE h='$h'");
 
 			echo "<script>location.href='groups.php?action'</script>";
 
@@ -91,24 +90,24 @@
 
 			$con = $System->conDB("../../config.json");
 
-			$query = $con->query("DELETE FROM pl_groups WHERE h='$h'")or die("Query error!");
+			$query = $System->queryDB("DELETE FROM pl_groups WHERE h='$h'", $con);
 
 			echo "<script>location.href='groups.php?action'</script>";
 
 		} elseif($action == "requests") {
 			
-			$query = $con->query("SELECT * FROM pl_groupuser WHERE status='waiting'")or die("Query error!");
-			while ($row = mysqli_fetch_array($query)) {
+			$query = $System->queryDB("SELECT * FROM pl_groupuser WHERE status='waiting'", $con);
+			while ($row = $System->fetch_array($query)) {
 
 				$group_h = $row['group_h'];
 				$user_h = $row['user_h'];
 				$request_id = $row['id'];
 
-				$query_group = $con->query("SELECT * FROM pl_groups WHERE h='$group_h'")or die("Query error!");
-				$query_user = $con->query("SELECT * FROM pl_users WHERE h='$user_h'")or die("Query error!");
+				$query_group = $System->queryDB("SELECT * FROM pl_groups WHERE h='$group_h'", $con);
+				$query_user = $System->queryDB("SELECT * FROM pl_users WHERE h='$user_h'", $con);
 
-				$row_group = mysqli_fetch_array($query_group);
-				$row_user = mysqli_fetch_array($query_user);
+				$row_group = $System->fetch_array($query_group);
+				$row_user = $System->fetch_array($query_user);
 
 				//~User Data
 				$name = $row_user['name'];
@@ -126,7 +125,7 @@
 
 			$request_id = $_GET['request_id'];
 
-			$query = $con->query("UPDATE pl_groupuser SET status='active' WHERE id=$request_id")or die("Query error!");
+			$query = $System->queryDB("UPDATE pl_groupuser SET status='active' WHERE id=$request_id", $con);
 
 			echo "<script>location.href='groups.php?action=requests'</script>";
 
@@ -146,8 +145,8 @@
 					<a href="categories.php?action"><li>'.$lang["categories"].'</li></a>
 				';
 
-			$query_setting = $con->query("SELECT * FROM pl_settings WHERE property='JP'");
-			$row_setting = mysqli_fetch_array($query_setting);
+			$query_setting = $System->queryDB("SELECT * FROM pl_settings WHERE property='JP'", $con);
+			$row_setting = $System->fetch_array($query_setting);
 			$JP = $row_setting['value'];
 
 			if($JP == 2) {
@@ -171,19 +170,19 @@
 						<tbody>
 		';
 				
-				$query = $con->query("SELECT * FROM pl_groups");
+				$query = $System->queryDB("SELECT * FROM pl_groups", $con);
 
-				while($row = mysqli_fetch_array($query)) {
+				while($row = $System->fetch_array($query)) {
 
 					$group_h = $row['h'];
 
 					$category_h = $row['category_h'];
 
-					$query1 = $con->query("SELECT * FROM pl_categories WHERE h='$category_h'")or die("Query error!");
-					$row1 = mysqli_fetch_array($query1);
+					$query1 = $System->queryDB("SELECT * FROM pl_categories WHERE h='$category_h'", $con);
+					$row1 = $System->fetch_array($query1);
 					$category_name = $row1['name'];
 
-					$query2 = $con->query("SELECT * FROM pl_groupuser WHERE group_h='$group_h'")or die("Query error!");
+					$query2 = $System->queryDB("SELECT * FROM pl_groupuser WHERE group_h='$group_h'", $con);
 
 					echo "
 					<tr>
@@ -191,11 +190,11 @@
 						<td>".$row['name']."</td>
 						<td>";
 
-					while ($row2 = mysqli_fetch_array($query2)) {
+					while ($row2 = $System->fetch_array($query2)) {
 						$user_h = $row2['user_h'];
 
-						$query3 = $con->query("SELECT * FROM pl_users WHERE h='$user_h'");
-						$row3 = mysqli_fetch_array($query3);
+						$query3 = $System->queryDB("SELECT * FROM pl_users WHERE h='$user_h'", $con);
+						$row3 = $System->fetch_array($query3);
 
 						$username = $row3['username'];
 

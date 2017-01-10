@@ -5,7 +5,7 @@
 	$System = new System();
     $System->check_admin();
 
-    $lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+    $lang = $System->parse_lang();
 ?>
 
 <!DOCTYPE html>
@@ -58,12 +58,12 @@
 			
 			$title = $_POST['title'];
 			$body = $_POST['body'];
-    		$h = substr( md5(microtime()), 1, 18);
+    		$h = $System->rand_str(10);
     		session_start();
     		$author = $_SESSION['h'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("INSERT INTO pl_posts(title,body,h,author) VALUES('$title','$body','$h','$author')")or die("Query Error!");
+    		$query = $System->queryDB("INSERT INTO pl_posts(title,body,h,author) VALUES('$title','$body','$h','$author')", $con);
     		echo "<script>location.href='posts.php?action'</script>";
 
     	} elseif($action == "edit") {
@@ -71,8 +71,8 @@
     		$h = $_GET['h'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("SELECT * FROM pl_posts WHERE h='$h'")or die("Query error!");
-    		$row = mysqli_fetch_array($query);
+    		$query = $System->queryDB("SELECT * FROM pl_posts WHERE h='$h'", $con);
+    		$row = $System->fetch_array($query);
 
     		$title = $row['title'];
     		$body = $row['body'];
@@ -117,7 +117,7 @@
     		$body = $_POST['body'];
 
     		$System->conDB("../../config.json");
-    		$query = $con->query("UPDATE pl_posts SET title='$title',body='$body' WHERE h='$h'")or die("Query error!");
+    		$query = $System->queryDB("UPDATE pl_posts SET title='$title',body='$body' WHERE h='$h'", $con);
 
     		echo "<script>location.href='posts.php?action'</script>";
 
@@ -126,7 +126,7 @@
     		$h = $_GET['h'];
 
     		$con = $System->conDB("../../config.json");
-    		$query = $con->query("DELETE FROM pl_posts WHERE h='$h'")or die("Query error!");
+    		$query = $System->queryDB("DELETE FROM pl_posts WHERE h='$h'", $con);
 
     		echo "<script>location.href='posts.php?action'</script>";
 
@@ -155,8 +155,8 @@
 					<tbody>
 		';
 				$con = $System->conDB("../../config.json");
-				$query = $con->query("SELECT * FROM pl_posts");
-				while($row = mysqli_fetch_array($query)) {
+				$query = $System->queryDB("SELECT * FROM pl_posts", $con);
+				while ($row = $System->fetch_array($query)) {
 					echo "
 					<tr>
 						<td>".$row['id']."</td>

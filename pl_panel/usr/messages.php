@@ -6,11 +6,9 @@
 
 	$System = new System();
 	$System->check_usr();
-	$System = new System();
-	$con = $System->conDB("../../config.json");
+	$con = $System->conDB();
 	$User = $System->get_user_by_h($_SESSION['h'], $con);
-
-	$lang = $System->parse_lang("../../src/lang/".$System->load_locale().".json");
+	$lang = $System->parse_lang();
 
 ?>
 
@@ -21,12 +19,7 @@
 	<title><?php echo $lang["messages"];?> | Teeach </title>
 	<link rel="stylesheet" href="../../src/css/main.css">
 	<link rel="stylesheet" href="../../src/css/messages.css">
-	<script src="../../src/ckeditor/ckeditor.js"></script>
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-	<script src="../../src/js/messages.js"></script>
-	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<?php $System->set_head(); ?>
         <style>
             .ui-autocomplete-loading {
             background: white url("images/ui-anim_basic_16x16.gif") right center no-repeat;
@@ -39,11 +32,8 @@
 </head>
 <body>
 	<?php
-		$query = $con->query("SELECT * FROM pl_settings WHERE property='centername'");
-		$row = mysqli_fetch_array($query);
-		$centername = $row['value'];
-		$System->set_header($centername);
-		$System->set_usr_menu($User->h,$User->privilege,$lang);
+
+		$System->set_header($User->h, $lang);
 
 		echo "<input type='hidden' value='".$User->h."' id='user_h'>";
 
@@ -136,11 +126,11 @@
 			$subject = $_POST['subject'];
 			$body = $_POST['body'];
 			$from = $User->h;
-			$h = substr( md5(microtime()), 1, 18);
+			$h = $System->rand_str(10);
 
 			$date = date("Y-m-d H:i:s");
 
-			$query2 = $con->query("INSERT INTO pl_messages(from_h,to_h,subject,body,unread,h,date) VALUES('$from','$to','$subject','$body',1,'$h','$date')")or die("Query error!");
+			$query2 = $System->queryDB("INSERT INTO pl_messages(from_h,to_h,subject,body,unread,h,date) VALUES('$from','$to','$subject','$body',1,'$h','$date')", $con);
 
 			echo '<script>location.href="messages.php"</script>';
 
@@ -151,7 +141,7 @@
     		$subject = $_POST["subject"];
     		$body = $_POST["body"];
     		$data = ["users"=>$users, "subject"=>$subject, "body"=>$body];
-    		$h = substr( md5(microtime()), 1, 18);
+    		$h = $System->str_rand(10);
     		$date = date("Y-m-d H:i:s");
     		json_encode($data);
 
@@ -253,7 +243,7 @@
 
 			$message_h = $_GET['h'];
 
-			$query = $con->query("DELETE FROM pl_messages WHERE h='$message_h'")or die("Query error!");
+			$query = $System->queryDB("DELETE FROM pl_messages WHERE h='$message_h'", $con);
 
 			echo "Message deleted. <a href='messages.php'>Aceptar</a>";
 
@@ -282,12 +272,12 @@
             		<div class="ui_width_sidebar right">
 			';
 
-				$query = $con->query("SELECT * FROM pl_messages WHERE to_h='$User->h' ORDER BY id DESC")or die("Query error!");
+				$query = $System->queryDB("SELECT * FROM pl_messages WHERE to_h='$User->h' ORDER BY id DESC", $con);
 
-				while ($row = mysqli_fetch_array($query)) {
+				while ($row = $System->fetch_array($query)) {
 					$from_h = $row['from_h'];
-					$query_from = $con->query("SELECT * FROM pl_users WHERE h='$from_h'")or die("Query error!");
-					$row_from = mysqli_fetch_array($query_from);
+					$query_from = $System->queryDB("SELECT * FROM pl_users WHERE h='$from_h'", $con);
+					$row_from = $System->fetch_array($query_from);
 					$from_h = $row_from['h'];
 					$from_name = $row_from['name'];
 					$from_surname = $row_from['surname'];
